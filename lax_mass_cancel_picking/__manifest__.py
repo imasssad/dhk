@@ -6,7 +6,7 @@
     'sequence': 101,
     'support': 'info@laxicon.in',
     'category': 'Stock',
-    'version': '16.0.1',
+    'version': '19.0.1',
     'license': 'LGPL-3',
     'description': """ This module allows to Cancel or Set to Draft Picking.""",
     'depends': ['stock', 'sale_stock'],

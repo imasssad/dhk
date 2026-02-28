@@ -4,7 +4,7 @@
 
 {
     'name': "Portal for Calendar Meetings for Attendees",
-    'version': '5.2.6',
+    'version': '19.0.5.2.6',
     'license': 'Other proprietary',
     'price': 39.0,
     'currency': 'EUR',

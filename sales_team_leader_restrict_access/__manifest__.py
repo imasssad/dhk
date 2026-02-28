@@ -6,7 +6,7 @@ Allow team leader to see his team's documents, not access right to other team's 
     'description': """
 Allow the team leader to see his team's documents, not access right to other team's documents""",
     'author': 'NOS Erp Consulting',
-    'version': '15.0.0.1',
+    'version': '19.0.0.1',
     'license': 'OPL-1',
     'price': 00.00,
     'currency': 'USD',

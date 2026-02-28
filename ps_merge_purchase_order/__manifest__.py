@@ -11,7 +11,7 @@
 
 {
     'name': 'Merge Purchase Order',
-    'version': '16.0',
+    'version': '19.0',
     'category': 'Purchase',
     'summary': 'Odoo module for customizable merging of purchase orders',
     'description': """

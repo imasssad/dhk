@@ -5,7 +5,7 @@
 {
     'name': 'Metro Style Portal Page',
     'summary': 'Metro Style Website User Portal Page',
-    'version': '1.0',
+    'version': '19.0.1.0',
     'category': 'Website',
     'summary': """
 Give Odoo website portal a Metro style look

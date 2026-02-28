@@ -22,7 +22,7 @@
 
 {
     'name': "MAC Address Login Validation Odoo 16",
-    'version': "16.0.1.0.0",
+    'version': "19.0.1.0.0",
     'summary': """Access Restriction By MAC Address""",
     'description': """Access Restriction By MAC Address, MAC Address, mac, mac address, restrict login, restrict mac""",
     'author': "Cybrosys Techno Solutions",

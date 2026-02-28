@@ -5,7 +5,7 @@
     "author": "Softhealer Technologies",
     "website": "https://www.softhealer.com",
     "support": "support@softhealer.com",
-    "version": "16.0.1",
+    "version": "19.0.1",
     "license": "OPL-1",
     "category": "Extra Tools",
     "summary": "Sale Dynamic Approval Sale Order Dynamic Approval Expense Dynamic Approval Account Dynamic Approval Invoice Dynamic Approval Bill Dynamic Approval Invoice Approval Process Bill Approval Payslip Dynamic Approval Purchase Dynamic Approval Odoo",

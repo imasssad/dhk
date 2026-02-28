@@ -11,7 +11,7 @@
 
 {
     'name': 'Simplify Access Management | Manage - Hide Menu, Submenu, Fields, Action, Reports, Views, | Restrict/Read-Only User, Apps,  Fields, Export, Archive, Actions, Views, Reports, Delete items | Manage Access rights from one place | Hide Tabs and buttons | Multi Company supported.',
-    'version': '16.0.8.2.2',
+    'version': '19.0.8.2.2',
     'sequence': 5,
     'author': 'Terabits Technolab',
     'license': 'OPL-1',

@@ -1,6 +1,6 @@
 {
     'name': 'DICS Portal Schedule Meeting',
-    'version': '16.0.0.5',
+    'version': '19.0.0.5',
     'description': "dics_portal_schedule_meeting",
     'company': 'DataInteger Consultancy Services LLP',
     'website': 'https://www.datainteger.com',

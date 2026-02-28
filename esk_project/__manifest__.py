@@ -1,6 +1,6 @@
 {
     'name': 'Project Customization',
-    'version': '16.0.1',
+    'version': '19.0.1',
     'author': 'Asim',
     'description': "Allow Project creation for consumable products",
     'website': '',

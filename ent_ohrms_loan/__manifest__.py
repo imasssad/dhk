@@ -21,7 +21,7 @@
 ########################################################################################
 {
     'name': 'Enterprise Open HRMS Loan Management',
-    'version': '16.0.1.0.0',
+    'version': '19.0.1.0.0',
     'summary': 'Manage Loan Requests',
     'description': """
         Helps you to manage Loan Requests of your company's staff.

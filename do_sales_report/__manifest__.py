@@ -4,7 +4,7 @@
     'description': """Extended version of sales report""",
     'author': "Tushar Ruhela",
     'category': 'Sales',
-    'version': '1.1',
+    'version': '19.0.1.1',
     'depends': ['base', 'sale', 'sale_management', 'web', 'account'],
     'data': [
         'views/sale_order_view.xml',

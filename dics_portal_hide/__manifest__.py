@@ -1,6 +1,6 @@
 {
     'name': 'DICS Portal Hide',
-    'version': '16.0.1',
+    'version': '19.0.1',
     'author': 'DataInteger Consultancy Services LLP',
     'description': "To hide Quotation, sales,invoices bills and Account Security hide in port",
     'website': 'https://www.datainteger.com',

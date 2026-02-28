@@ -1,6 +1,6 @@
 {
     'name': 'SO-PO Price Update Automation',
-    'version': '16.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Sales/Purchase',
     'summary': 'Export PO from SO, update prices via Excel, auto-update SO costs',
     'description': """

@@ -4,7 +4,7 @@
     'description': """Extended version of purchase report""",
     'author': "Tushar Ruhela",
     'category': 'Purchase',
-    'version': '1.1',
+    'version': '19.0.1.1',
     'depends': ['base', 'sale', 'sale_management', 'web', 'account','purchase'],
     'data': [
         'views/purchase_order_view.xml',

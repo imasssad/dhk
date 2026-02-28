@@ -6,7 +6,7 @@
     'description': """MHJ Guarantee letters""",
     'author': "MHJ",
     'website': "HAJJAJ.PRO",
-    'version': '14.0.1.0',
+    'version': '19.0.1.0',
 
     'depends': ['account'],
 

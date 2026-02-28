@@ -1,7 +1,7 @@
 
 {
     'name': 'ERP ESKY',
-    'version': '16.0.0.4',
+    'version': '19.0.0.4',
     'author': 'DataInteger Consultancy Services LLP',
     'description': '',
     "license" : "OPL-1",

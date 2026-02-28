@@ -2,7 +2,7 @@
 
 {
     'name': 'Attendance Location Information',
-    'version': '16.0.1',
+    'version': '19.0.1',
     'category': 'Human Resources',
     "license": "OPL-1",
     "author": "Softhealer Technologies",

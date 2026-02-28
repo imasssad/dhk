@@ -4,7 +4,7 @@
 
 {
     'name': 'Portal Employee Attendance',
-    'version': '16.0.1.0',
+    'version': '19.0.1.0',
     'summary': 'Portal Attendance Using this module user can see their attendance and also mark their attendance from portal as well.| Portal attendance | Portal Attendance filter | Portal Attendance groupby | Online Attendance | Portal attendance list | Website Attendance | Employee attendance | Website employee | Employee attendance | Employee Check In | Employee Checkout | Mobile attendance | Attendance Kiosk',
     'description': "Employee can see their attendance.Using filters Employee can easily find the attendance.Employee can also search the attendance.",
     'license': 'OPL-1',

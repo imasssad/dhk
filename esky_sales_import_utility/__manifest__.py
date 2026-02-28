@@ -1,6 +1,6 @@
 {
     'name' : 'Import P&L Sheet',
-    'version' : '1.0',
+    'version' : '19.0.1.0',
     'description': """This module is used to import sale order lines""",
     'category': 'Sales',
     'company': "CBS EGYPT",

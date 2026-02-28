@@ -1,6 +1,6 @@
 {
     'name': 'Mass Update Pricelist on Quotations',
-    'version': '16.0.1.0.0',
+    'version': '19.0.1.0.0',
     'category': 'Sales',
     'summary': 'Select multiple quotations and apply a pricelist in bulk',
     'depends': ['sale_management'],

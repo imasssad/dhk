@@ -2,7 +2,7 @@
     'name': 'Quotation Version',
     'author': 'Suraj Rawat',
     'category': 'Sales/Sales',
-    'version': '1.0',
+    'version': '19.0.1.0',
     'summary': '''
                 Sale Version History
             ''',

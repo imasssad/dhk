@@ -4,7 +4,7 @@
     'author': "CBS EGYPT",
     'website': "https://cbsegypt.com",
     'category': 'Sales/Sales',
-    'version': '1.0',
+    'version': '19.0.1.0',
     'depends': ['base', 'sale', 'esky_sales_workflow', 'mail'],
     'data': [
         'security/ir.model.access.csv',

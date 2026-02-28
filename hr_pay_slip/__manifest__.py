@@ -15,7 +15,7 @@
 
 {
     'name': 'HR Pay Slip',
-    'version': '16.0.1',
+    'version': '19.0.1',
     'category': 'hr',
     'license': 'LGPL-3',
     'summary': """This modual help you for.""",

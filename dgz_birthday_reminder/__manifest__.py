@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name': "Employee Birthday Remainder",
-    'version': '16.0.1',
+    'version': '19.0.1',
     'category': 'HR',
     'website': 'www.digitztech.com',
     'summary': "Arrange employee birthdays in ascending order by date. Ensure you never overlook an employee's birthday moving forward.",

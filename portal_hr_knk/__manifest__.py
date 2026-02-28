@@ -4,7 +4,7 @@
 
 {
     'name': 'Portal HR',
-    'version': '16.0.1.0',
+    'version': '19.0.1.0',
     'summary': 'This Module allows users to make employees as portal user and provides all portal features to employees',
     'description': """Portal HR
 =================

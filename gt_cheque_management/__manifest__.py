@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 {
     'name' : 'Cheque Management',
-    'version' : '13.0',
+    'version' : '19.0',
     'author' : 'CBSEGYPT',
     'category' : 'Accounting',
     'description' : """

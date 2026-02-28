@@ -6,7 +6,7 @@
     'author': "MDS",
     'website': "https://MDS.com",
     'category': 'Uncategorized',
-    'version': '16.0',
+    'version': '19.0',
     'depends': ['base','sale'],
     'data': [
         # 'security/ir.model.access.csv',

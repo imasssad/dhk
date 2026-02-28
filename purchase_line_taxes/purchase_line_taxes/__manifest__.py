@@ -14,7 +14,7 @@
     'author': "MDS",
     'website': "https://MDS.com",
     'category': 'Purchase',
-    'version': '16.0.1.0.0',
+    'version': '19.0.1.0.0',
     'depends': ['base', 'purchase'],
     'data': [
         # 'security/ir.model.access.csv',

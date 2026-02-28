@@ -9,7 +9,7 @@
     "summary": "Dynamic Sale Order Approval,Dynamic Sales Approval,Sales Multi Approval,Sale Order Multiple Approval,Quotaion Dynamic Approval,Sale Order Double Approval,Sale Double Approval,Sale User Dynamic Approval,User Wise Approval,Group Wise Approval Odoo",
     "description": """This module allows you to set dynamic and multi-level approvals in quotation/sale order so each order can be approved by many levels. Sale orders can be approved based on untaxed/ total amount and approved by particular users or groups they get emails notification about orders that waiting for approval. When a sale order approves or rejects salesperson gets a notification about it.
 """,
-    "version": "16.0.2",
+    "version": "19.0.2",
     "depends": ["sale_management", "bus","sh_base_dynamic_approval"],
     "data": [
         'security/ir.model.access.csv',

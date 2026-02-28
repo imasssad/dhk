@@ -4,7 +4,7 @@
     'description': """Extended version of Delivery report""",
     'author': "Tushar Ruhela",
     'category': 'Accounting',
-    'version': '1.1',
+    'version': '19.0.1.1',
     'depends': ['base', 'account', 'sale', 'stock'],
     'data': [
         'views/stock_picking_view.xml',

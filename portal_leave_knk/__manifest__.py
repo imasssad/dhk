@@ -4,7 +4,7 @@
 
 {
     'name': "Portal Leaves",
-    'version': '16.0.1.1',
+    'version': '19.0.1.1',
     'summary': """
         Apply leaves from portal.Easily access to leave and apply leave from portal.User can easily check for leave status.User can delete the leave from portal..Portal Leave|Portal Leave application|Leave Application|Employee Leave Portal|Portal Leave Apply|Leave Portal.""",
     'description': """

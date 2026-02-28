@@ -8,7 +8,7 @@
     'sequence': 101,
     'support': 'info@laxicon.in',
     'category': 'Sales',
-    'version': '16.0.1',
+    'version': '19.0.1',
     'license': 'LGPL-3',
     'description': """ This module allow to Cancle or Confirm Sales Orders.
     """,

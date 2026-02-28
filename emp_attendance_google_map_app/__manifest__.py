@@ -3,7 +3,7 @@
 {
     "name" : "Employee Attendance Location with Google Map",
     "author": "Edge Technologies",
-    "version" : "16.0.1.0",
+    "version" : "19.0.1.0",
     "images":["static/description/main_screenshot.png"],
     'live_test_url': "https://youtu.be/xZS-m_G3cqg",
     'summary': 'Apps helps Employee Attendance with Google Map Employee Attendance with Map employee location employee google map location of attendance sign in location find location of employee user location sign in location of sign in employee location sign in sign out',
