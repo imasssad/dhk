@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_end_user_details_wizard,access_end_user_details_wizard,model_end_user_details_wizard,,1,1,1,1

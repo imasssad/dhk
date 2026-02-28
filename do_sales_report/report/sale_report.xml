@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="sale.action_report_saleorder" model="ir.actions.report">
+      <field name="name">Quotation / Order</field>
+      <field name="model">sale.order</field>
+      <field name="report_type">qweb-pdf</field>
+      <field name="report_name">do_sales_report.report_project_sales</field>
+      <field name="report_file">do_sales_report.report_project_sales</field>
+      <field name="print_report_name">(object.state in ('draft', 'sent') and 'Quotation - %s' % (object.name)) or 'Order - %s' % (object.name)</field>
+      <field name="binding_model_id" ref="sale.model_sale_order"/>
+      <field name="binding_type">report</field>
+      <field name="paperformat_id" ref="do_sales_report.paperformat_portrait_quotation"/>
+    </record>
+
+    <record id="sale.action_report_pro_forma_invoice" model="ir.actions.report">
+        <field name="name">PRO-FORMA Invoice</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">do_sales_report.report_project_sales_proforma_invoice</field>
+        <field name="report_file">do_sales_report.report_project_sales_proforma_invoice</field>
+        <field name="print_report_name">'PRO-FORMA - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="do_sales_report.paperformat_portrait_quotation"/>
+        <field name="groups_id" eval="[(4, ref('sale.group_proforma_sales'))]"/>
+    </record>
+
+  </data>
+</odoo>

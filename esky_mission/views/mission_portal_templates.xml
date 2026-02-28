@@ -1,0 +1,485 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_mission_custom" name="Portal My missions: mission  entries" inherit_id="portal.portal_my_home" priority="28">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Missions</t>
+                <t t-set="url" t-value="'/my/mission'"/>
+                <t t-set="placeholder_count" t-value="'custom_mission_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_menu_mission_custom" name="Portal layout : missions menu entries" inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name in ['custom_mission_page_probc', 'create_mission'] or custom_mission_request"
+                t-attf-class="breadcrumb-item #{'active ' if not custom_mission_request else ''}">
+                <a t-if="page_name in ['custom_mission_request','create_mission'] or custom_mission_request" t-attf-href="/my/mission?{{ keep_query() }}">Mission</a>
+                <t t-else="">Mission</t>
+            </li>
+            <li t-if="custom_mission_request" class="breadcrumb-item active">
+                <span t-field="custom_mission_request.name"/>
+            </li>
+        </xpath>
+    </template>
+
+
+    <template id="portal_searchbar_mission" inherit_id="portal.portal_searchbar">
+        <xpath expr="//nav" position="inside">
+            <a class="btn btn-secondary my-2 mx-1" t-if="page_name == 'custom_mission_page_probc' or custom_mission_request"  href="/create/mission">Mission Request</a>
+        </xpath>
+    </template>
+
+    <template id="portal_my_mission_custom" name="My missions">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Mission</t>
+            </t>
+            <t t-if="not missions">
+                <p>There are currently no missions for your account.</p>
+            </t>
+            <t t-if="missions" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Sign In/Out</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Option</th>
+                        <th>Mission</th>
+                        <th>Customer</th>
+                        <th>Sign In/Out Status</th>
+                        <th>Employee</th>
+                    </tr>
+                </thead>
+                <t t-foreach="missions" t-as="custom_mission_request">
+                    <tr>
+                        <td>
+                            <a role="button" t-attf-href="/update/mission/#{custom_mission_request.id}?{{ keep_query() }}" class="btn btn-sm btn-link"><i class="btn btn-primary fa fa-pencil"></i></a>
+                            <a t-if="custom_mission_request.state in ['validate', 'validate1', 'confirm'] and custom_mission_request.options == 'visit' and custom_mission_request.signin_status in ['sign_in', 'sign_out']" role="button" t-attf-href="/my/mission/#{custom_mission_request.id}?{{ keep_query() }}" class="btn btn-sm btn-link"><i class="btn btn-primary fa fa-sign-in"></i></a>
+                        </td>
+                        <td>
+                            <span t-if="custom_mission_request.state == 'confirm'" t-attf-class="bg-warning rounded-pill py-1 px-3" t-field="custom_mission_request.state" />
+                            <span t-if="custom_mission_request.state == 'refuse'" t-attf-class="bg-danger rounded-pill py-1 px-3" t-field="custom_mission_request.state" />
+                            <span t-if="custom_mission_request.state == 'validate1'" t-attf-class="bg-primary rounded-pill py-1 px-3" t-field="custom_mission_request.state" />
+                            <span t-if="custom_mission_request.state == 'validate'" t-attf-class="bg-success rounded-pill py-1 px-3" t-field="custom_mission_request.state" />
+                            <span t-if="custom_mission_request.state == 'lost'" t-attf-class="bg-danger rounded-pill py-1 px-3" t-field="custom_mission_request.state" />
+                            <span t-if="custom_mission_request.state == 'completed'" t-attf-class="bg-success rounded-pill py-1 px-3" t-field="custom_mission_request.state" />
+                        </td>
+                        <td>
+                            <span t-field="custom_mission_request.date"/>
+                        </td>
+                        <td>
+                            <span t-field="custom_mission_request.options"/>
+                        </td>
+                        <td>
+                            <span t-field="custom_mission_request.name"/>
+                        </td>
+                        <td>
+                            <span t-if="custom_mission_request.options == 'visit'" t-field="custom_mission_request.customer_id.name"/>
+                            <span t-if="custom_mission_request.options != 'visit'">N/A</span>
+                        </td>
+                        <td>
+                            <span t-if="custom_mission_request.options == 'visit'" t-field="custom_mission_request.signin_status"/>
+                            <span t-if="custom_mission_request.options != 'visit'">N/A</span>
+                        </td>
+                        <td>
+                            <span t-field="custom_mission_request.employee_id.name"/>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_apply_mission" name="Mission">
+        <t t-call="portal.portal_layout">
+            <form action="/save/mission" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="employee" t-att-value="employee.id" />
+                <script type="text/javascript">
+                    function getOption() {
+                        selectElement = document.querySelector('#option');
+                        output = selectElement.value;
+                        if (output === "'visit'") {
+                            boxes = document.getElementsByClassName('show_customer')
+                            for (const box of boxes) {
+                              box.style.display = 'flex';
+                            }
+                        } else {
+                            $(".show_customer").hide();
+                        }
+                    }
+                </script>
+                <style type="text/css">
+                    .show_customer {
+                        display: none;
+                    }
+                </style>
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Missions</t>
+                </t>
+                <div class="row mt-3 my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="emp_name"><b>Employee Name:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="emp_name" class="form-control" t-att-value="employee.name" required='True' readonly='True' />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="start_date"><b>Date:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="date" name="start_date" class="form-control" required="true" t-options='{"widget": "date"}' />
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="option"><b>Options:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select id="option" name="option" class="form-control" required='True' onchange="getOption()">
+                            <option t-attf-value="'from_home'">Work From Home</option>
+                            <option t-attf-value="'from_esky'">Work From Esky</option>
+                            <option t-attf-value="'visit'">Visit</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2 show_customer">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="customer"><b>Customer:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select id="customer" name="customer" class="form-control" required='True'>
+                            <t t-foreach="customer" t-as="c">
+                                <option t-att-value="c.id">
+                                    <span t-esc="c.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="end_date"><b>Mission:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <textarea name="name" type="text" class="form-control s_website_form_input" required="" rows="3" cols="50" />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="description"><b>Description:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <textarea name="description" type="text" class="form-control s_website_form_input" required="" rows="3" cols="50" />
+                    </div>
+                </div>
+                <div class="row my-2" t-if="error">
+                    <div class="col-xl-6 offset-xl-3 bg-danger text-center">
+                        <div class="py-2"><b ><t t-out="error" /></b></div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button class="btn btn-primary mx-2" type="submit">Submit</button>
+                        <a class="btn btn-danger mx-2" href="/my/mission" >Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+
+    <template id="custom_portal_my_mission" name="My mission">
+        <t t-call="portal.portal_layout">
+            <form id="signinform" action="/signin/mission" method="post" t-if="not custom_mission_request.signin and not custom_mission_request.signout and custom_mission_request.options == 'visit' and custom_mission_request.state in ['validate','validate1','confirm']">
+                <script>
+                    function getCoordinates()
+                    {
+                      navigator.geolocation.getCurrentPosition(function(location) {
+                        var lat = document.getElementsByClassName("latitude");
+                        var long = document.getElementsByClassName("longitude");
+                        for(var index=0;index &lt; lat.length;index++){
+                              lat[index].value = location.coords.latitude;
+                        }
+                        for(var index=0;index &lt; long.length;index++){
+                              long[index].value = location.coords.longitude;
+                        }
+                        $('#signin').trigger("click");
+                      })
+                    }
+                </script>
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="longitude" class="longitude" style="max-width: 26%;"/>
+                <input type="hidden" name="latitude" class="latitude" style="max-width: 26%;"/>
+                <input type="hidden" name="employee" t-att-value="custom_mission_request.employee_id.id"/>
+                <input type="hidden" name="mission" t-att-value="custom_mission_request.id"/>
+                <div class="row my-2">
+                    <div class="form-group mt-3 col-xl-3">
+                        <label class="col-form-label" for="start_date"><b>Date:</b></label>
+                    </div>
+                    <div class="form-group mt-3 col-xl-6">
+                        <input type="date" name="start_date" class="form-control" t-options='{"widget": "date"}' t-att-value="custom_mission_request.date" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="emp_name"><b>Employee Name:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="emp_name" class="form-control" t-att-value="custom_mission_request.employee_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="option"><b>Option:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="option" class="form-control" t-att-value="dict(custom_mission_request.fields_get(['options'])['options']['selection']).get(custom_mission_request.options)" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="staus"><b>Status:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input t-if="custom_mission_request.state == 'confirm'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-warning rounded-pill py-1 px-3" value="Waiting Manager Approval"/>
+                        <input t-if="custom_mission_request.state == 'refuse'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-danger rounded-pill py-1 px-3" value="Refused" />
+                        <input t-if="custom_mission_request.state == 'validate1'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-primary rounded-pill py-1 px-3" value="Waiting HR Manager Approval" />
+                        <input t-if="custom_mission_request.state == 'validate'" t-attf-class="bg-success rounded-pill py-1 px-3" type="text" name="staus" class="form-control" readonly='True' value="Approved" />
+                        <input t-if="custom_mission_request.state == 'lost'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-danger rounded-pill py-1 px-3" value="Lost" />
+                        <input t-if="custom_mission_request.state == 'completed'" t-attf-class="bg-success rounded-pill py-1 px-3" type="text" name="staus" class="form-control" readonly='True' value="Completed" />
+                    </div>
+                </div>
+
+                <div class="row my-2" t-if="custom_mission_request.customer_id">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="customer"><b>Customer:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="customer" class="form-control" t-att-value="custom_mission_request.customer_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2" t-if="custom_mission_request.manager_id">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="manager"><b>Manager:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="manager" class="form-control" t-att-value="custom_mission_request.manager_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="description"><b>Description:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <textarea type="text" name="description" class="form-control s_website_form_input" t-esc="custom_mission_request.desc" readonly='True' rows="3" cols="50"/>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button id="signin" type="submit" class="btn btn-primary mx-2" style="display:none;">Check In</button>
+                        <button type="button" class="btn btn-primary mx-2" onclick="getCoordinates();">Sign In</button>
+                    </div>
+                </div>
+            </form>
+                    <form id="signoutform" action="/signout/mission" method="post" t-if="custom_mission_request.signin and not custom_mission_request.signout and custom_mission_request.options == 'visit' and custom_mission_request.state in ['validate','validate1','confirm']">
+                                <script>
+                                    function getsignoutCoordinates()
+                                    {
+                                      navigator.geolocation.getCurrentPosition(function(location) {
+                                        var lat = document.getElementsByClassName("latitude");
+                                        var long = document.getElementsByClassName("longitude");
+                                        for(var index=0;index &lt; lat.length;index++){
+                                              lat[index].value = location.coords.latitude;
+                                        }
+                                        for(var index=0;index &lt; long.length;index++){
+                                              long[index].value = location.coords.longitude;
+                                        }
+                                        $('#signout').trigger("click");
+                                      })
+                                    }
+                                </script>
+                                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                                <input type="hidden" name="longitude" class="longitude" style="max-width: 26%;"/>
+                                <input type="hidden" name="latitude" class="latitude" style="max-width: 26%;"/>
+                                <input type="hidden" name="employee" t-att-value="custom_mission_request.employee_id.id" />
+                                <input type="hidden" name="mission" t-att-value="custom_mission_request.id"/>
+                                <div class="row my-2">
+                    <div class="form-group mt-3 col-xl-3">
+                        <label class="col-form-label" for="start_date"><b>Date:</b></label>
+                    </div>
+                    <div class="form-group mt-3 col-xl-6">
+                        <input type="date" name="start_date" class="form-control" t-options='{"widget": "date"}' t-att-value="custom_mission_request.date" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="emp_name"><b>Employee Name:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="emp_name" class="form-control" t-att-value="custom_mission_request.employee_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="option"><b>Option:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="option" class="form-control" t-att-value="dict(custom_mission_request.fields_get(['options'])['options']['selection']).get(custom_mission_request.options)" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="staus"><b>Status:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input t-if="custom_mission_request.state == 'confirm'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-warning rounded-pill py-1 px-3" value="Waiting Manager Approval"/>
+                        <input t-if="custom_mission_request.state == 'refuse'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-danger rounded-pill py-1 px-3" value="Refused" />
+                        <input t-if="custom_mission_request.state == 'validate1'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-primary rounded-pill py-1 px-3" value="Waiting HR Manager Approval" />
+                        <input t-if="custom_mission_request.state == 'validate'" t-attf-class="bg-success rounded-pill py-1 px-3" type="text" name="staus" class="form-control" readonly='True' value="Approved" />
+                        <input t-if="custom_mission_request.state == 'lost'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-danger rounded-pill py-1 px-3" value="Lost" />
+                        <input t-if="custom_mission_request.state == 'completed'" t-attf-class="bg-success rounded-pill py-1 px-3" type="text" name="staus" class="form-control" readonly='True' value="Completed" />
+                    </div>
+                </div>
+
+                <div class="row my-2" t-if="custom_mission_request.customer_id">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="customer"><b>Customer:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="customer" class="form-control" t-att-value="custom_mission_request.customer_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2" t-if="custom_mission_request.manager_id">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="manager"><b>Manager:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="manager" class="form-control" t-att-value="custom_mission_request.manager_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="description"><b>Description:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                         <textarea type="text" name="description" class="form-control s_website_form_input" t-esc="custom_mission_request.desc" readonly='True' rows="3" cols="50"/>
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button id="signout" type="submit" class="btn btn-primary mx-2" style="display:none;">Check Out</button>
+                        <button type="button" class="btn btn-primary mx-2" onclick="getsignoutCoordinates();">Sign Out</button>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+
+    <!-- Update Mission Description -->
+    <template id="custom_portal_edit_mission" name="Edit mission">
+        <t t-call="portal.portal_layout">
+            <form action="/edit/mission" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="employee" t-att-value="custom_mission_request.employee_id.id" />
+                <input type="hidden" name="mission" t-att-value="custom_mission_request.id"/>
+                <div class="row my-2">
+                    <div class="form-group mt-3 col-xl-3">
+                        <label class="col-form-label" for="start_date"><b>Date:</b></label>
+                    </div>
+                    <div class="form-group mt-3 col-xl-6">
+                        <input type="date" name="start_date" class="form-control" t-options='{"widget": "date"}' t-att-value="custom_mission_request.date" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="emp_name"><b>Employee Name:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="emp_name" class="form-control" t-att-value="custom_mission_request.employee_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="option"><b>Option:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="option" class="form-control" t-att-value="dict(custom_mission_request.fields_get(['options'])['options']['selection']).get(custom_mission_request.options)" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="staus"><b>Status:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input t-if="custom_mission_request.state == 'confirm'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-warning rounded-pill py-1 px-3" value="Waiting Manager Approval"/>
+                        <input t-if="custom_mission_request.state == 'refuse'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-danger rounded-pill py-1 px-3" value="Refused" />
+                        <input t-if="custom_mission_request.state == 'validate1'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-primary rounded-pill py-1 px-3" value="Waiting HR Manager Approval" />
+                        <input t-if="custom_mission_request.state == 'validate'" t-attf-class="bg-success rounded-pill py-1 px-3" type="text" name="staus" class="form-control" readonly='True' value="Approved" />
+                        <input t-if="custom_mission_request.state == 'lost'" type="text" name="staus" class="form-control" readonly='True' t-attf-class="bg-danger rounded-pill py-1 px-3" value="Lost" />
+                        <input t-if="custom_mission_request.state == 'completed'" t-attf-class="bg-success rounded-pill py-1 px-3" type="text" name="staus" class="form-control" readonly='True' value="Completed" />
+                    </div>
+                </div>
+
+                <div class="row my-2" t-if="custom_mission_request.customer_id">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="customer"><b>Customer:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="customer" class="form-control" t-att-value="custom_mission_request.customer_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2" t-if="custom_mission_request.manager_id">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="manager"><b>Manager:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="manager" class="form-control" t-att-value="custom_mission_request.manager_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="description"><b>Description:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <textarea t-if="custom_mission_request.readonly_desc != True" type="text" name="description" class="form-control s_website_form_input" t-esc="custom_mission_request.desc" rows="3" cols="50" />
+                        <textarea t-if="custom_mission_request.readonly_desc == True" type="text" name="description" class="form-control s_website_form_input" t-esc="custom_mission_request.desc" readonly='True' rows="3" cols="50" />
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col text-center" t-if="custom_mission_request.readonly_desc != True">
+                        <button class="btn btn-primary mx-2" type="submit">Update</button>
+                        <a class="btn btn-danger mx-2" href="/my/mission" >Cancel</a>
+                    </div>
+                    <div class="col text-center" t-if="custom_mission_request.readonly_desc == True">
+                        <a class="btn btn-danger mx-2" href="/my/mission" >Back</a>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+
+
+	<record id="multicurrency_revaluation_report_esky" model="account.report">
+        <field name="name">Unrealized Currency Gains/Losses</field>
+<!--		<field name="root_report_id" ref="account_reports.multicurrency_revaluation_report"/>-->
+		<field name="root_report_id" eval="False"/>
+        <field name="filter_date_range" eval="False"/>
+        <field name="filter_show_draft" eval="True"/>
+        <field name="default_opening_date_filter">last_month</field>
+        <field name="custom_handler_model_id" ref="account_reports.model_account_multicurrency_revaluation_report_handler"/>
+        <field name="main_template">account_reports.multicurrency_report_main_template</field>
+        <field name="line_template">account_reports.multicurrency_report_line_template</field>
+        <field name="search_template">account_reports.multicurrency_report_search_template</field>
+        <field name="column_ids">
+        <record id="multicurrency_revaluation_report_partner_name" model="account.report.column">
+            <field name="name">Partner</field>
+            <field name="expression_label">partner_name</field>
+            <field name="figure_type">none</field>
+        </record>
+        <record id="multicurrency_revaluation_report_balance_currency" model="account.report.column">
+            <field name="name">Balance in Foreign Currency</field>
+            <field name="expression_label">balance_currency</field>
+            <field name="figure_type">none</field>
+        </record>
+        <record id="multicurrency_revaluation_report_balance_operation" model="account.report.column">
+            <field name="name">Balance at Operation Rate</field>
+            <field name="expression_label">balance_operation</field>
+        </record>
+        <record id="multicurrency_revaluation_report_balance_current" model="account.report.column">
+            <field name="name">Balance at Current Rate</field>
+            <field name="expression_label">balance_current</field>
+        </record>
+        <record id="multicurrency_revaluation_report_adjustment" model="account.report.column">
+            <field name="name">Adjustment</field>
+            <field name="expression_label">adjustment</field>
+        </record>
+
+    </field>
+    <field name="line_ids">
+        <!-- Header Line -->
+        <record id="multicurrency_revaluation_to_adjust" model="account.report.line">
+            <field name="name">Accounts To Adjust</field>
+            <field name="code">multicurrency_included1</field>
+            <field name="groupby">currency_id, account_id, id</field>
+            <field name="expression_ids">
+                <record id="multicurrency_revaluation_to_adjust_child_partner_name" model="account.report.expression">
+                    <field name="label">partner_name</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_to_adjust</field>
+                    <field name="subformula">partner_name</field>
+                </record>
+                <record id="multicurrency_revaluation_to_adjust_balance_currency" model="account.report.expression">
+                    <field name="label">balance_currency</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_to_adjust</field>
+                    <field name="subformula">balance_currency</field>
+                </record>
+                <record id="multicurrency_revaluation_to_adjust_balance_operation" model="account.report.expression">
+                    <field name="label">balance_operation</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_to_adjust</field>
+                    <field name="subformula">balance_operation</field>
+                    <field name="auditable" eval="False"/>
+                </record>
+                <record id="multicurrency_revaluation_to_adjust_balance_current" model="account.report.expression">
+                    <field name="label">balance_current</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_to_adjust</field>
+                    <field name="subformula">balance_current</field>
+                    <field name="auditable" eval="False"/>
+                </record>
+                <record id="multicurrency_revaluation_to_adjust_adjustment" model="account.report.expression">
+                    <field name="label">adjustment</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_to_adjust</field>
+                    <field name="subformula">adjustment</field>
+                    <field name="auditable" eval="False"/>
+                </record>
+            </field>
+        </record>
+
+
+        <!-- Excluded Accounts Line -->
+        <record id="multicurrency_revaluation_excluded" model="account.report.line">
+            <field name="name">Excluded Accounts</field>
+            <field name="groupby">currency_id, account_id, id</field>
+            <field name="expression_ids">
+                <record id="multicurrency_revaluation_excluded_partner_name" model="account.report.expression">
+                    <field name="label">partner_name</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_excluded</field>
+                    <field name="subformula">partner_name</field>
+                </record>
+                <record id="multicurrency_revaluation_excluded_balance_currency" model="account.report.expression">
+                    <field name="label">balance_currency</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_excluded</field>
+                    <field name="subformula">balance_currency</field>
+                </record>
+                <record id="multicurrency_revaluation_excluded_balance_operation" model="account.report.expression">
+                    <field name="label">balance_operation</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_excluded</field>
+                    <field name="subformula">balance_operation</field>
+                </record>
+                <record id="multicurrency_revaluation_excluded_balance_current" model="account.report.expression">
+                    <field name="label">balance_current</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_excluded</field>
+                    <field name="subformula">balance_current</field>
+                </record>
+                <record id="multicurrency_revaluation_excluded_adjustment" model="account.report.expression">
+                    <field name="label">adjustment</field>
+                    <field name="engine">custom</field>
+                    <field name="formula">_report_custom_engine_multi_currency_revaluation_excluded</field>
+                    <field name="subformula">adjustment</field>
+                </record>
+            </field>
+        </record>
+    </field>
+    </record>
+
+    <record id="action_account_report_multicurrency_revaluation_esky" model="ir.actions.client">
+            <field name="name">Unrealized Currency Gains/Losses</field>
+            <field name="tag">account_report</field>
+            <field name="context" eval="{'report_id': ref('esky_account_reports.multicurrency_revaluation_report_esky')}"/>
+    </record>
+
+    <menuitem id="account_reports.menu_action_account_report_multicurrency_revaluation" name="Unrealized Currency Gains/Losses" action="action_account_report_multicurrency_revaluation_esky" parent="account.account_reports_management_menu" groups="base.group_multi_currency"
+              />
+</odoo>

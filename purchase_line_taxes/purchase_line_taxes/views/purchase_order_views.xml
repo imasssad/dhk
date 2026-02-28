@@ -1,0 +1,21 @@
+<odoo>
+    <data>
+        <!-- Inherit Purchase Order Form View to add line_taxes field -->
+        <record id="purchase_order_form_inherit_line_taxes" model="ir.ui.view">
+            <field name="name">purchase.order.form.inherit.line.taxes</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                
+                <!-- Add line_taxes field after payment_term_id -->
+                <xpath expr="//field[@name='payment_term_id']" position="after">
+                    <field name="line_taxes" 
+                           widget="many2many_tags" 
+                           options="{'no_create': True}"
+                           placeholder="Select taxes to apply to all lines"/>
+                </xpath>
+
+            </field>
+        </record>
+    </data>
+</odoo>

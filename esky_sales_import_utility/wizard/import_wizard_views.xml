@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="import_data_wizard_views" model="ir.ui.view">
+    <field name="name">import data wizard</field>
+    <field name="model">import.sale.lines</field>
+    <field name="arch" type="xml">
+      <form string="download file" icon="fa-download">
+        <group>
+          <field name="upload_file" filename="file_name"/>
+          <field name="file_name" invisible="1"/>
+        </group>
+        <footer> 
+          <button string="IMPORT" type="object" name="data_upload_sale_lines" class="oe_highlight" />
+          <button name="get_contract_template" string="TEMPLATE" type="object" class="oe_highlight"/>
+          <button string="CANCEL" class="btn btn-default btn-secondary" special="cancel"/>
+      </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="import_sale_lines_data_wizard_action" model="ir.actions.act_window">
+    <field name="name">Import P&amp;L sheet</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">import.sale.lines</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>      
+</odoo>        

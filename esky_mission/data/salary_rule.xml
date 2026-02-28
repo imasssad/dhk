@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Mission Expense Rule -->
+    <record id="mission_expense_rule" model="hr.salary.rule">
+        <field name="name">Mission Expenses</field>
+        <field name="category_id" ref="hr_payroll.ALW"/>
+        <field name="code">MEXP</field>
+        <field name="sequence" eval="20"/>
+        <field name="struct_id" ref="hr_payroll.structure_002"/>
+        <field name="amount_select">code</field>
+        <field name="amount_python_compute">result = payslip.env['hr.payslip'].get_total_expense(payslip)</field>
+     </record>
+</odoo>

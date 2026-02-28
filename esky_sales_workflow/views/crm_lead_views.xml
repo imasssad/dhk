@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="quick_create_opportunity_form_d_register" model="ir.ui.view">
+        <field name="name">crm.lead.form.quick_create.d.register</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.quick_create_opportunity_form"/>
+        <field name="arch" type="xml">
+            <field name="company_currency" position="before">
+                <field name="d_register" widget="boolean_toggle"/>
+                <field name="usd_currency" invisible="1"/>
+            </field>
+            <field name="partner_id" position="attributes">
+                <attribute name="string">Account</attribute>
+                <attribute name="domain">[('customer_rank', '>', 0),('parent_id', '=', False)]</attribute>
+            </field>
+            <field name="partner_id" position="after">
+                <field name="contact_person"/>
+            </field>
+            <field name="expected_revenue" position="attributes">
+                <attribute name="options">{'currency_field': 'usd_currency'}</attribute>
+            </field>
+            <field name="recurring_revenue" position="attributes">
+                <attribute name="options">{'currency_field': 'usd_currency'}</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="crm_lead_view_form_d_register" model="ir.ui.view">
+        <field name="name">crm.lead.form.d.register</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <field name="lost_reason_id" position="before">
+                <field name="d_register" widget="boolean_toggle"/>
+                <field name="usd_currency" invisible="1"/>
+            </field>
+            <field name="tag_ids" position="after">
+                <field name="contact_person"/>
+                <field name="presales" domain="[('role', '=', 'presales')]" widget="many2many_tags" options="{'no_create': True}"/>
+            </field>
+            <xpath expr="//group[@name='opportunity_partner']/field[@name='partner_id']" position="attributes">
+                <attribute name="string">Account</attribute>
+                <attribute name="domain">[('customer_rank', '>', 0),('parent_id', '=', False)]</attribute>
+            </xpath>
+            <field name="expected_revenue" position="attributes">
+                <attribute name="options">{'currency_field': 'usd_currency'}</attribute>
+            </field>
+            <field name="recurring_revenue" position="attributes">
+                <attribute name="options">{'currency_field': 'usd_currency'}</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="view_crm_lead_kanban_contact_person" model="ir.ui.view">
+        <field name="name">crm.lead.kanban.contact.person</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <xpath expr="//kanban/field[@name='partner_id']" position="after">
+                <field name="contact_person"/>
+                <field name="usd_currency"/>
+            </xpath>
+            <xpath expr="//div[hasclass('oe_kanban_content')]/div[3]" position="after">
+                <div>
+                    <span class="o_text_overflow" t-if="record.contact_person.value" t-esc="record.contact_person.value"></span>
+                </div>
+            </xpath>
+            <field name="expected_revenue" position="attributes">
+                <attribute name="options">{'currency_field': 'usd_currency'}</attribute>
+            </field>
+            <field name="recurring_revenue" position="attributes">
+                <attribute name="options">{'currency_field': 'usd_currency'}</attribute>
+            </field>
+<!--            <xpath expr="//div[hasclass('oe_kanban_content')]/div[2]" position="replace">-->
+<!--                <t t-if="record.expected_revenue.raw_value">-->
+<!--                    <field name="expected_revenue" widget="monetary" options="{'currency_field': 'usd_currency'}"/>-->
+<!--                    <span t-if="record.recurring_revenue and record.recurring_revenue.raw_value" groups="crm.group_use_recurring_revenues"> + </span>-->
+<!--                </t>-->
+<!--                <t t-if="record.recurring_revenue and record.recurring_revenue.raw_value">-->
+<!--                    <field name="recurring_revenue" widget="monetary" options="{'currency_field': 'usd_currency'}" groups="crm.group_use_recurring_revenues"/>-->
+<!--                    <field name="recurring_plan" groups="crm.group_use_recurring_revenues"/>-->
+<!--                </t>-->
+<!--            </xpath>-->
+        </field>
+    </record>
+</odoo>

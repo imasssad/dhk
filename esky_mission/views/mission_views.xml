@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="mission_form">
+        <field name="name">mission.form</field>
+        <field name="model">mission.mission</field>
+        <field name="arch" type="xml">
+            <form>
+                <header>
+                    <button name="approve_by_manager" type="object" string="APPROVE" class="btn-primary" groups="esky_mission.group_mission_manager" states="confirm"/>
+                    <button name="approve_mission_expense" type="object" string="APPROVE" class="btn-primary" groups="esky_mission.group_mission_manager" states="lost"/>
+                    <button name="approve_by_hr_manager" type="object" string="APPROVE" class="btn-primary" groups="esky_mission.group_mission_hr_manager" states="validate1"/>
+                    <button name="refuse_mission" type="object" string="REFUSE" class="btn-secondary" states="confirm,validate1"/>
+                    <field name="state" widget="statusbar" statusbar_visible="confirm,validate,refuse"/>
+                </header>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date"/>
+                            <field name="employee_id"/>
+                            <field name="options"/>
+                            <field name="signin_time" attrs="{'invisible': [('options', '!=', 'visit')]}"/>
+                            <field name="zone_id" attrs="{'invisible': [('options', '!=', 'visit')]}"/>
+                            <field name="sign_in_location" attrs="{'invisible': [('options', '!=', 'visit')]}" widget="url"/>
+                            <field name="signin_at_esky" attrs="{'invisible': [('options', '!=', 'visit')]}"/>
+                            <field name="desc" attrs="{'readonly': [('readonly_desc', '=', True)]}"/>
+                        </group>
+                        <group>
+                            <field name="name"/>
+                            <field name="manager_id"/>
+                            <field name="customer_id" attrs="{'invisible': [('options', '!=', 'visit')]}"/>
+                            <field name="signout_time" attrs="{'invisible': [('options', '!=', 'visit')]}"/>
+                            <field name="zone_rate" attrs="{'invisible': [('options', '!=', 'visit')]}"/>
+                            <field name="sign_out_location" attrs="{'invisible': [('options', '!=', 'visit')]}" widget="url"/>
+                            <field name="readonly_desc" invisible="1"/>
+                            <field name="signout_at_esky" attrs="{'invisible': [('options', '!=', 'visit')]}"/>
+                        </group>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="mission_tree">
+        <field name="name">mission.tree</field>
+        <field name="model">mission.mission</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="date"/>
+                <field name="name"/>
+                <field name="employee_id"/>
+                <field name="manager_id"/>
+                <field name="options"/>
+                <field name="state"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="mission_action">
+        <field name="name">Missions</field>
+        <field name="res_model">mission.mission</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+           <p class="o_view_nocontent_smiling_face">
+              Create a Mission
+           </p>
+        </field>
+    </record>
+    <menuitem
+        id="mission_main_menu"
+        name="Missions"
+        parent="hr.menu_hr_root"
+        sequence="1"
+        groups="esky_mission.group_mission_manager"/>
+
+    <menuitem
+        id="mission_menu"
+        action="mission_action"
+        parent="esky_mission.mission_main_menu"
+        groups="esky_mission.group_mission_manager"
+        sequence="1"/>
+
+    <menuitem
+        id="employees_report_menu"
+        name="Employees Report"
+        action="action_mission_report_wizard"
+        parent="hr.hr_menu_hr_reports"
+        sequence="2"/>
+</odoo>

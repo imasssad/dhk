@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="sale_lines_excel" model="ir.attachment">
+        <field name="name">P&amp;L Sheet</field>
+        <field file="esky_sales_import_utility/P&amp;L.xlsx" name="datas" type="base64"/>
+    </record>  
+</odoo>  

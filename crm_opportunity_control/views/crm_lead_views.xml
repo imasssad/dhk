@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="crm_oppor_case_form_view" model="ir.ui.view">
+        <field name="name">crm.lead.oppor.inherited</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="sale_crm.crm_case_form_view_oppor"/>
+        <field name="arch" type="xml">
+            <button name="action_view_sale_order" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </button>
+            <button name="action_view_sale_quotation" position="after">
+                <button class="oe_stat_button" type="object" attrs="{'invisible': ['|', ('sale_order_count', '=', 0), ('type', '=', 'lead')]}"
+                        name="action_view_sale_order" icon="fa-usd">
+                        <div class="o_field_widget o_stat_info">
+                            <span class="o_stat_value"><field name="sale_data_amount_total" widget="monetary" options="{'currency_field': 'sale_currency_id'}"/></span>
+                            <span class="o_stat_text"> Orders</span>
+                            <field name="sale_order_count" invisible="1"/>
+                            <field name="sale_currency_id" invisible="1"/>
+                        </div>
+                    </button>
+            </button>
+        </field>
+    </record>
+</odoo>

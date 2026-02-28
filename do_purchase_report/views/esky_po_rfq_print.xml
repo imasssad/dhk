@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+	<template id="report_project_purchase_rfq_document_esky">
+        <t t-call="do_purchase_report.external_layout_mw_purchase_report">
+        	<style>
+                body{
+                    font-size:22px!important;
+                }
+                .style-table-invoice {
+                    border: 1px black solid;
+                    border-top:none;
+                    width: 100%;
+                    border-bottom:none;
+                }
+                .style-sub-table-invoice {
+                    position: relative;
+                   <!--  width: 30%;
+                    left: 55rem; -->
+                }
+                .style-acc-table-invoice {
+                    border: 1px black solid;
+                    <!-- border-top:none; -->
+                    width: 100%;
+                }
+            </style>
+        	<t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+        	<t t-set="forced_vat" t-value="o.fiscal_position_id.foreign_vat"/>
+    	    <div class="page" style="">
+        		<div class="row" style="border: 1px solid;">
+                    <div class="col-md-12 text-center">
+                        <t t-if="o.state == 'purchase'">
+                            <h2 style="font-size: 2rem;"> <strong>PURCHASE ORDER</strong></h2>
+                        </t>
+                        <t t-else="">
+                            <h2 style="font-size: 2rem;"> <strong>Request for Quotation</strong></h2>
+                        </t>
+                    </div>
+                </div>
+
+                <div class="row" style="border: 1px solid;border-top:none;">
+                    <div class="col-md-6 text-left" style="padding-left: 2rem;padding-top: 2rem;">
+                        <strong><span t-esc="o.current_company_name.name"/></strong><br/>
+                        <t t-if="o.current_company_name.street and o.current_company_name.street2">
+                                <span t-esc="o.current_company_name.street"/>, <span t-esc="o.current_company_name.street2"/> <br/>
+                        </t>
+                        <t t-elif="o.current_company_name.street">
+                                <span t-esc="o.current_company_name.street"/> <br/>
+                        </t>
+                        <t t-elif="o.current_company_name.street2">
+                                <span t-esc="o.current_company_name.street2"/><br/>
+                        </t>
+                        <t t-if="o.current_company_name.city and o.current_company_name.state_id and o.current_company_name.country_id">
+                                <span t-esc="o.current_company_name.city"/>, <span t-esc="o.current_company_name.state_id.name"/> <span t-esc="o.current_company_name.zip"/>, <span t-esc="o.current_company_name.country_id.name"/> <br/>
+                        </t>
+                        <t t-elif="o.current_company_name.city and o.current_company_name.state_id">
+                                <span t-esc="o.current_company_name.city"/>, <span t-esc="o.current_company_name.state_id.name"/> <span t-esc="o.current_company_name.zip"/> <br/>
+                        </t>
+                        <t t-elif="o.current_company_name.city and o.current_company_name.country_id">
+                                <span t-esc="o.current_company_name.city"/> <span t-esc="o.current_company_name.zip"/>, <span t-esc="o.current_company_name.country_id.name"/><br/>
+                        </t>
+                        <t t-elif="o.current_company_name.state_id and o.current_company_name.country_id">
+                                <span t-esc="o.current_company_name.state_id"/> <span t-esc="o.current_company_name.zip"/>, <span t-esc="o.current_company_name.country_id.name"/><br/>
+                        </t>
+                        <span>Phone: <span t-esc="o.current_company_name.phone"/></span>
+                    </div>
+                    <div class="col-6">
+                        <div style="position:relative;right:16rem;top:3rem;">
+                            <span style="font-weight: 700;">Date:</span>
+                            <span t-esc="o.date_order" t-options='{"widget": "date"}'/>
+                            <br/>
+                            <span style="font-weight: 700;">Quote No.</span>
+                            <span t-esc="o.name"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="border: 1px solid;border-top:none;height:1.5rem;">
+                </div>
+
+                <div class="row" style="border: 1px solid;border-top:none;border-bottom:none;">
+                    <div class="col-md-12 text-left" style="">
+                        <span> <strong>Bill To</strong></span>
+                    </div>
+                </div>
+
+                <div class="row" style="border: 1px solid;border-top:none;border-bottom:none;">
+                    <div class="col-6">
+                        <span style="margin-left: 2rem;font-weight:700;" t-esc="o.partner_id.name"/>
+                    </div>
+                    <div class="col-2 text-end">
+                        <span style="font-weight:700;">Contact :&amp;nbsp;</span>
+                    </div>
+                    <div class="col-4 text-start">
+                        <span t-esc="o.partner_id.name"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border: 1px solid;border-top:none;border-bottom:none;">
+                    <div class="col-6">
+                        <t t-if="o.partner_id.street and o.partner_id.street2">
+                            <span style="margin-left: 2rem;" t-esc="o.partner_id.street"/>, <span t-esc="o.partner_id.street2"/>
+                        </t>
+                        <t t-elif="o.partner_id.street">
+                            <span t-esc="o.partner_id.street" style="margin-left: 2rem;"/>
+                        </t>
+                        <t t-elif="o.partner_id.street2">
+                            <span t-esc="o.partner_id.street2" style="margin-left: 2rem;"/>
+                        </t>
+                    </div>
+                    <div class="col-2 text-end">
+                        <span style="font-weight:700;">Phone Number :&amp;nbsp;</span>
+                    </div>
+                    <div class="col-4 text-start">
+                        <span t-esc="o.partner_id.phone"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border: 1px solid;border-top:none;border-bottom:none;">
+                    <div class="col-6">
+                        <t t-if="o.partner_id.city and o.partner_id.state_id and o.partner_id.country_id">
+                            <span style="margin-left: 2rem;" t-esc="o.partner_id.city"/>, <span t-esc="o.partner_id.state_id.name"/> <span t-esc="o.partner_id.zip"/>, <span t-esc="o.partner_id.country_id.name"/>
+                        </t>
+                        <t t-elif="o.partner_id.city and o.partner_id.state_id">
+                            <span style="margin-left: 2rem;" t-esc="o.partner_id.city"/>, <span t-esc="o.partner_id.state_id.name"/> <span t-esc="o.partner_id.zip"/>
+                        </t>
+                        <t t-elif="o.partner_id.city and o.partner_id.country_id">
+                            <span style="margin-left: 2rem;" t-esc="o.partner_id.city"/> <span t-esc="o.partner_id.zip"/>, <span t-esc="o.partner_id.country_id.name"/>
+                        </t>
+                        <t t-elif="o.partner_id.state_id and o.partner_id.country_id">
+                            <span style="margin-left: 2rem;" t-esc="o.partner_id.state_id"/> <span t-esc="o.partner_id.zip"/>, <span t-esc="o.partner_id.country_id.name"/>
+                        </t>
+                    </div>
+                    <div class="col-2 text-end">
+                        <span style="font-weight:700;">Email Address :&amp;nbsp;</span>
+                    </div>
+                    <div class="col-4 text-start">
+                        <span style="color:#0563c1;" t-esc="o.partner_id.email"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border: 1px solid;border-bottom:none;padding:2rem;">
+                    <div class="col-6">
+                        <span style="margin-left: 2rem;font-weight:700;">
+                            Credit Terms:
+                        </span>
+                        <span style="margin-left:1rem;" t-esc="o.payment_term_id.name" />
+                    </div>
+                    <!-- <div class="col-6">
+                        <div style="margin-left:0rem;">
+                            <span style="font-weight:700;">TBA</span>
+                        </div>
+                    </div> -->
+                </div>
+
+                <div class="row" style="border: 1px solid;padding:2rem;">
+                    <div class="col-12">
+                        <span style="margin-left: 2rem;font-weight:700;">
+                            Payment:
+                        </span>
+                        <span style="margin-left:1rem;" t-esc="o.payment" />
+                    </div>
+                </div>
+
+                <t t-set="sno" t-value="1" />
+                <t t-set="has_dates" t-value="any(line.start_date or line.end_date for line in o.order_line)"/>
+                <table class="table table-sm o_main_table table-bordered" style="border-color: black;">
+                	<thead style="display: table-row-group">
+                		<tr>
+                        	<th name="th_no" class="text-center"><span>No.</span></th>
+                            <th name="th_description" class="text-center"><span>DESCRIPTION</span></th>
+                            <th name="th_quantity" class="text-center"><span>QTY</span></th>
+                                            <!-- Conditionally show date columns -->
+                            <th t-if="has_dates" class="text-center"><span>START DATE</span></th>
+                            <th t-if="has_dates" class="text-center"><span>END DATE</span></th>
+                            <th name="th_priceunit" t-attf-class="text-center {{ 'd-none d-md-table-cell' if report_type == 'html' else '' }}"><span>UNIT PRICE</span></th>
+                            <th name="th_subtotal" class="text-center">
+                                <span groups="account.group_show_line_subtotals_tax_excluded">TOTAL</span>
+                                <span groups="account.group_show_line_subtotals_tax_included">TOTAL</span>
+                            </th>
+	                    </tr>
+	                </thead>
+	                <tbody>
+	                    <t t-foreach="o.order_line" t-as="order_line">
+	                        <tr t-att-class="'bg-200 fw-bold o_line_section' if order_line.display_type == 'line_section' else 'fst-italic o_line_note' if order_line.display_type == 'line_note' else ''">
+	                            <t t-if="not order_line.display_type">
+	                            	<td class="text-center"><span t-esc="sno"/><t t-set="sno" t-value="sno+1"/></td>
+	                                <td class="text-center" id="product">
+	                                    <span t-field="order_line.name"/>
+	                                </td>
+	                                <td class="text-center">
+	                                    <span t-field="order_line.product_qty"/>
+	                                    <span t-field="order_line.product_uom" groups="uom.group_uom"/>
+	                                </td>
+                                    <!-- Conditionally show date cells -->
+                                    <t t-if="has_dates">
+                                        <td class="text-center">
+                                            <span t-if="order_line.start_date" t-field="order_line.start_date" t-options='{"widget": "date"}'/>
+                                            <t t-if="not order_line.start_date">-</t>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-if="order_line.end_date" t-field="order_line.end_date" t-options='{"widget": "date"}'/>
+                                            <t t-if="not order_line.end_date">-</t>
+                                        </td>
+                                    </t>
+	                                <td class="text-center">
+                                        <span t-field="order_line.price_unit"/>
+                                    </td>
+                                    <td class="text-center">
+                                        <span t-field="order_line.price_subtotal"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+	                            </t>
+	                            <t t-if="order_line.display_type == 'line_section'">
+                                    <td colspan="99" id="section" class="text-center">
+                                        <span t-field="order_line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="order_line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-if="order_line.display_type == 'line_note'">
+                                    <td colspan="99" id="note" class="text-center">
+                                        <span t-field="order_line.name"/>
+                                    </td>
+                                </t>
+	                        </tr>
+	                    </t>
+	                </tbody>
+	            </table>
+
+                <div class="" style="border: 1px solid black;border-top:none;position:relative;bottom:1rem;height:inherit;">
+
+                    <table class="table table-borderless style-sub-table-invoice">
+
+                        <tr class="">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-end" style="font-weight:700;color:black;">SUBTOTAL</td>
+                            <td class="text-center" style="border-top: none  !important;width:20%;">
+                                <span class="" t-field="o.amount_untaxed"/>
+                            </td>
+                        </tr>
+                        <t t-set="tax_totals" t-value="o.tax_totals"/>
+                        <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                            <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                            <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+                                <tr>
+                                    <t t-if="tax_totals['display_tax_base']">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-end" style="font-weight:700;color:black;">
+                                            <span t-esc="amount_by_group['tax_group_name']"/>
+                                            <span class="text-nowrap"> on
+                                                <t t-esc="amount_by_group['formatted_tax_group_base_amount']"/>
+                                            </span>
+                                        </td>
+                                        <td class="text-center" style="border-top: none  !important;">
+                                            <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td class="text-end" style="font-weight:700;color:black;"><span class="text-nowrap" t-esc="amount_by_group['tax_group_name']"/></td>
+                                        <td class="text-center" style="border-top: none  !important;">
+                                            <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']" />
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </t>
+                        <tr class="">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td class="text-end" style="font-weight:700;color:black;">TOTAL</td>
+                            <td class="text-center" style="border-top: none  !important;">
+                                <span class="" t-field="o.amount_total"/>
+                            </td>
+                        </tr>
+                    </table>
+
+                    <div class="row" style="position: relative;bottom: 5.5rem;">
+                        <div class="col-6">
+                            <span style="margin-left: 25rem;">
+                                <strong>Currency:</strong>
+                            </span>
+                            <strong><span t-esc="o.current_company_name.currency_id.name"/></strong>
+                        </div>
+                    </div>
+
+                    <div class="row" style="border: 1px solid;border:none;position:relative;bottom:2rem;">
+                        <div class="col-5">
+                            <span style="margin-left: 4rem;font-weight:700;">
+                                TAX ID:
+                            </span>
+                            <span style="margin-left: 0.5rem;font-weight:700;" t-esc="o.partner_id.vat"/>
+                        </div>
+                        <div class="col-7">
+                            <div style="">
+                                <span style="font-weight:700;">Registration No.:</span>
+                                <span style="margin-left: 0.5rem;font-weight:700;" t-esc="o.name"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" style="position:relative;bottom:0.5rem;">
+                        <div class="col-6">
+                            <h4 style="font-weight:700;margin-left:1rem;">
+                                Bank Accounts Details:
+                            </h4>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="border: 1px solid;border-bottom:none;position:relative;bottom:1rem;">
+                    <div class="col-6">
+                        <span style="font-weight:700;">
+                            Account Name:
+                        </span>
+                        <span style="margin-left:1rem;" t-esc="o.add_account_name" />
+                    </div>
+                </div>
+
+                <table class="table table-sm o_main_table table-borderless style-acc-table-invoice" style="position:relative;bottom:1rem;" name="invoice_line_table">
+                    <thead>
+                        <tr>
+                            <th name="th_acc_no" class="text-start"><span>Account No.</span></th>
+                            <th name="th_curr" class="text-start"><span>Currency</span></th>
+                            <th name="th_bank_name" class="text-start"><span>Bank Name</span></th>
+                            <th name="th_swift" class="text-start"><span>Swift &amp; IBAN</span></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                           <td><span t-field="o.add_account_no"/></td>
+                            <td><span t-field="o.add_currency"/></td>
+                            <td><span t-field="o.add_bank_name"/></td>
+                            <td><span t-field="o.add_iban_swift"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+    	   </div>
+        </t>
+    </template>
+</odoo>

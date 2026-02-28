@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<odoo>
+    <record id="view_partner_form_inherit_role" model="ir.ui.view">
+        <field name="name">res.partner.form.role.inherit</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//group/field[@name='user_id']" position="after">
+                <field name="second_sale_person"  domain="[('role', '=', 'salesperson')]" options="{'no_create':1,'no_create_edit':1}"/>
+                <field name="account_manager" domain="[('role', '=', 'accounting_manager')]" options="{'no_create': True}"/>
+                <field name="presales" domain="[('role', '=', 'presales')]" widget="many2many_tags" options="{'no_create': True}"/>
+            </xpath>
+            <xpath expr="//group/field[@name='user_id']" position="attributes">
+                <attribute name="domain">[('role', '=', 'salesperson')]</attribute>
+                <attribute name="options">{'no_create': True}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>

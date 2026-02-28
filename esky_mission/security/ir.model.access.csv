@@ -1,0 +1,11 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mission_manager,access.mission.manager,model_mission_mission,esky_mission.group_mission_manager,1,1,1,1
+access_mission_hr_manager,access.mission.hr.manager,model_mission_mission,esky_mission.group_mission_hr_manager,1,1,1,1
+access_mission_admin,access.mission.admin,model_mission_mission,esky_mission.group_mission_admin_manager,1,1,1,1
+access_mission_portal,access.mission.portal,model_mission_mission,base.group_portal,1,0,0,0
+access_mission_backend,access.mission.backend,model_mission_mission,base.group_user,1,0,0,0
+access_zone_manager,access.zone.manager,model_zone_rate,esky_mission.group_mission_manager,1,1,1,1
+access_zone_hr_manager,access.zone.hr.manager,model_zone_rate,esky_mission.group_mission_hr_manager,1,1,1,1
+access_zone_admin,access.zone.admin,model_zone_rate,esky_mission.group_mission_admin_manager,1,1,1,1
+access_zone_all,access.zone.all,model_zone_rate,,1,1,1,0
+access_mission_report_wizard_user,access.mission.report.wizard.user,model_mission_report_wizard,,1,1,1,1

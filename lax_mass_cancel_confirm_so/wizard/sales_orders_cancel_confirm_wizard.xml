@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="view_cancel_sales_orders_wizard" model="ir.ui.view">
+        <field name="name">cancel.sales.orders.form</field>
+        <field name="model">cancel.sales.orders</field>
+        <field name="arch" type="xml">
+             <form string="Cancel Sales Orders">
+                <strong>Are you sure to Cancel these Sales Orders?</strong>
+                <group>
+                    <group>
+                        <field name="cancel_type" widget="radio" required="1"/>
+                    </group>
+                    <group>
+                        <field name="cancel_delivery_order"/>
+                        <field name="cancel_invoice_and_payment"/>
+                    </group>
+                </group>
+                <footer>
+                    <button name="confirm_btn_wizard" string="Confirm" type="object"
+                    class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_cancel_sales_orders_wizard" model="ir.actions.act_window">
+        <field name="name">Cancel Orders</field>
+        <field name="res_model">cancel.sales.orders</field>
+        <field name="view_id" ref="view_cancel_sales_orders_wizard"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order" />
+    </record>
+    
+    <record id="view_confirm_sales_orders_wizard" model="ir.ui.view">
+        <field name="name">confirm.sales.orders.form</field>
+        <field name="model">confirm.sales.orders</field>
+        <field name="arch" type="xml">
+             <form string="Confirm Sales Orders">
+                <strong>Are you sure to Confirm these Sales Orders?</strong>
+                <footer>
+                    <button name="confirm_sales_order" string="Confirm Sales Orders" type="object"
+                    class="btn-primary"/>
+                    <button name="confirm_and_reset_sales_order" string="Reset &#38; Confirm Sales Orders" type="object" class="btn-primary"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    
+    <record id="action_confirm_sales_orders_wizard" model="ir.actions.act_window">
+        <field name="name">Confirm Sales Orders</field>
+        <field name="res_model">confirm.sales.orders</field>
+        <field name="view_id" ref="view_confirm_sales_orders_wizard"/>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="sale.model_sale_order" />
+    </record>
+</odoo>

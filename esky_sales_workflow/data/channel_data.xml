@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="mail.channel" id="channel_new_customer_created">
+        <field name="name">New Customer Created</field>
+        <field name="description">General announcements for Sales Director</field>
+        <field name="group_ids" eval="[Command.link(ref('esky_sales_workflow.group_sales_director'))]"/>
+    </record>
+
+    <record model="mail.channel" id="channel_salesperson_assigned">
+        <field name="name">Salesperson Assigned</field>
+        <field name="description">General announcements for Technical Head</field>
+        <field name="group_ids" eval="[Command.link(ref('esky_sales_workflow.group_technical_head'))]"/>
+    </record>
+</odoo>

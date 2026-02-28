@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="import_documents_wizard_views" model="ir.ui.view">
+    <field name="name">import documents wizard</field>
+    <field name="model">import.sales.documents</field>
+    <field name="arch" type="xml">
+      <form string="download file" icon="fa-download">
+        <group>
+          <field name="vendor_quotation" filename="vendor_quotation_name"/>
+          <field name="customer_po" filename="customer_po_name"/>
+          <field name="vendor_quotation_name" invisible="1"/>
+          <field name="customer_po_name" invisible="1"/>
+        </group>
+        <footer> 
+          <button string="UPLOAD" type="object" name="data_upload" class="oe_highlight"/>
+          <button string="CANCEL" class="btn btn-default btn-secondary" special="cancel"/>
+      </footer>
+      </form>
+    </field>
+  </record>
+
+  <record id="import_sales_documents_wizard_action" model="ir.actions.act_window">
+    <field name="name">Upload Documents</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">import.sales.documents</field>
+    <field name="view_mode">form</field>
+    <field name="target">new</field>
+  </record>
+</odoo>        

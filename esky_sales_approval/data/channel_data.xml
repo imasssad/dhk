@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="mail.channel" id="channel_approval_to_send">
+            <field name="name">Approval To Sent</field>
+            <field name="description">General announcements for Getting Approval To Send Quotation</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_user'))]"/>
+        </record>
+
+        <record model="mail.channel" id="channel_approval_to_confirm">
+            <field name="name">Approval To Confirm</field>
+            <field name="description">General announcements for Getting Approval To Confirm Quotation</field>
+            <field name="group_ids" eval="[Command.link(ref('base.group_user'))]"/>
+        </record>
+    </data>
+</odoo>

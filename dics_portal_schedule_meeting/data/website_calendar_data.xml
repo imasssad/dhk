@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="calendar.model_calendar_event" model="ir.model">
+            <field name="website_form_access">True</field>
+        </record>
+        <function model="ir.model.fields" name="formbuilder_whitelist">
+            <value>calendar.event</value>
+            <value eval="[
+                'name',
+                'user_id',
+                'start',
+                'stop',
+                'duration',
+                'partner_ids',
+            ]"/>
+        </function>
+    </data>
+</odoo>

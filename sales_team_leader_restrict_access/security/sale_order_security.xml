@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Group Sales / Team Lead -->
+    <record id="group_sale_salesman_team_leader" model="res.groups">
+        <field name="name">User: Team Lead</field>
+        <field name="category_id" ref="base.module_category_sales_sales"/>
+        <field name="implied_ids" eval="[(6,0, [ref('sales_team.group_sale_salesman')])]"/>
+        <field name="comment">The user will have access to whose records in the sales application.</field>
+    </record>
+
+    <record id="sale_order_team_leader_rule" model="ir.rule">
+        <field name="name">Team Lead Orders</field>
+        <field ref="sale.model_sale_order" name="model_id"/>
+        <field name="domain_force">
+            ['|', '|', ('user_id','=',False),('user_id', '=', user.id),
+            ('team_id', 'in', user.crm_team_ids.ids)]</field>
+        <field name="groups" eval="[(6,0, [ref('sales_team_leader_restrict_access.group_sale_salesman_team_leader')])]"/>
+    </record>
+
+    <record id="sale_order_line_team_leader_rule" model="ir.rule">
+        <field name="name">Team Lead Order Lines</field>
+        <field ref="sale.model_sale_order_line" name="model_id"/>
+        <field name="domain_force">
+            ['|', '|', ('salesman_id','=',user.id),('salesman_id','=',False),
+            ('order_id.team_id', 'in', user.crm_team_ids.ids)]</field>
+        <field name="groups" eval="[(6, 0, [ref('sales_team_leader_restrict_access.group_sale_salesman_team_leader')])]"/>
+    </record>
+
+    <record id="sale_order_report_team_leader_rule" model="ir.rule">
+        <field name="name">Sales Report Leader Rule</field>
+        <field ref="sale.model_sale_report" name="model_id"/>
+        <field name="domain_force">
+            ['|', '|', ('user_id','=',user.id),
+            ('user_id','=',False),
+            ('team_id', 'in', user.crm_team_ids.ids)]</field>
+        <field name="groups" eval="[(6, 0, [ref('sales_team_leader_restrict_access.group_sale_salesman_team_leader')])]"/>
+    </record>
+
+    <!-- Invoice Rules -->
+    <record model="ir.rule" id="account_invoice_report_rule_team_leader_see_personal">
+        <field name="name">Team Lead Invoices Analysis</field>
+        <field name="model_id" ref="account.model_account_invoice_report"/>
+        <field name="domain_force">
+            ['|','|',('invoice_user_id', '=', user.id),
+            ('invoice_user_id', '=', False),
+            ('team_id', 'in', user.crm_team_ids.ids)]</field>
+        <field name="groups" eval="[(6, 0, [ref('sales_team_leader_restrict_access.group_sale_salesman_team_leader')])]"/>
+    </record>
+
+    <record model="ir.rule" id="account_move_team_leader_personal_rule">
+        <field name="name">Team Lead Invoice</field>
+        <field ref="account.model_account_move" name="model_id"/>
+        <field name="domain_force">
+            [('move_type', 'in', ('out_invoice', 'out_refund',)),
+            '|','|',('invoice_user_id', '=', user.id),
+            ('invoice_user_id', '=', False),
+            ('team_id', 'in', user.crm_team_ids.ids)]</field>
+        <field name="groups" eval="[(6, 0, [ref('sales_team_leader_restrict_access.group_sale_salesman_team_leader')])]"/>
+    </record>
+
+    <record model="ir.rule" id="account_move_line_team_leader_personal_rule">
+        <field name="name">Team Lead Invoice Lines</field>
+        <field ref="account.model_account_move_line" name="model_id"/>
+        <field name="domain_force">
+            [('move_id.move_type', 'in', ('out_invoice', 'out_refund',)),
+            '|','|',
+            ('move_id.invoice_user_id', '=', user.id),
+            ('move_id.invoice_user_id', '=', False),
+            ('move_id.team_id', 'in', user.crm_team_ids.ids)]</field>
+        <field name="groups" eval="[(6, 0, [ref('sales_team_leader_restrict_access.group_sale_salesman_team_leader')])]"/>
+    </record>
+
+    <record model="ir.ui.menu" id="sale.menu_sale_report">
+        <field name="groups_id" eval="[ref('sales_team.group_sale_salesman')]"/>
+    </record>
+
+</odoo>

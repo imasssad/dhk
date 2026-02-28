@@ -1,0 +1,29 @@
+<odoo>
+     <record id="cheque_date_wizard_view" model="ir.ui.view">
+        <field name="name">cheque.date</field>
+        <field name="model">cheque.date.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Cheque">
+                <group>
+                    <field name="bank_account" invisible="context.get('bounce', False)"/>
+                    <field name="cheque_deposite_date"/>
+                    <field name="currency_id" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="cash_date_change" type="object" string="Submit" class="oe_highlight"/>
+                    or
+                    <button name="cancel" string="Cancel" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+
+    <record id="action_cheque_date_wizard" model="ir.actions.act_window">
+        <field name="name">Cheque</field>
+        <field name="res_model">cheque.date.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="cheque_date_wizard_view"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

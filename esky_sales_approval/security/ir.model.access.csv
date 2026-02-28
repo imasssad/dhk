@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_send_approval_workflow,access_send_approval_workflow,model_send_approval_workflow,,1,1,1,1
+access_reject_reason_wizard,access_reject_reason_wizard,model_reject_reason_wizard,,1,1,1,1
+access_import_sales_documents,access.import.sales.documents,model_import_sales_documents,,1,1,1,0
+access_confirm_approval_workflow,access_confirm_approval_workflow,model_confirm_approval_workflow,,1,1,1,1

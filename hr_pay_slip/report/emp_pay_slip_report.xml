@@ -1,0 +1,232 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_hr_pay_slip">
+        <t t-foreach="docs" t-as="o">
+            <t t-call="web.html_container">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <table style="width:100%;border:1px solid black;border-collapse: collapse;background-color: #FFDFDD;">
+                            <tbody>
+                                <tr style="font-size: 20px;">
+                                    <td style="width:6%;"></td>
+                                    <td colspan="10" class="text-left" style="padding: 8px"><span t-field="o.company_id.name" /></td>
+                                </tr>
+                                <tr class="text-left">
+                                    <td style="width:6%;"></td>
+                                    <td style="padding: 5px" colspan="10">Salary Pay Slip For The Month Of Jan 2023</td>
+                                </tr>
+                                <tr class="text-left">
+                                    <td style="width:6%;"></td>
+                                    <td style="width:10%;padding: 5px" class="text-left">Name :</td>
+                                    <td colspan="7" class="text-left" style="padding: 5px"><span t-field="o.name" /></td>
+                                    <td style="width:6%;"></td>
+                                    <td style="width:6%;"></td>
+                                </tr>
+                                <tr class="text-left">
+                                    <td style="width:6%;"></td>
+                                    <td class="text-left" style="padding: 5px">Account :</td>
+                                    <td class="text-center" style="padding: 5px; width: 23%;">327191</td>
+                                    <!-- <td class="text-left"><span t-field="o.name" /></td> -->
+                                    <td style="width:3%;"></td>
+                                    <td style="width:6%;"></td>
+                                    <td colspan="2" class="text-left" style="padding: 5px">Email :</td>
+                                    <td colspan="4" style="width:6%;padding: 5px"></td>
+                                </tr>
+                                <tr class="text-left">
+                                    <td style="width:6%; padding: 5px;">1</td>
+                                    <td colspan="4" class="text-center" style="background-color: #AEB6BF;"><b><u>Basic Payment</u></b></td>
+                                    <td style="width:3%;padding: 5px;" class="text-left">Rs.</td>
+                                    <td style="width:8%;padding: 5px;text-align: right;"><span t-esc="basic_slry" /></td>
+                                    <td style="width:3%;padding: 5px;">A</td>
+                                    <td style="padding: 5px;">Total Attendance</td>
+                                    <td style="width:3%;padding: 5px;"></td>
+                                    <td style="width:3%;padding: 5px; text-align: right;"><span t-esc="day"/></td>
+                                </tr>
+
+                                <t t-set="count" t-value="1"/>
+                                <t t-set="line_total" t-value="0"/>
+                                <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-set="count" t-value="count + 1"/>
+                                    <tr class="text-left" t-if="count &lt;= 7">
+                                        <t t-if="count == 2">
+                                            <t t-set="line_total" t-value="line_total + line.total"/>
+                                            <td style="width:6%;padding: 5px;"><span t-esc="count" /></td>
+                                            <td colspan="2" class="text-left" style="padding: 5px;"><span t-field="line.name" /></td>
+                                            <td style="width:3%;padding: 5px;">Rs.</td>
+                                            <td style="width:6%;padding: 5px;text-align: right;"><span t-field="line.total" /></td>
+                                            <td colspan="2" rowspan="6"></td>
+                                            <td style="width:3%;padding: 5px;">B</td>
+                                            <td style="padding: 5px;">Total Leave</td>
+                                            <td style="width:3%;padding: 5px;"></td>
+                                            <td style="width:3%;padding: 5px;text-align: right;">0</td>
+                                        </t>
+                                        <t t-if="count == 3">
+                                            <t t-set="line_total" t-value="line_total + line.total"/>
+                                            <td style="width:6%;padding: 5px;"><span t-esc="count" /></td>
+                                            <td colspan="2" class="text-left" style="padding: 5px;"><span t-field="line.name" /></td>
+                                            <td style="width:3%;padding: 5px;">Rs.</td>
+                                            <td style="width:6%;padding: 5px;text-align: right;"><span t-field="line.total" /></td>
+                                            <td style="width:3%;padding: 5px;"></td>
+                                            <td style="padding: 5px;">Allowed Leave</td>
+                                            <td style="width:3%;padding: 5px;"></td>
+                                            <td style="width:3%;padding: 5px;text-align: right;">0</td>
+                                        </t>
+                                        <t t-if="count == 4">
+                                            <t t-set="line_total" t-value="line_total + line.total"/>
+                                            <td style="width:6%;padding: 5px;"><span t-esc="count" /></td>
+                                            <td colspan="2" class="text-left" style="padding: 5px;"><span t-field="line.name" /></td>
+                                            <td style="width:3%;padding: 5px;">Rs.</td>
+                                            <td style="width:6%;padding: 5px;text-align: right;"><span t-field="line.total" /></td>
+                                            <td style="width:3%;padding: 5px;"></td>
+                                            <td style="padding: 5px;">Loss of Pay days</td>
+                                            <td style="width:3%;padding: 5px;"></td>
+                                            <td style="width:3%;padding: 5px;text-align: right;">0</td>
+                                        </t>
+                                        <t t-if="count == 5">
+                                            <t t-set="line_total" t-value="line_total + line.total"/>
+                                            <td style="width:6%;padding: 5px;"><span t-esc="count" /></td>
+                                            <td colspan="2" class="text-left" style="padding: 5px;"><span t-field="line.name" /></td>
+                                            <td style="width:3%;padding: 5px;">Rs.</td>
+                                            <td style="width:6%;padding: 5px;text-align: right;"><span t-field="line.total" /></td>
+                                            <td style="width:3%;padding: 5px;">C</td>
+                                            <td style="padding: 5px;">Total Salary Days</td>
+                                            <td style="width:3%;padding: 5px;"></td>
+                                            <td style="width:3%;padding: 5px;text-align: right;"><span t-esc="day"/></td>
+                                        </t>
+                                        <t t-if="count == 6">
+                                            <t t-set="line_total" t-value="line_total + line.total"/>
+                                            <td style="width:6%;padding: 5px;"><span t-esc="count" /></td>
+                                            <td colspan="2" class="text-left" style="padding: 5px;"><span t-field="line.name" /></td>
+                                            <td style="width:3%;padding: 5px;">Rs.</td>
+                                            <td style="width:6%;padding: 5px;text-align: right;"><span t-field="line.total"/></td>
+                                            <td colspan="4" style="background-color: #AEB6BF;"></td>
+                                        </t>
+                                        <t t-if="count == 7">
+                                            <t t-set="line_total" t-value="line_total + line.total"/>
+                                            <td style="width:6%;padding: 5px;"><span t-esc="count" /></td>
+                                            <td colspan="2" class="text-left" style="padding: 5px;"><span t-field="line.name" /></td>
+                                            <td style="width:3%;padding: 5px;">Rs.</td>
+                                            <td style="width:6%;padding: 5px;text-align: right;"><span t-field="line.total"/></td>
+                                            <td colspan="2"></td>
+                                            <td colspan="2"></td>
+                                        </t>
+                                    </tr>
+                                </t>
+
+                                <tr class="text-left">
+                                    <td style="width:6%; padding: 5px;"></td>
+                                    <td colspan="2" class="text-center">Total Additions</td>
+                                    <td colspan="2" rowspan="2" style="width:3%;padding: 5px;" class="text-left"></td>
+                                    <!-- <td style="width:6%;padding: 5px;"></td> -->
+                                    <td style="width:3%;padding: 5px;" class="text-left">Rs.</td>
+                                    <td style="width:6%;padding: 5px;">0</td>
+                                    <td colspan="2"></td>
+                                    <td colspan="2"></td>
+                                </tr>
+                                <tr class="text-left">
+                                    <td style="width:6%; padding: 5px;"></td>
+                                    <td colspan="2" class="text-center">Total Gross Salary</td>
+                                    <td></td>
+                                    <td style="width:3%;padding: 5px;text-align: right;" class="text-left"><span t-esc="line_total" /></td>
+                                    <td colspan="2"></td>
+                                    <td colspan="2"></td>
+                                </tr>
+
+                                <tr class="text-left">
+                                    <td style="width:6%; padding: 5px;"></td>
+                                    <td colspan="4" class="text-center" style="background-color: #AEB6BF;padding: 5px;"><b><u>Deductions</u></b></td>
+                                    <td style="width:3%;padding: 5px;" class="text-left"></td>
+                                    <td style="width:6%;padding: 5px;"></td>
+                                    <td colspan="4"></td>
+                                </tr>
+
+                                <t t-set="count" t-value="1"/>
+                                <t t-set="new_count" t-value="0"/>
+                                <t t-set="deduction_total" t-value="0"/>
+                                <t t-foreach="o.line_ids" t-as="line">
+                                    <t t-set="count" t-value="count + 1"/>
+                                    <tr class="text-left" t-if="count &gt;= 8">
+                                        <t t-if="count == 8">
+                                            <t t-set="deduction_total" t-value="deduction_total + line.total"/>
+                                            <t t-set="new_count" t-value="new_count + 1"/>
+                                            <td style="width:6%;padding: 5px;"><span t-esc="new_count" /></td>
+                                            <td colspan="2" class="text-left" style="padding: 5px;"><span t-field="line.name" /></td>
+                                            <td style="width:3%;padding: 5px;">Rs.</td>
+                                            <td style="width:6%;padding: 5px;text-align: right;"><span t-field="line.total" /></td>
+                                            <td></td>
+                                            <td></td>
+                                            <td colspan="4" rowspan="6" style="background-color: #F14C1C;" class="text-center"><b><u>NB.</u></b><br/><br/><br/><span>As per our policy no one is<br/>allowed to discuss any of this<br/>confidential info to anyone<br/>otherwise there will be a<br/>warning.</span></td>
+                                        </t>
+                                        <t t-else="">
+                                            <t t-set="deduction_total" t-value="deduction_total + line.total"/>
+                                            <t t-set="new_count" t-value="new_count + 1"/>
+                                            <td style="width:6%;padding: 5px;"><span t-esc="new_count" /></td>
+                                            <td colspan="2" class="text-left" style="padding: 5px;"><span t-field="line.name" /></td>
+                                            <td style="width:3%;padding: 5px;">Rs.</td>
+                                            <td style="width:6%;padding: 5px;text-align: right;"><span t-field="line.total" /></td>
+                                            <td></td>
+                                            <td></td>
+                                        </t>
+                                    </tr>
+                                </t>
+                                <tr>
+                                    <td style="width:6%;"></td>
+                                    <td colspan="2" class="text-center" style="padding: 5px;">Total Deductions</td>
+                                    <td colspan="2" style="width:3%;padding: 5px;" class="text-left"></td>
+                                    <td style="width:3%;padding: 5px;" class="text-left">Rs.</td>
+                                    <td style="width:6%;padding: 5px;text-align: right;"><span t-esc="deduction_total" /></td>
+                                </tr>
+
+                                <tr class="text-left">
+                                    <td style="width:6%;padding: 5px"> </td>
+                                    <td colspan="4" rowspan="2" class="text-center" style="padding: 10px">NET SALARY</td>
+                                    <td style="width:3%;padding: 5px;" class="text-left"></td>
+                                    <td rowspan="2" style="width:6%;padding: 5px;"><span t-esc="line_total - deduction_total" /></td>
+                                    <td colspan="4" rowspan="2" style="padding: 5px;"><span t-esc="taxt_amt" /></td>
+                                </tr>
+                                <tr class="text-left">
+                                    <td style="width:6%;"></td>
+                                    <td style="width:3%;padding: 5px;" class="text-left"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="text-center row" style="font-size: 15px; margin-top: 15px;">
+                            <div class="col-6">Authorised by</div>
+                            <div class="col-6">Signature  ________________</div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <record id="paperformat_hr_pay_slip" model="report.paperformat">
+        <field name="name">HR Pay Slip</field>
+        <field name="default" eval="True" />
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">20</field>
+        <field name="margin_bottom">0</field>
+        <field name="margin_left">5</field>
+        <field name="margin_right">5</field>
+        <field name="header_line" eval="False" />
+        <field name="header_spacing">10</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <record id="action_report_hr_pay_slip" model="ir.actions.report">
+        <field name="name">Pay Slip Report</field>
+        <field name="model">hr.payslip</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">hr_pay_slip.report_hr_pay_slip</field>
+        <field name="report_file">hr_pay_slip.report_hr_pay_slip</field>
+        <field name="print_report_name">'Payslip - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="hr_payroll.model_hr_payslip"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="paperformat_hr_pay_slip"/>
+    </record>
+
+</odoo>

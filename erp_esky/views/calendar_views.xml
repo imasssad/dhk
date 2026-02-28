@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="erp_esky_view_calendar_event_form_inherited" model="ir.ui.view">
+        <field name="name">calendar.event.form.inherit</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form/sheet" position="before">
+                <header>
+                    <button name="get_approval" type="object" states="draft" string="Approval"/>
+                    <button name="action_confirm" states="approve" type="object" string="confirm"
+                            groups="erp_esky.group_confirm_caleder_meeting"/>
+                    <button name="action_cancel" states="draft" type="object" string="Cancel"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,approve,confirm"/>
+                </header>
+            </xpath>
+            <xpath expr="//field[@name='allday']" position="after">
+                <field name="is_checkin" invisible="1"/>
+                <field name="is_checkout" invisible="1"/>
+            </xpath>
+        </field>
+    </record>
+
+</odoo>

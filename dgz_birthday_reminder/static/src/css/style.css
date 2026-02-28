@@ -1,0 +1,69 @@
+.birthday-reminder-heading{
+    text-align:center;
+    color: #66598f;
+    font-size:14px;
+    padding-bottom:6px;
+    padding-top:6px;
+    border-bottom: 1px solid #ccc;
+}
+.today-birthday {
+    color: #bb2d2d;
+    float: right;
+    text-align:right;
+    font-size: 12px;
+}
+.next-seven-days-birthday {
+    color: #f15a00;
+    float: right;
+    text-align:right;
+    font-size: 12px;
+}
+
+.today-to-birthday {
+
+    color: #adb5bd;
+    float: right;
+    text-align:right;
+    font-size: 12px;
+}
+
+.birthday-count {
+    margin-right: -0.5em;
+    border: 0;
+    height: 16px;
+    padding: 2px 4px;
+    background-color: #28a745;
+    font-size: 11px;
+    margin-left: 2.5px;
+    text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+    transform: translate(-10%, -30%);
+}
+
+
+.profile-table {
+    width: 100%;
+    border-collapse: collapse;
+    height:3rem;
+    font-family:sans-serif;
+
+}
+
+.profile-table tr {
+    border-bottom: 1px solid #ccc;
+    height:3rem;
+}
+.profile-table tr:hover {
+    background-color: #f0f0f0;
+}
+
+.employee-date{
+    margin-top: 1px;
+    margin-bottom: -0.3rem;
+}
+
+
+
+
+
+
+

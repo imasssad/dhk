@@ -1,0 +1,304 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="external_layout_standard_esky_delivery_report">
+    <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+        <div class="row">
+            <div class="col-3">
+                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 90px;" alt="Logo"/>
+            </div>
+            <div class="col-6"></div>
+            <div class="col-3" style="">
+                <div style="text-align:right;">
+                    <span style="color:white;font-size:32px !important;font-weight:bold;border: 0px #ff5729 solid;background-color: #ff5729;"> Delivery Note </span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+         t-att-data-oe-lang="o and o.env.context.get('lang')">
+      <t t-call="web.address_layout"/>
+      <t t-raw="0"/>
+    </div>
+    <div class="footer o_standard_footer">
+        <div class="text-center" style="border-top: 1px solid black;">
+            <div t-if="report_type == 'pdf'" class="text-muted">
+                Page: <span class="page"/> / <span class="topage"/>
+            </div>
+        </div>
+    </div>
+  </template>
+
+  <template id="external_layout_esky_delivery_report">
+    <t t-if="not o" t-set="o" t-value="doc"/>
+    <t t-if="not company">
+      <!-- Multicompany -->
+      <t t-if="company_id">
+        <t t-set="company" t-value="company_id"/>
+      </t>
+      <t t-elif="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id.sudo()"/>
+      </t>
+      <t t-else="else">
+        <t t-set="company" t-value="res_company"/>
+      </t>
+    </t>
+    <t t-call="do_purchase_report.external_layout_standard_esky_delivery_report">
+      <t t-raw="0"/>
+    </t>
+  </template>
+
+  <template id="report_esky_delivery_document">
+        <t t-call="do_purchase_report.external_layout_esky_delivery_report">
+          <style>
+            body{
+                font-size:18px!important;
+            }
+
+            .style-table {
+              border: 1px black solid;
+              width: 100%;
+            }
+
+            th {
+              border: 1px solid black;
+              background-color: #ff5729;
+              text-align: center;
+              padding: 8px;
+              color:white;
+              font-size:17px;
+            }
+
+            td {
+              border: 1px solid black;
+              text-align: center;
+              padding: 8px;
+              font-size:17px;
+              color:#003264;
+            }
+            .style-table-1 {
+                 margin-left: 41.5rem !important;
+                 width: 26.3%;
+                 position: relative;
+                 bottom: 1rem;
+            }
+
+            .td-style:nth-child(even) {
+                 background-color: #c5e0b3;
+            }
+        </style>
+        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+            <div class="page" style="">
+                <div class="container">
+
+                </div>
+
+                <div class ="row" style="padding-top: 2%;">
+                    <div class="col-7">
+
+                    </div>
+                    <div class="col-5">
+                        <div style="color:#003264;">
+<!--                            <span style="font-weight: 700;">DATE:</span> <span t-esc="o.date_order" t-options='{"widget": "date"}'/>-->
+                            <table width="100%">
+                                <tr>
+                                    <td>Order Date</td>
+                                    <td><span t-field="o.sale_id.date_order" t-options='{"widget": "date"}'/> </td>
+                                </tr>
+                                <tr>
+                                    <td>Vendor #</td>
+                                    <t t-set="vendor" t-value="''"/>
+                                    <t t-foreach="o.sale_id.order_line" t-as="ol">
+                                        <t t-if="ol.vendor_id">
+                                            <t t-set="vendor" t-value="ol.vendor_id.name"/>
+                                        </t>
+                                    </t>
+                                    <td><span t-esc="vendor"/></td>
+                                </tr>
+                                <tr>
+                                    <td>Customer #</td>
+                                    <td>
+                                        <span t-field="o.partner_id.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 3%;">
+                    <div class="col-4" style="border: 0px #ff5729 solid;background-color: #ff5729;">
+                        <h6 style="font-weight: 700;color:white;margin-left: 1%;margin-top:1%;">
+                            Shipping Address
+                        </h6>
+                    </div>
+                    <div class="col-2">
+                    </div>
+                    <div class="col-6" style="border: 0px #ff5729 solid;background-color: #ff5729;margin-left: 0%; ">
+                        <h6 style="font-weight: 700;color:white;margin-left: 20px;margin-top:1%;">
+                            eSky Address
+                        </h6>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 1%;">
+
+                    <!-- For Shipping Address     -->
+                    <div class="col-4">
+                        <h6 style="margin-left: 1%;color:#003264;">
+                            <span t-esc="o.partner_id.name"/><br/>
+                            <span t-esc="o.partner_id.email"/><br/>
+                            <span t-esc="o.partner_id.phone"/> <br/>
+                            <t t-if="o.partner_id.street and o.partner_id.street2">
+                                <span t-esc="o.partner_id.street"/>, <span t-esc="o.partner_id.street2"/><br/>
+                            </t>
+                            <t t-elif="o.partner_id.street">
+                                <span t-esc="o.partner_id.street"/> <br/>
+                            </t>
+                            <t t-elif="o.partner_id.street2">
+                                <span t-esc="o.partner_id.street2"/><br/>
+                            </t>
+                            <t t-if="o.partner_id.city and o.partner_id.state_id and o.partner_id.country_id">
+                                <span t-esc="o.partner_id.city"/>, <span t-esc="o.partner_id.state_id.name"/> <span t-esc="o.partner_id.zip"/>, <span t-esc="o.partner_id.country_id.name"/>
+                            </t>
+                            <t t-elif="o.partner_id.city and o.partner_id.state_id">
+                                <span t-esc="o.partner_id.city"/>, <span t-esc="o.partner_id.state_id.name"/> <span t-esc="o.partner_id.zip"/>
+                            </t>
+                            <t t-elif="o.partner_id.city and o.partner_id.country_id">
+                                <span t-esc="o.partner_id.city"/> <span t-esc="o.partner_id.zip"/>, <span t-esc="o.partner_id.country_id.name"/>
+                            </t>
+                            <t t-elif="o.partner_id.state_id and o.partner_id.country_id">
+                                <span t-esc="o.partner_id.state_id"/> <span t-esc="o.partner_id.zip"/>, <span t-esc="o.partner_id.country_id.name"/>
+                            </t>
+                        </h6>
+                    </div>
+
+                    <div class="col-2"></div>
+
+                    <!-- For Esky Address -->
+                    <div class="col-6" style="position: relative;">
+                        <h6 style="color:#003264;margin-left: 0%;">
+                            <t t-if="o.company_id.city and o.company_id.state_id and o.company_id.country_id">
+                                <h6 style="color:#003264;margin-left: 0%;">
+                                    <span t-esc="o.company_id.city"/>, <span t-esc="o.company_id.state_id.name"/> <span t-esc="o.company_id.zip"/>, <span t-esc="o.company_id.country_id.name"/>
+                                </h6>
+                            </t>
+                            <t t-elif="o.company_id.city and o.company_id.state_id">
+                                <h6 style="color:#003264;margin-left: 0%;">
+                                    <span t-esc="o.company_id.city"/>, <span t-esc="o.company_id.state_id.name"/> <span t-esc="o.company_id.zip"/>
+                                </h6>
+                            </t>
+                            <t t-elif="o.company_id.city and o.company_id.country_id">
+                                <h6 style="color:#003264;margin-left: 0%;">
+                                    <span t-esc="o.company_id.city"/> <span t-esc="o.company_id.zip"/>, <span t-esc="o.company_id.country_id.name"/>
+                                </h6>
+                            </t>
+                            <t t-elif="o.company_id.state_id and o.company_id.country_id">
+                                <h6 style="color:#003264;margin-left: 0%;">
+                                    <span t-esc="o.company_id.state_id"/> <span t-esc="o.company_id.zip"/>, <span t-esc="o.company_id.country_id.name"/>
+                                </h6>
+                            </t>
+                        </h6>
+                    </div>
+                </div>
+
+
+
+                <t t-set="sno" t-value="1" />
+                <table class="table table-sm o_main_table mt-5 style-table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_no"><strong>Serial.</strong></th>
+                            <th name="th_description"><strong>Description</strong></th>
+                            <th name="th_quantity" class="text-center"><strong>QTY</strong></th>
+                            <th name="th_price_unit" class="text-center"><strong>Serial#</strong></th>
+                            <th name="th_amount" class="text-center"><strong>Part#</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="lines" t-value="o.move_ids"/>
+                            <tr t-foreach="lines" t-as="move">
+                                <td><span t-esc="sno"/><t t-set="sno" t-value="sno+1"/></td>
+                                <td>
+                                    <span t-field="move.product_id"/>
+                                    <p t-if="move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
+                                        <span t-field="move.description_picking"/>
+                                    </p>
+                                </td>
+                                <td>
+                                    <span t-field="move.product_uom_qty"/>
+                                    <span t-field="move.product_uom"/>
+                                </td>
+                                <td>
+                                    <span t-field="move.serial_number"/>
+                                </td>
+                                <td>
+                                    <span t-field="move.product_id.name"/>
+                                </td>
+                            </tr>
+                    </tbody>
+
+                </table>
+                <div style="page-break-inside: avoid;">
+                    <div class="row" style="">
+                        <div class="col-4 text-center" style="border:2px solid black;height:2rem;">
+                            <span style="font-size:12px;">
+                                <strong>Checked &amp; Received By</strong>
+                            </span>
+                        </div>
+                        <div class="col-4"></div>
+
+                        <div class="col-4 text-center" style="border:2px solid black;height:2rem;">
+                            <span style="font-size:12px;">
+                                <strong>W/H Head</strong>
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="row" style="">
+                        <div class="col-4 text-start" style="border:2px solid black;margin-top:1rem;">
+                            <span style="font-size:12px;margin-left:0.5rem;margin-top:20px;">
+                                <strong>Name ............................................................</strong>
+                            </span><br/>
+                            <span style="font-size:12px;margin-left:0.5rem;margin-top:20px;">
+                                <strong>Sign ............................................................</strong>
+                            </span><br/>
+                            <span style="font-size:12px;margin-left:0.5rem;margin-top:20px;">
+                                <strong>Date ............................................................</strong>
+                            </span>
+                        </div>
+
+                        <div class="col-4"></div>
+
+                        <div class="col-4 text-start" style="border:2px solid black;margin-top:1rem;">
+                            <span style="font-size:12px;margin-left:0.5rem;margin-top:20px;">
+                                <strong>Name ............................................................</strong>
+                            </span><br/>
+                            <span style="font-size:12px;margin-left:0.5rem;margin-top:20px;">
+                                <strong>Sign ............................................................</strong>
+                            </span><br/>
+                            <span style="font-size:12px;margin-left:0.5rem;margin-top:20px;">
+                                <strong>Date ............................................................</strong>
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </t>
+    </template>
+
+  <template id="report_esk_delivery_note">
+       <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-if="o.company_id.priority_company == 2">
+                    <t t-call="do_purchase_report.report_esky_delivery_document" t-lang="o.partner_id.lang"/>
+                </t>
+                <t t-else="">
+                    <t t-call="stock.report_delivery_document" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

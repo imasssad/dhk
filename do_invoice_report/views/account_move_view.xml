@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="account_move_view_form" model="ir.ui.view">
+	    <field name="name">account.move.form</field>
+	    <field name="model">account.move</field>
+	    <field name="inherit_id" ref="account.view_move_form" />
+	    <field name="arch" type="xml">
+	    	<xpath expr="//field[@name='currency_id']" position="after">
+	    		<field name="current_company_name" invisible="1"/>
+      		</xpath>
+      		<page name="other_info" position="inside">
+  				<group>
+  					<group name="other_details" string="Other Details">
+  						<field name="add_attention"/>
+  						<field name="add_po_no"/>
+  						<field name="add_payment"/>
+  					</group>
+  					<group name="bank_details" string="Bank Details">
+  						<field name="add_account_name"/>
+  						<field name="add_account_no"/>
+  						<field name="add_currency"/>
+  						<field name="add_bank_name"/>
+  						<field name="add_iban_no"/>
+  						<field name="add_swift"/>
+  						<field name="amount_in_words" invisible="1"/>
+  					</group>
+  				</group>
+      		</page>
+	    </field>
+	</record>
+</odoo>

@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<templates>
+    <t t-name="DgzBirthdayReminderSystrayDropdown">
+        <div class="priority-groups-div">
+            <div class="SystrayMenuContainer">
+                <div class="o_MessagingMenu dropdown">
+                    <div class="o-dropdown dropdown o_debug_manager o-dropdown--no-caret">
+                        <a class="o_MessagingMenu_toggler dropdown-toggle o-no-caret o-dropdown--narrow"
+                           title="Systray Dropdown" role="button" aria-haspopup="true" aria-expanded="">
+                            <i id='create_so' class="fa fa-birthday-cake"/>
+                            <span class="badge birthday-count"></span>
+                        </a>
+                    </div>
+                    <div id="bdy_systray_notif" class="o_MessagingMenu_dropdownMenu o-dropdown-menu"
+                         style="left: auto; right: 0; width:34rem; left: auto; right: 0; padding:0rem; margin-left:0; margin:0rem;">
+                        <div class="container"
+                             style=" padding-right: 0rem; padding-left:0rem; padding-top: 0%; margin:0;">
+                            <div class="systray_notification"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+    <t t-name="BdySystrayDetails">
+        <div class="container" style="padding-right:0px;padding-left:0px;">
+            <div class="secondary-main-div">
+                <div style="width:100%;">
+                    <h5 class="birthday-reminder-heading">BIRTHDAY REMINDER</h5>
+                </div>
+                <t t-if="employeeKeys.length !== 0">
+                    <t t-foreach="employeeKeys" t-as="employee_data">
+                        <table class="profile-table">
+                            <tr>
+                                <td style="width:2rem;">
+                                    <div class="o_NotificationListItem_sidebar o_NotificationGroup_sidebar m-1">
+                                        <div class="o_NotificationListItem_imageContainer o_NotificationGroup_imageContainer o_NotificationGroup_sidebarItem position-relative">
+                                            <img class="o_NotificationListItem_image o_NotificationGroup_image w-100 h-100 rounded-circle"
+                                                 t-att-src="employee_data_dict[employee_data].avatar_url"/>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="o_NotificationListItem_content o_NotificationGroup_content d-flex flex-column flex-grow-1 align-self-start m-2">
+                                        <h6 style="color:#495057;">
+                                            <t t-esc="employee_data_dict[employee_data].name"/>
+                                            <t t-set="next_birthday"
+                                               t-value="new Date(employee_data_dict[employee_data].next_birthday)"/>
+                                            <t t-set="today" t-value="new Date()"/>
+                                            <t t-set="one_day" t-value="1000 * 60 * 60 * 24"/>
+                                            <t t-set="days_to_birthday"
+                                               t-value="Math.ceil((next_birthday - today) / one_day)"/>
+                                            <t t-if="next_birthday.toDateString() === today.toDateString()">
+                                                <span class="today-birthday">Today</span>
+                                            </t>
+                                            <t t-else="">
+                                                <t t-set="start_of_week" t-value="new Date(today)"/>
+                                                <t t-set="end_of_week"
+                                                   t-value="new Date(start_of_week.getTime() + (7 * one_day))"/>
+                                                <t t-if="next_birthday &gt;= start_of_week &amp;&amp; next_birthday &lt;= end_of_week">
+                                                    <span class="next-seven-days-birthday">
+                                                        <t t-esc="days_to_birthday"/>
+                                                        days to go
+                                                    </span>
+                                                </t>
+                                                <t t-else="">
+                                                    <span class="today-to-birthday">
+                                                        <t t-esc="days_to_birthday"/>
+                                                        days to go
+                                                    </span>
+                                                </t>
+                                            </t>
+                                        </h6>
+                                        <div class="employee-info" style="display: flex;">
+                                            <p class="employee-date">
+                                                <t t-raw="employee_data_dict[employee_data].birthday.split('-').reverse().join('/')"/>
+                                            </p>
+                                            <span class="flex-grow-1"></span>
+                                            <span style="color: #adb5bd;">
+                                                Stepping To <t t-esc="employee_data_dict[employee_data].age"/>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </t>
+                </t>
+                <t t-else="">
+                    <div style="text-align:center;width:100%;padding:20px;">
+                        <b>No Upcoming Birthday's found</b>
+                    </div>
+                </t>
+            </div>
+        </div>
+    </t>
+</templates>

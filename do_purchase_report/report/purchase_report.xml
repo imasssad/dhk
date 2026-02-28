@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <data>
+
+    <record id="purchase.action_report_purchase_order" model="ir.actions.report">
+      <field name="name">Purchase Order</field>
+      <field name="model">purchase.order</field>
+      <field name="report_type">qweb-pdf</field>
+      <field name="report_name">do_purchase_report.report_project_purchase</field>
+      <field name="report_file">do_purchase_report.report_project_purchase</field>
+      <field name="print_report_name">
+          (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or
+          'Purchase Order - %s' % (object.name))</field>
+      <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+      <field name="binding_type">report</field>
+      <field name="paperformat_id" ref="do_purchase_report.paperformat_purchase_report"/>
+    </record>
+
+    <record id="purchase.report_purchase_quotation" model="ir.actions.report">
+        <field name="name">Request for Quotation</field>
+        <field name="model">purchase.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">do_purchase_report.report_project_purchase_rfq</field>
+        <field name="report_file">do_purchase_report.report_project_purchase_rfq</field>
+        <field name="print_report_name">'Request for Quotation - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="do_purchase_report.paperformat_purchase_report"/>
+    </record>
+
+
+    <record id="stock.action_report_delivery" model="ir.actions.report">
+        <field name="name">Delivery Slip</field>
+        <field name="model">stock.picking</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">do_purchase_report.report_esk_delivery_note</field>
+        <field name="report_file">do_purchase_report.report_esk_delivery_note</field>
+        <field name="print_report_name">'Delivery Slip - %s - %s' % (object.partner_id.name or '', object.name)</field>
+        <field name="binding_model_id" ref="stock.model_stock_picking"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="do_purchase_report.paperformat_purchase_report"/>
+    </record>
+
+<!--    <record id="action_report_purchase_order_esky" model="ir.actions.report">-->
+<!--      <field name="name">Purchase Order (Esky)</field>-->
+<!--      <field name="model">purchase.order</field>-->
+<!--      <field name="report_type">qweb-pdf</field>-->
+<!--      <field name="report_name">do_purchase_report.report_project_purchase_esky</field>-->
+<!--      <field name="report_file">do_purchase_report.report_project_purchase_esky</field>-->
+<!--      <field name="print_report_name">-->
+<!--          (object.state in ('draft', 'sent') and 'Request for Quotation - %s' % (object.name) or-->
+<!--          'Purchase Order - %s' % (object.name))</field>-->
+<!--      <field name="binding_model_id" ref="purchase.model_purchase_order"/>-->
+<!--      <field name="binding_type">report</field>-->
+<!--      <field name="paperformat_id" ref="do_purchase_report.paperformat_purchase_report"/>-->
+<!--    </record>-->
+
+  </data>
+</odoo>

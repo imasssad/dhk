@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="ps_merge_purchase_order" model="ir.ui.view">
+        <field name="name">ps.merge.purchase.order</field>
+        <field name="model">merge.purchase.order</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <group>
+                    <field name="merge_type" required="1"/>
+                    <field name="vendor_id" attrs="{'invisible': [('merge_type','in',['merge_cancel','merge_delete'])],
+                        'required': [('merge_type','not in',['merge_cancel','merge_delete'])]}"/>
+                    <field name="purchase_order_id" attrs="{'invisible': [('merge_type','in',['new_cancel','new_delete'])],
+                        'required': [('merge_type','not in',['new_cancel','new_delete'])]}"/>
+                </group>
+                <footer>
+                    <button name="merge_purchase_order" string="Merge Orders" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="btn-default" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="ps_merge_purchase_order_action_view" model="ir.actions.act_window">
+        <field name="name">Merge Purchase Quotes</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">merge.purchase.order</field>
+        <field name="view_mode">form</field>
+        <field name="binding_model_id" ref="purchase.model_purchase_order"/>
+        <field name="target">new</field>
+    </record>
+</odoo>

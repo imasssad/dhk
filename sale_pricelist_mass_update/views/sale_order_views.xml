@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- The server action binding in wizard XML already adds the action to the list view.
+         This file is kept for any future view customizations. -->
+</odoo>

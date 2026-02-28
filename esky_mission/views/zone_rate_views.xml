@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="zone_rate_form">
+        <field name="name">zone.rate.form</field>
+        <field name="model">zone.rate</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="name"/>
+                            <field name="rate"/>
+                            <field name="departments" widget="many2many_tags" options="{'no_open': True, 'no_create': True}"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids"/>
+                    <field name="message_ids" options="{'post_refresh': 'recipients'}"/>
+                </div>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="zone_rate_tree">
+        <field name="name">zone.rate.tree</field>
+        <field name="model">zone.rate</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="name"/>
+                <field name="rate"/>
+                <field name="departments" widget="many2many_tags"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="zone_rate_action">
+        <field name="name">Zone Rates</field>
+        <field name="res_model">zone.rate</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+           <p class="o_view_nocontent_smiling_face">
+              Create a new Zone
+           </p>
+        </field>
+    </record>
+
+    <menuitem
+        id="zone_rate_menu"
+        action="zone_rate_action"
+        parent="esky_mission.mission_main_menu"
+        groups="esky_mission.group_mission_manager"
+        sequence="2"/>
+</odoo>

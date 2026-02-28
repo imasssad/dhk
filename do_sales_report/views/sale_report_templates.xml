@@ -1,0 +1,1933 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="external_layout_standard_mw_sales_report">
+    <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+            <div class="row">
+                <div class="col-3 mb4">
+                    <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 90px;" alt="Logo"/>
+                </div>
+            </div>
+        </div>
+    <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+         t-att-data-oe-lang="o and o.env.context.get('lang')">
+      <t t-call="web.address_layout"/>
+      <t t-raw="0"/>
+    </div>
+    <div class="footer o_standard_footer">
+        <div class="text-center" style="border-top: 1px solid black;">
+            <div t-if="report_type == 'pdf'" class="text-muted">
+                Page: <span class="page"/> / <span class="topage"/>
+            </div>
+        </div>
+    </div>
+  </template>
+
+  <template id="external_layout_mw_sales_report">
+    <t t-if="not o" t-set="o" t-value="doc"/>
+    <t t-if="not company">
+      <!-- Multicompany -->
+      <t t-if="company_id">
+        <t t-set="company" t-value="company_id"/>
+      </t>
+      <t t-elif="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id.sudo()"/>
+      </t>
+      <t t-else="else">
+        <t t-set="company" t-value="res_company"/>
+      </t>
+    </t>
+    <t t-call="do_sales_report.external_layout_standard_mw_sales_report">
+      <t t-raw="0"/>
+    </t>
+  </template>
+
+    <template id="report_project_sales_document">
+        <t t-call="do_sales_report.external_layout_mw_sales_report">
+          <style>
+            body{
+              font-size:18px!important;
+            }
+            .style-table {
+              border: 1px black solid;
+              width: 100%;
+            }
+
+            .table-esky {
+                border-collapse: collapse;
+                width: 100%;
+                position:relative;
+            }
+
+            .th-esky {
+                border: 1px solid black;
+                background-color: #002060;
+                padding: 8px;
+                color:white;
+                font-size:20px;
+            }
+            .section-th-esky {
+                border: 1px solid black;
+                background-color: #c55a11;
+                padding: 8px;
+                color:white;
+                font-size:20px;   
+            }
+            .td-esky {
+                border: 1px solid black;
+                padding: 8px;
+                font-size:20px;
+                color:black;
+                text-align: center;
+            }
+
+            .th-do-it {
+              border: 1px solid black;
+              background-color: #ff5729;
+              text-align: center;
+              padding: 8px;
+              color:white;
+              font-size:17px;
+            }
+
+            .td-do-it {
+              border: 1px solid black;
+              text-align: center;
+              padding: 8px;
+              font-size:17px;
+              color:#003264;
+            }
+            .style-table-1 {
+              margin-left: 40.2rem;
+              width: 26.3%;
+              position: relative;
+              bottom: 1rem;
+            }
+            .sub-table-esky {
+                margin-left: 65.3rem;
+                width: 22.5%;
+                position: relative;   
+            }
+            .sub-td-esky {
+                border: 1px solid black;
+                background-color: #002060;
+                padding: 8px;
+                color:white;
+                font-size:20px;
+            }
+
+            .td-style:nth-child(even) {
+              background-color: #c5e0b3;
+            }
+            .style-table-movers {
+              border: 1px black solid;
+              width: 100%;
+              border-top:none;
+            }
+            .style-sub-movers {
+                <!-- left: 39rem;
+                width: 27%; -->
+                width:100%;
+                position: relative;
+                bottom: 1rem;
+            }
+            .hr-style {
+                border: 1px solid;
+                height:0.2rem;
+                border-left:none;
+                border-right:none;
+                width: 40%;
+                position: relative;
+                left:32.7rem;
+                bottom:0.5rem;
+            }
+            .hr-style-2 {
+                border: 1.5px solid;
+                height:1rem;
+                border-left:none;
+                border-right:none;
+                border-bottom:none;
+                width: 103.7%;
+                position:relative;
+                right:1rem;
+                top:8rem;
+            }
+            .font-style-class {
+                color:#003264;
+                margin-left:0.5%;
+                font-size:17px;
+            }
+        </style>
+        <t t-set="doc" t-value="doc.with_context(lang=doc.partner_id.lang)"/>
+        <div class="page">
+            <!-- For DO IT Company  -->
+            <t t-if="doc.current_company_name.priority_company == 0">
+                <div class="container">
+                    <!-- <div class="row">
+                        <div class="col-md-12">
+                            <img t-if="doc.current_company_name.logo" t-att-src="image_data_uri(doc.current_company_name.logo)" style="width:26%;position:relative;left:1%;" alt="Logo"/>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-12 text-center" style="position:relative;top:3rem;">
+                            <h2 style="font-size: 2rem;font-family: auto;color:#003264;"> <strong>SALES ORDER</strong></h2>
+                        </div>
+                    </div>
+                </div>  
+
+                <div class ="row" style="padding-top: 2%;position:relative;top:5rem;">
+                    <div class="col-6">
+                        <h6 style="color:#003264;margin-left: 0.5%;">
+                            <span t-esc="doc.current_company_name.name"/>
+                        </h6>
+                    </div>
+                    <div class="col-6">
+                        <div style="color:#003264;margin-left:13rem;">
+                            <span style="font-weight: 700;">DATE:</span> <span t-esc="doc.date_order" t-options='{"widget": "date"}'/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0%;position:relative;top:5rem;">
+                    <div class="col-6">
+                        <t t-if="doc.current_company_name.street and doc.current_company_name.street2">
+                            <h6 style="color:#003264;margin-left: 0.5%;">
+                                <span t-esc="doc.current_company_name.street"/>, <span t-esc="doc.current_company_name.street2"/> 
+                            </h6>
+                        </t>
+                        <t t-elif="doc.current_company_name.street">
+                            <h6 style="color:#003264;margin-left: 0.5%;">
+                                <span t-esc="doc.current_company_name.street"/> 
+                            </h6>
+                        </t>
+                        <t t-elif="doc.current_company_name.street2">
+                            <h6 style="color:#003264;margin-left: 0.5%;">
+                                <span t-esc="doc.current_company_name.street2"/> 
+                            </h6>
+                        </t>
+                    </div>
+                    <div class="col-6">
+                        <div style="color:#003264;margin-left:13rem;">
+                            <span style="font-weight:700;">S.O. # </span>
+                            <span t-esc="doc.name"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0%;position:relative;top:5rem;">
+                    <div class="col-6">
+                        <h6 style="color:#003264;margin-left: 0.5%;">
+                            <t t-if="doc.current_company_name.city and doc.current_company_name.state_id and doc.current_company_name.country_id">
+                                <h6 style="color:#003264;margin-left: 0.5%;">
+                                    <span t-esc="doc.current_company_name.city"/>, <span t-esc="doc.current_company_name.state_id.name"/> <span t-esc="doc.current_company_name.zip"/>, <span t-esc="doc.current_company_name.country_id.name"/> 
+                                </h6>
+                            </t>
+                            <t t-elif="doc.current_company_name.city and doc.current_company_name.state_id">
+                                <h6 style="color:#003264;margin-left: 0.5%;">
+                                    <span t-esc="doc.current_company_name.city"/>, <span t-esc="doc.current_company_name.state_id.name"/> <span t-esc="doc.current_company_name.zip"/> 
+                                </h6>
+                            </t>
+                            <t t-elif="doc.current_company_name.city and doc.current_company_name.country_id">
+                                <h6 style="color:#003264;margin-left: 0.5%;">
+                                    <span t-esc="doc.current_company_name.city"/> <span t-esc="doc.current_company_name.zip"/>, <span t-esc="doc.current_company_name.country_id.name"/>
+                                </h6>
+                            </t>
+                            <t t-elif="doc.current_company_name.state_id and doc.current_company_name.country_id">
+                                <h6 style="color:#003264;margin-left: 0.5%;">
+                                    <span t-esc="doc.current_company_name.state_id"/> <span t-esc="doc.current_company_name.zip"/>, <span t-esc="doc.current_company_name.country_id.name"/>
+                                </h6>
+                            </t>
+                        </h6>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 3%;position:relative;top:5rem;">
+                    <div class="col-4" style="border: 0px #ff5729 solid;background-color: #ff5729;width: 36%;">
+                        <h6 style="color:white;margin-left: 1%;margin-top:1%;">
+                            <strong>Bill To</strong>
+                        </h6>
+                    </div>
+                    <div class="col-3">
+                    </div>
+                    <div class="col-5" style="border: 0px #ff5729 solid;background-color: #ff5729;width: 38%;margin-left: 2%; ">
+                        <h6 style="color:white;margin-left: 1%;margin-top:1%;">
+                            <strong>SHIP TO</strong>
+                        </h6>
+                    </div>  
+                </div>
+
+                <div class ="row" style="padding-top: 0.5%;position:relative;top:5rem;">
+                    <div class="col-4">
+                        <span class="font-style-class">Customer Name:</span>
+                        <span class="font-style-class" t-esc="doc.partner_id.name"/>
+                    </div>
+                    <div class="col-3" style="width:30% !important;">
+                    </div>
+                    <div class="col-4">
+                        <span style="color:#003264;font-size:17px;">Customer Name:</span>
+                        <span class="font-style-class" t-esc="doc.partner_id.name"/>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0.5%;position:relative;top:5rem;">
+                    <div class="col-4">
+                        <span style="color:#003264;margin-left:0.5%;font-size:17px;">Contact Person:</span>
+                        <span class="font-style-class" t-esc="doc.bill_to_contact"/>
+                    </div>
+                    <div class="col-3" style="width:30% !important;">
+                    </div>
+                    <div class="col-4">
+                        <span style="color:#003264;font-size:17px;">Contact Person:</span>
+                        <span class="font-style-class" t-esc="doc.ship_to_contact"/>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0.5%;position:relative;top:5rem;">
+                    <div class="col-4">
+                        <span style="color:#003264;margin-left:0.5%;font-size:17px;">Email:</span>
+                        <span class="font-style-class" t-esc="doc.bill_to_email"/>
+                    </div>
+                    <div class="col-3" style="width:30% !important;">
+                    </div>
+                    <div class="col-4">
+                        <span style="color:#003264;font-size:17px;">Email:</span>
+                        <span class="font-style-class" t-esc="doc.ship_to_email"/>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0.5%;position:relative;top:5rem;">
+                    <div class="col-4">
+                        <span style="color:#003264;margin-left:0.5%;font-size:17px;">Address:</span>
+                        <span class="font-style-class" t-esc="doc.bill_to_address"/>
+                    </div>
+                    <div class="col-3" style="width:30% !important;">
+                    </div>
+                    <div class="col-4">
+                        <span style="color:#003264;font-size:17px;">Address:</span>
+                        <span class="font-style-class" t-esc="doc.ship_to_address"/>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0.5%;position:relative;top:5rem;">
+                    <div class="col-4">
+                        <span style="color:#003264;margin-left:0.5%;font-size:17px;">Phone:</span>
+                        <span class="font-style-class" t-esc="doc.bill_to_phone"/>
+                    </div>
+                    <div class="col-3" style="width:30% !important;">
+                    </div>
+                    <div class="col-4">
+                        <span style="color:#003264;font-size:17px;">Phone:</span>
+                        <span class="font-style-class" t-esc="doc.ship_to_phone"/>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0%;position:relative;top:5rem;">
+                    <div class="col-6">
+                        <span style="color:#003264;margin-left:0.5%;font-size:17px;">TAX ID:</span>
+                        <span class="font-style-class" t-esc="doc.partner_id.vat"/>
+                    </div>
+                </div>
+
+                <!-- Detect if any line actually carries a value -->
+                <t t-set="has_start_date" t-value="any(l.start_date for l in doc.order_line)"/>
+                <t t-set="has_end_date"   t-value="any(l.end_date   for l in doc.order_line)"/>
+                <t t-set="has_discount"   t-value="any(l.discount   for l in doc.order_line)"/>
+
+
+                <table style="position:relative;top:6rem;" class="style-table">
+                    <thead>
+                        <tr>
+                            <th class="th-do-it">REQUISTIONER</th>
+                            <th class="th-do-it">Delivery</th>
+                            <th class="th-do-it">Payment Terms</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="td-do-it"><span t-field="doc.requistioner"/></td>
+                            <td class="td-do-it"><span t-field="doc.delivery"/></td>
+                            <td class="td-do-it"><span t-field="doc.payment"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <t t-set="sno" t-value="1" />
+                <table class="table table-sm o_main_table mt-5 style-table" style="position:relative;top:5rem;">
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_no" class="th-do-it">NO.</th>
+                            <th name="th_part_no" class="th-do-it">ITEM #</th>
+                            <th name="th_description" class="th-do-it">DESCRIPTION</th>
+                            <th name="th_quantity" class="th-do-it">QTY</th>
+                                                    <!-- Only show when used -->
+                            <th class="text-center th-esky" t-if="has_start_date">Start Date</th>
+                            <th class="text-center th-esky" t-if="has_end_date">End Date</th>
+                            <th name="th_priceunit" class="th-do-it">UNIT PRICE</th>
+                            <th name="th_discount"  class="th-do-it" t-if="has_discount">DISCOUNT</th>
+                            <th name="th_subtotal" class="th-do-it">
+                                <span groups="account.group_show_line_subtotals_tax_excluded">TOTAL</span>
+                                <span groups="account.group_show_line_subtotals_tax_included">TOTAL</span>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="sale_tbody">
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-foreach="doc.order_line" t-as="line">
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td class="td-do-it" name="td_no"><span t-esc="sno"/><t t-set="sno" t-value="sno+1"/></td>
+                                    <td class="td-do-it" name="td_part_no"><span t-field="line.part_number"/></td>
+                                    <td class="td-do-it" name="td_name"><span t-field="line.name"/></td>
+                                    <td name="td_quantity" class="td-do-it">
+                                        <span t-field="line.product_uom_qty"/>
+                                        <span t-field="line.product_uom"/>
+                                    </td>
+                                    
+                                    <td class="td-esky text-center"
+                                        t-if="has_start_date">
+                                        <span t-field="line.start_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td class="td-esky text-center"
+                                        t-if="has_end_date">
+                                        <span t-field="line.end_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td name="td_priceunit" class="td-do-it">
+                                        <span t-field="line.price_unit"/>
+                                    </td>
+                                    <td name="td_discount" class="td-do-it"
+                                        t-if="has_discount">
+                                        <span t-field="line.discount"/>%
+                                    </td>
+                                    <td style="background-color:#c5e0b3;" t-if="not line.is_downpayment" name="td_subtotal" class=" o_price_total td-do-it">
+                                        <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                        <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                    </td>
+                                </t>
+                                <t t-elif="line.display_type == 'line_section'">
+                                    <td name="td_section_line" colspan="99" class="td-do-it">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-elif="line.display_type == 'line_note'">
+                                    <td name="td_note_line" colspan="99" class="td-do-it">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+                            <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section') and not line.is_downpayment">
+                                <tr class="is-subtotal">
+                                    <td name="td_section_subtotal" colspan="99" class="td-do-it">
+                                        <strong class="mr16">Subtotal</strong>
+                                        <span
+                                          t-out="current_subtotal"
+                                          t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+                <div class="clearfix" name="so_total_summary">
+                    <div id="total" class="row" name="total">
+                        <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                <table class="table table-sm" style="position:relative;top:4rem;">
+                    <tr>
+                        <td name="td_amount_untaxed_label" class="td-do-it">SUBTOTAL</td>
+                        <td name="td_amount_untaxed" class="td-style td-do-it">
+                            <span style="background-color:#c5e0b3;" t-field="doc.amount_untaxed"/>
+                        </td>
+                    </tr>
+                    <t t-set="tax_totals" t-value="doc.tax_totals"/>
+                    <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                        <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                        <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+                            <tr>
+                                <t t-if="tax_totals['display_tax_base']">
+                                    <td class="td-do-it">
+                                        <span t-esc="amount_by_group['tax_group_name']"/>
+                                        <span class="text-nowrap"> on
+                                            <t t-esc="amount_by_group['formatted_tax_group_base_amount']"/>
+                                        </span>
+                                    </td>
+                                    <td class="td-style td-do-it">
+                                        <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                    </td>
+                                </t>
+                                <t t-else="">
+                                    <td class="td-do-it"><span class="text-nowrap" t-esc="amount_by_group['tax_group_name']"/></td>
+                                    <td class="td-style td-do-it">
+                                        <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']" />
+                                    </td>
+                                </t>
+                            </tr>
+                        </t>
+                    </t>
+                    <tr class="o_total">
+                        <td name="td_amount_total_label" class="td-do-it"><strong style="color:#003264;">TOTAL</strong></td>
+                        <td name="td_amount_total" class="text-right td-style td-do-it">
+                            <span style="background-color:#c5e0b3;" t-field="doc.amount_total"/>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+                <div class ="row" style="padding-top: 0%;position:relative;">
+                    <div class="col-6">
+                        <h6 style="font-weight: 700;color:#003264;margin-left: 0.5%;">
+                            Other Comments / Special Instructions:
+                        </h6>
+                        <span style="color:#003264;font-size:16.5px;" t-field="doc.note"></span>
+                    </div>
+                </div>
+
+                <div class ="row" style="position:relative;padding-top:2%;">
+                    <div class="col-6">
+                        <h6 style="font-weight: 700;color:#003264;margin-left: 0.5%;">
+                            <i>Authorized by:</i>
+                        </h6>
+                    </div>
+                </div>
+            </t>
+
+            <!-- For Trust Movers Company  -->
+            <t t-elif="doc.current_company_name.priority_company == 1">
+
+                <div class="" style="border: 1px solid;margin-top:3rem;height:inherit;">
+                    <div class="col-md-12 text-center">
+                        <h4> <strong>Estimate site delivery cost</strong></h4>
+                    </div>
+
+                    <div class="" style="border: 1px solid;height:1.5rem;">
+                    </div>
+
+                    <t t-set="sno" t-value="1" />
+                    <table class="table table-sm o_main_table table-bordered" style="border-color: black;">
+                        <thead>
+                            <tr>
+                                <th name="th_no" class="text-center th-movers"><span>No.</span></th>
+                                <th name="th_description" class="text-center th-movers"><span>DESCRIPTION</span></th>
+                                <th name="th_subtotal" class="text-center th-movers" colspan="2">
+                                    <span groups="account.group_show_line_subtotals_tax_excluded">AMOUNT</span>
+                                    <span groups="account.group_show_line_subtotals_tax_included">AMOUNT</span>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="sale_tbody">
+                            <t t-set="current_subtotal" t-value="0"/>
+                            <t t-foreach="doc.order_line" t-as="line">
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                                <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                    <t t-if="not line.display_type">
+                                        <td class="text-center" name="td_no"><span t-esc="sno"/><t t-set="sno" t-value="sno+1"/></td>
+                                        <td class="text-center" name="td_name"><span t-field="line.name"/></td>
+                                        <td t-if="not line.is_downpayment" name="td_subtotal" class="text-center o_price_total">
+                                            <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                            <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                        </td>
+                                        <td class="text-center"><strong>USD</strong></td>
+                                    </t>
+                                    <t t-elif="line.display_type == 'line_section'">
+                                        <td name="td_section_line" colspan="99" class="text-center">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                        <t t-set="current_section" t-value="line"/>
+                                        <t t-set="current_subtotal" t-value="0"/>
+                                    </t>
+                                    <t t-elif="line.display_type == 'line_note'">
+                                        <td name="td_note_line" colspan="99" class="text-center">
+                                            <span t-field="line.name"/>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section') and not line.is_downpayment">
+                                    <tr class="is-subtotal text-center">
+                                        <td name="td_section_subtotal" class="text-center" colspan="99">
+                                            <strong class="mr16">Subtotal</strong>
+                                            <span
+                                                t-out="current_subtotal"
+                                                t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                            />
+                                        </td>
+                                    </tr>
+                                </t>
+                            </t>
+                        </tbody>
+                    </table>
+                    <table class="style-sub-movers table-borderless">
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td name="td_amount_untaxed_label" style="text-align:end;">
+                                <strong>SUBTOTAL</strong>
+                            </td>
+                            <td name="td_amount_untaxed" style="text-align:center;width:20%;">
+                                <span t-field="doc.amount_untaxed"/>
+                            </td>
+                        </tr>
+                        <!-- <tr>
+                            <td></td>
+                            <td></td>
+                            <td name="td_vat_label" style="text-align:end;">Ship. &amp; Hand.</td>
+                            <td name="td_vat" style="text-align:center;">
+                                <span>
+                                    $0.0
+                                </span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td name="td_other_label" style="text-align:end;">OTHER</td>
+                            <td name="td_other" style="text-align:center;">
+                                <span>
+                                    $0.0
+                                </span>
+                            </td>
+                        </tr> -->
+                    </table>
+                    <div class="row hr-style">
+                    </div>
+                    <br/>
+                    <table class="style-sub-movers table-borderless">
+                        <t t-set="tax_totals" t-value="doc.tax_totals"/>
+                        <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                            <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                            <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+                                <tr>
+                                    <t t-if="tax_totals['display_tax_base']">
+                                        <td></td>
+                                        <td></td>
+                                        <td style="text-align:end;">
+                                            <strong>
+                                                <span t-esc="amount_by_group['tax_group_name']"/>
+                                                <span class="text-nowrap"> on
+                                                    <t t-esc="amount_by_group['formatted_tax_group_base_amount']"/>
+                                                </span>
+                                            </strong>
+                                        </td>
+                                        <td style="text-align:center;width:20%;">
+                                            <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                        </td>
+                                    </t>
+                                    <t t-else="">
+                                        <td></td>
+                                        <td></td>
+                                        <td style="text-align:end;">
+                                            <strong><span class="text-nowrap" t-esc="amount_by_group['tax_group_name']"/></strong></td>
+                                        <td style="text-align:center;">
+                                            <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']" />
+                                        </td>
+                                    </t>
+                                </tr>
+                            </t>
+                        </t>
+                        <tr class="o_total">
+                            <td></td>
+                            <td></td>
+                            <td name="td_amount_total_label" style="text-align:end;"><strong>TOTAL</strong></td>
+                            <td name="td_amount_total" style="text-align:center;width:20%;">
+                                <span t-field="doc.amount_total"/>
+                            </td>
+                        </tr>
+                    </table>
+                    <div class="" style="border: 1px solid;height:1.5rem;">
+                    </div>
+                </div>
+            </t>
+
+            <!-- For Company Priority ID is 4 -->
+
+            <t  t-elif="doc.current_company_name.priority_company == 4">
+                <!-- <div class="row">
+                    <div class="col-md-12">
+                        <img t-if="doc.current_company_name.logo" t-att-src="image_data_uri(doc.current_company_name.logo)" style="width:26%;position:relative;left:1%;" alt="Logo"/>
+                    </div>
+                </div> -->
+                <div class="row">
+                    <div class="col-md-12 text-center" style="position:relative;top:35rem;">
+                        <h1 style="color:#ed7d31;font-size:3.5rem;">
+                            <strong>
+                                <i>
+                                    Financial Proposal<br/>Presented To
+                                </i>
+                            </strong>
+                        </h1>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12 text-center" style="position:relative;top:35rem;">
+                        <h1 style="color:#ed7d31;font-size:3.5rem;">
+                            <strong>
+                                <i>
+                                    <span t-esc="doc.partner_id.name"/>
+                                </i>
+                                <br/>
+                                <img t-if="doc.partner_id.image_1920" t-att-src="image_data_uri(doc.partner_id.image_1920)" alt="Customer Logo" style="max-height: 150px;"/>
+                            </strong>
+                        </h1>
+                    </div>
+                </div>
+                <div style="page-break-after: always;"/>
+                <div class="row">
+                    <div class="col-md-12" style="position:relative;top:2rem;">
+                        <h1 style="color:#ed7d31;font-size:2rem;" class="text-center">
+                            <strong>
+                                eSKy IT - The Firm
+                            </strong>
+                        </h1>
+                        <t t-set="gt" t-value="request.env['general.terms'].sudo().search([('default_gt', '=', True)])"/>
+                        <i><strong t-esc="gt.general_terms" style="color:#002060 !important;font-size:1.5rem;"/></i>
+                    </div>
+                </div>
+                <div style="page-break-after: always;"/>
+
+                <div class="row" style="border:1px solid black;height:2rem;background-color:#c55a11;width:25rem;position:relative;left:60rem;">
+                    <div class="col-md-12 text-center">
+                        <span style="color:white;font-size:20px;"><strong><i>Quotation Reference</i></strong></span>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:25rem;border-top:none;left:60rem;">
+                    <div class="col-md-3 text-center" style="border-right:1px solid black;width:12rem;">
+                        <span style="font-size:20px;"><strong>Quote No:</strong></span>
+                    </div>
+                    <div class="col-md-6 text-center" style="background-color:#002060;width:13rem;">
+                        <span t-field="doc.name" style="color:white;"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:25rem;border-top:none;left:60rem;">
+                    <div class="col-md-3 text-center" style="border-right:1px solid black;width:12rem;">
+                        <span style="font-size:20px;"><strong>Quote Date</strong></span>
+                    </div>
+                    <div class="col-md-6 text-center" style="width:13rem;">
+                        <span t-esc="doc.x_studio_report_date" t-options='{"widget": "date"}'/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;left:24rem;">
+                    <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;border-bottom:1px solid black;">
+                        <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Quote To:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                        <span t-field="doc.partner_id" style="color:white;"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">
+                    <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;">
+                        <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Project Ref:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                        <span t-field="doc.project_ref" style="color:white;"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">
+                    <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;border-top:1px solid black;border-bottom:1px solid black;">
+                        <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Contact Person:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                        <span t-field="doc.contact_person" style="color:white;"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">
+                    <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;border-top:1px solid black;border-bottom:1px solid black;">
+                        <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Mobile:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+<!--                        <span t-field="doc.mobile" style="color:white;"/>-->
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">
+                    <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;border-top:1px solid black;border-bottom:1px solid black;">
+                        <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Address:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+            <!--                        <span t-field="doc.mobile" style="color:white;"/>-->
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" style="position:relative;top:2rem;">
+                        <h1 style="color:black;font-size:2rem;text-decoration: underline;" class="text-center">
+                             <span t-field="doc.x_studio_options"/>
+                        </h1>
+                    </div>
+                </div>
+
+
+                <!-- Is there a discount on at least one line? -->
+                <t t-set="lines_to_report" t-value="doc._get_order_lines_to_report()"/>
+                <t t-set="display_discount" t-value="any(l.discount for l in lines_to_report)"/>
+                <t t-set="sno" t-value="1" />
+                <!-- Detect if any line actually carries a value -->
+                <t t-set="has_start_date" t-value="any(l.start_date for l in doc.order_line)"/>
+                <t t-set="has_end_date"   t-value="any(l.end_date   for l in doc.order_line)"/>
+                <t t-set="has_discount"   t-value="any(l.discount   for l in doc.order_line)"/>
+
+                <table class="table table-sm o_main_table table-esky mt-5 mb-0">
+                    <thead style="display: table-row-group">
+                        <th name="th_no" class="text-center th-esky">S.No.</th>
+                        <th t-if="doc.show_unit_price" name="th_part_no" class="text-center th-esky">Part Number</th>
+                        <th t-if="doc.show_unit_price" name="th_description" class="text-center th-esky">DESCRIPTION</th>
+                        <th t-if="not doc.show_unit_price" name="th_part_no" class="text-center th-esky" colspan="2">Part Number</th>
+                        <th t-if="not doc.show_unit_price" name="th_description" class="text-center th-esky" colspan="2">DESCRIPTION</th>
+                        <th name="th_quantity" class="text-center th-esky">Qty</th>
+                          <!-- Only show when used -->
+                        <th class="text-center th-esky" t-if="has_start_date">Start Date</th>
+                        <th class="text-center th-esky" t-if="has_end_date">End Date</th>
+                        <th t-if="doc.show_unit_price" name="th_priceunit" class="text-center th-esky">Unit Price</th>
+                        <th name="th_discount" class="th-do-it">DISCOUNT</th>
+                      
+
+                       
+                        <th name="th_discount"  class="th-do-it" t-if="has_discount">DISCOUNT</th>
+                        <th t-if="doc.show_unit_price" name="th_subtotal" class="text-center th-esky">
+                            <span groups="account.group_show_line_subtotals_tax_excluded">Total Price</span>
+                            <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
+                        </th>
+                    </thead>
+                    <tbody class="sale_tbody">
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-set="current_vat" t-value="0"/>
+                        <t t-set="current_grand_total" t-value="0"/>
+                        <t t-foreach="doc.order_line" t-as="line">
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                            <t t-set="current_vat" t-value="current_vat + line.price_tax"/>
+                            <t t-set="current_grand_total" t-value="current_vat + current_subtotal"/>
+                            <!-- <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/> -->
+
+                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td class="td-esky" name="td_no"><span t-esc="sno"/><t t-set="sno" t-value="sno+1"/></td>
+                                    <td t-if="doc.show_unit_price" class="td-esky" name="td_part_number"><span t-field="line.part_number"/></td>
+                                    <td t-if="doc.show_unit_price" class="td-esky" name="td_name"><span t-field="line.name"/></td>
+                                    <td t-if="not doc.show_unit_price" class="td-esky" name="td_part_number" colspan="2"><span t-field="line.part_number"/></td>
+                                    <td t-if="not doc.show_unit_price" class="td-esky" name="td_name" colspan="2"><span t-field="line.name"/></td>
+                                    <td name="td_quantity" class="text-center td-esky">
+                                        <span t-field="line.product_uom_qty" t-options='{"widget": "integer"}'/>
+                                    </td>
+                                    <td class="td-esky text-center"
+                                        t-if="has_start_date">
+                                        <span t-field="line.start_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td class="td-esky text-center"
+                                        t-if="has_end_date">
+                                        <span t-field="line.end_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td t-if="doc.show_unit_price" name="td_priceunit" class="text-center td-esky">
+                                        <span t-field="line.price_unit" t-options='{"widget": "monetary"}'/>
+                                    </td>
+                                    <!-- In the data rows (inside the line loop) -->
+                                    
+                                    <td name="td_discount" class="td-do-it"
+                                        t-if="has_discount">
+                                        <span t-field="line.discount"/>%
+                                    </td>
+                                    <td t-if="not line.is_downpayment and doc.show_unit_price" name="td_subtotal" class="text-center o_price_total td-esky">
+                                        <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                        <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                    </td>
+                                </t>
+                                <t t-elif="line.display_type == 'line_section'">
+                                    <td name="td_section_line" colspan="99" class="section-th-esky text-center">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                    <t t-set="current_vat" t-value="0"/>
+                                    <t t-set="current_grand_total" t-value="0"/>
+                                </t>
+                                <t t-elif="line.display_type == 'line_note'">
+                                    <td name="td_note_line" colspan="99" class="td-esky text-center">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+                            <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section') and not line.is_downpayment">
+                                <tr class="is-subtotal">
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td name="td_section_subtotal" class="sub-td-esky" style="text-align:right;width:10%">
+                                        <strong class="mr16">Total</strong>
+                                    </td>
+                                    <td class="sub-td-esky" style="text-align:right;">
+                                        <span t-out="current_subtotal" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                                <tr name="vat">
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td name="td_section_subtotal" class="sub-td-esky">
+                                        <strong class="mr16">VAT</strong>
+                                    </td>
+                                    <td class="sub-td-esky" style="text-align:right;width:10%">
+                                        <span t-out="current_vat" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                                <tr name="grand_total">
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td name="td_section_subtotal" class="sub-td-esky text-center" style="text-align:right;width:10%">
+                                        <strong class="mr16">Grand Total</strong>
+                                    </td>
+                                    <td class="sub-td-esky text-center" style="text-align:right;">
+                                        <span t-out="current_grand_total" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                    <tr>
+                        <td name="td_section_line" colspan="99" class="section-th-esky text-center">
+                             <span><br></br></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border:  1px solid white;"/>
+                        <td style="border:  1px solid white;"/>
+                        <td style="border:  1px solid white;"/>
+                        <td style="border:  1px solid white;"/>
+                        <td name="td_amount_untaxed_label" class="sub-td-esky">Total</td>
+                        <td name="td_amount_untaxed" class="sub-td-esky" style="text-align:right;">
+                            <span t-field="doc.amount_untaxed"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td name="td_vat_label" class="sub-td-esky">VAT</td>
+                        <td name="td_vat" class="sub-td-esky" style="text-align:right;">
+                            <span>
+                                <t t-set="total_vat" t-value="doc.amount_total - doc.amount_untaxed"/>
+                                <span t-out="total_vat" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                            </span>
+                        </td>
+                    </tr>
+                    <tr class="o_total">
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td name="td_amount_total_label" class="sub-td-esky"><strong>Grand Total</strong></td>
+                        <td name="td_amount_total" class="sub-td-esky" style="text-align:right;">
+                            <span t-field="doc.amount_total"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="99" style="border: 1px solid white;">
+                            <span style="color:white;">space</span>
+                        </td>
+                    </tr>
+                    <tr class="o_total">
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td name="td_amount_total" class="text-center sub-td-esky" colspan="2">
+                            <span t-field="doc.user_id.email"/>
+                        </td>
+                    </tr>
+                    <tr class="o_total">
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td style="border: 1px solid white;"/>
+                        <td name="td_amount_total" class="text-center sub-td-esky" colspan="2">
+                            <span t-field="doc.user_id.mobile"/>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="row" style="border:1px solid black;background-color: #c55a11;height:3.5rem;">
+                    <div class="col-md-12" style="padding:1rem;">
+                        <span style="color:white;font-size:23px;"><strong><i>Terms and Conditions:</i></strong></span>
+                    </div>
+                </div>
+                <div class="row" style="border:1px solid black;border-top:none;border-bottom:none;">
+                    <div class="col-md-6" style="padding:1rem;">
+                        <strong t-esc="doc.note" style="font-size:21px;"/>
+                    </div>
+                </div>
+                <div class="row" style="border:1px solid black;">
+                    <div class="col-md-12" style="padding:1rem;">
+                        <span><strong><i>DISCLAIMER:</i></strong></span><br/>
+                        <t t-set="gt" t-value="request.env['general.terms'].sudo().search([('default_gt', '=', True)])"/>
+                        <span t-esc="gt.disclaimer"/>
+                    </div>
+                </div>
+            </t>
+
+            <!-- For Esky Company -->
+            <!-- <t t-else=""> -->
+                <!-- <div class="row">
+                    <div class="col-md-12">
+                        <img t-if="doc.current_company_name.logo" t-att-src="image_data_uri(doc.current_company_name.logo)" style="width:26%;position:relative;left:1%;" alt="Logo"/>
+                    </div>
+                </div> -->
+                <!-- <div class="row">
+                    <div class="col-md-12 text-center" style="position:relative;top:35rem;">
+                        <h1 style="color:#ed7d31;font-size:3.5rem;"> 
+                            <strong>
+                                <i>
+                                    Financial Proposal<br/>Presented To
+                                </i>
+                            </strong>
+                        </h1>
+                    </div>
+                </div>
+                <br/>
+                <div class="row">
+                    <div class="col-md-12 text-center" style="position:relative;top:35rem;">
+                        <h1 style="color:#ed7d31;font-size:3.5rem;"> 
+                            <strong>
+                                <i>
+                                    <span t-esc="doc.partner_id.name"/>
+                                </i>
+                                <br/>
+                                <img t-if="doc.partner_id.image_1920" t-att-src="image_data_uri(doc.partner_id.image_1920)" alt="Customer Logo" style="max-height: 150px;"/>
+                            </strong>
+                        </h1>
+                    </div>
+                </div>
+                <div style="page-break-after: always;"/>
+                <div class="row">
+                    <div class="col-md-12" style="position:relative;top:2rem;">
+                        <h1 style="color:#ed7d31;font-size:2rem;" class="text-center"> 
+                            <strong>
+                                eSKy IT - The Firm
+                            </strong>
+                        </h1>
+                        <t t-set="gt" t-value="request.env['general.terms'].sudo().search([('default_gt', '=', True)])"/>
+                        <i><strong t-esc="gt.general_terms" style="color:#002060 !important;font-size:1.5rem;"/></i>
+                    </div>
+                </div>
+                <div style="page-break-after: always;"/>
+
+                <div class="row" style="border:1px solid black;height:2rem;background-color:#c55a11;width:25rem;position:relative;left:60rem;">
+                    <div class="col-md-12 text-center">
+                        <span style="color:white;font-size:20px;"><strong><i>Quotation Reference</i></strong></span>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:25rem;border-top:none;left:60rem;">
+                    <div class="col-md-3 text-center" style="border-right:1px solid black;width:12rem;">
+                        <span style="font-size:20px;"><strong>Quote No:</strong></span>
+                    </div>
+                    <div class="col-md-6 text-center" style="background-color:#002060;width:13rem;">
+                        <span t-field="doc.name" style="color:white;"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:25rem;border-top:none;left:60rem;">
+                    <div class="col-md-3 text-center" style="border-right:1px solid black;width:12rem;">
+                        <span style="font-size:20px;"><strong>Quote Date</strong></span>
+                    </div>
+                    <div class="col-md-6 text-center" style="width:13rem;">
+                        <span t-esc="doc.x_studio_report_date" t-options='{"widget": "date"}'/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;left:24rem;">
+                    <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;border-bottom:1px solid black;">
+                        <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Quote To:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                        <span t-field="doc.partner_id" style="color:white;"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">
+                    <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;">
+                        <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Project Ref:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                        <span t-field="doc.project_ref" style="color:white;"/>
+                    </div>
+                </div>
+
+                <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">
+                    <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;border-top:1px solid black;border-bottom:1px solid black;">
+                        <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Contact Person:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                        <span t-field="doc.contact_person" style="color:white;"/>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12" style="position:relative;top:2rem;">
+                        <h1 style="color:black;font-size:2rem;text-decoration: underline;" class="text-center"> 
+                             <span t-field="doc.x_studio_options"/>
+                        </h1>
+                    </div>
+                </div>
+
+                <t t-set="lines_to_report" t-value="doc._get_order_lines_to_report()"/>
+                <t t-set="display_discount" t-value="any(l.discount for l in lines_to_report)"/>
+                <t t-set="sno" t-value="1" />
+                
+                <t t-set="has_start_date" t-value="any(l.start_date for l in doc.order_line)"/>
+                <t t-set="has_end_date"   t-value="any(l.end_date   for l in doc.order_line)"/>
+                <t t-set="has_discount"   t-value="any(l.discount   for l in doc.order_line)"/>
+
+                <table class="table table-sm o_main_table table-esky mt-5 mb-0">
+                    <thead style="display: table-row-group">
+                        <th name="th_no" class="text-center th-esky">S.No.</th>
+                        <th t-if="doc.show_unit_price" name="th_part_no" class="text-center th-esky">Part Number</th>
+                        <th t-if="doc.show_unit_price" name="th_description" class="text-center th-esky">DESCRIPTION</th>
+                        <th t-if="not doc.show_unit_price" name="th_part_no" class="text-center th-esky" colspan="2">Part Number</th>
+                        <th t-if="not doc.show_unit_price" name="th_description" class="text-center th-esky" colspan="2">DESCRIPTION</th>
+                        <th name="th_quantity" class="text-center th-esky">Qty</th>
+                                           
+                        <th class="text-center th-esky" t-if="has_start_date">Start Date</th>
+                        <th class="text-center th-esky" t-if="has_end_date">End Date</th>
+                        <th t-if="doc.show_unit_price" name="th_priceunit" class="text-center th-esky">Unit Price</th>
+                        <th name="th_discount"  class="th-do-it" t-if="has_discount">DISCOUNT</th>
+                        <th t-if="doc.show_unit_price" name="th_subtotal" class="text-center th-esky">
+                            <span groups="account.group_show_line_subtotals_tax_excluded">Total Price</span>
+                            <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
+                        </th>
+                    </thead>
+                    <tbody class="sale_tbody">
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-set="current_vat" t-value="0"/>
+                        <t t-set="current_grand_total" t-value="0"/>
+                        <t t-foreach="doc.order_line" t-as="line">
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal"/>
+                            <t t-set="current_vat" t-value="current_vat + line.price_tax"/>
+                            <t t-set="current_grand_total" t-value="current_vat + current_subtotal"/>
+                     
+
+                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td class="td-esky" name="td_no"><span t-esc="sno"/><t t-set="sno" t-value="sno+1"/></td>
+                                    <td t-if="doc.show_unit_price" class="td-esky" name="td_part_number"><span t-field="line.part_number"/></td>
+                                    <td t-if="doc.show_unit_price" class="td-esky" name="td_name"><span t-field="line.name"/></td>
+                                    <td t-if="not doc.show_unit_price" class="td-esky" name="td_part_number" colspan="2"><span t-field="line.part_number"/></td>
+                                    <td t-if="not doc.show_unit_price" class="td-esky" name="td_name" colspan="2"><span t-field="line.name"/></td>
+                                    <td name="td_quantity" class="text-center td-esky">
+                                        <span t-field="line.product_uom_qty" t-options='{"widget": "integer"}'/>
+                                    </td>
+                                    <td class="td-esky text-center"
+                                        t-if="has_start_date">
+                                        <span t-field="line.start_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td class="td-esky text-center"
+                                        t-if="has_end_date">
+                                        <span t-field="line.end_date" t-options='{"widget": "date"}'/>
+                                    </td>
+                                    <td t-if="doc.show_unit_price" name="td_priceunit" class="text-center td-esky">
+                                        <span t-field="line.price_unit" t-options='{"widget": "monetary"}'/>
+                                    </td>
+                                    <td name="td_discount" class="td-do-it"
+                                        t-if="has_discount">
+                                        <span t-field="line.discount"/>%
+                                    </td>
+                                    <td t-if="not line.is_downpayment and doc.show_unit_price" name="td_subtotal" class="text-center o_price_total td-esky">
+                                        <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                                        <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                                    </td>
+                                </t>
+                                <t t-elif="line.display_type == 'line_section'">
+                                    <td name="td_section_line" colspan="99" class="section-th-esky text-center">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                    <t t-set="current_vat" t-value="0"/>
+                                    <t t-set="current_grand_total" t-value="0"/>
+                                </t>
+                                <t t-elif="line.display_type == 'line_note'">
+                                    <td name="td_note_line" colspan="99" class="td-esky text-center">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+
+                            
+                <t t-set="line_index" t-value="loop.index0"/>
+                <t t-set="line_last"  t-value="loop.last"/>
+              </t>
+            </tbody>
+          </table>
+                            <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section') and not line.is_downpayment">
+                                
+                                 <div style="page-break-inside: avoid;">
+                      <table class="table table-sm o_main_table table-esky mt-5 mb-0">
+                      <tr>
+                          <td style="border:  1px solid white;width:5%;"/>
+                          <td style="border:  1px solid white;width:10%;"/>
+                          <td style="border:  1px solid white;width:5%;"/>
+                          <td style="border:  1px solid white;"/>
+                          <td name="td_section_subtotal" class="text-right sub-td-esky">Total</td>
+                          <td class="sub-td-esky" style="text-align:right;">
+                                        <span t-out="current_subtotal" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                      </tr>
+                      <tr name="vat">
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td name="td_section_subtotal" class="sub-td-esky text-right" style="text-align:right;width:10%">
+                                        <strong class="mr16">VAT</strong>
+                                    </td>
+                                    <td class="sub-td-esky text-right" style="text-align:right;">
+                                        <span t-out="current_vat" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                      <tr name="grand_total">
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td name="td_section_subtotal" class="text-right sub-td-esky" style="text-align:right;width:10%">
+                                        <strong class="mr16">Grand Total</strong>
+                                    </td>
+                                    <td class="sub-td-esky text-right" style="text-align:right;">
+                                        <span t-out="current_grand_total" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr> 
+                      <tr>
+                          <td colspan="99" style="border: 1px solid white;">
+                              <span style="color:white;">space</span>
+                          </td>
+                      </tr>
+                     </table>
+                  </div>
+                                <tr class="is-subtotal">
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td name="td_section_subtotal" class="sub-td-esky text-right" style="text-align:right;width:10%">
+                                        <strong class="mr16">Total</strong>
+                                    </td>
+                                    <td class="sub-td-esky text-right" style="text-align:right;">
+                                        <span t-out="current_subtotal" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                                <tr name="vat">
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td name="td_section_subtotal" class="sub-td-esky text-right" style="text-align:right;width:10%">
+                                        <strong class="mr16">VAT</strong>
+                                    </td>
+                                    <td class="sub-td-esky text-right" style="text-align:right;">
+                                        <span t-out="current_vat" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                                <tr name="grand_total">
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td style="border: 0px solid white;"/>
+                                    <td name="td_section_subtotal" class="text-right sub-td-esky" style="text-align:right;width:10%">
+                                        <strong class="mr16">Grand Total</strong>
+                                    </td>
+                                    <td class="sub-td-esky text-right" style="text-align:right;">
+                                        <span t-out="current_grand_total" t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'
+                                        />
+                                    </td>
+                                </tr> -->
+                            <!-- </t>
+                        </t>
+                    </tbody>
+                    <tr>
+                        <td name="td_section_line" colspan="99" class="section-th-esky text-rightr">
+                             <span><br></br></span>
+                        </td>
+                    </tr>
+                    </table> -->
+                    <!-- <div style="page-break-inside: avoid;">
+                      <table class="table table-sm o_main_table table-esky mt-5 mb-0">
+                      <tr>
+                          <td style="border:  1px solid white;width:5%;"/>
+                          <td style="border:  1px solid white;width:10%;"/>
+                          <td style="border:  1px solid white;width:5%;"/>
+                          <td style="border:  1px solid white;"/>
+                          <td name="td_amount_untaxed_label" class="text-right sub-td-esky">Total</td>
+                          <td name="td_amount_untaxed" class="sub-td-esky" style="text-align:right;width:10%">
+                              <span t-field="doc.amount_untaxed"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_vat_label" class="text-right sub-td-esky">VAT</td>
+                          <td name="td_vat" class="sub-td-esky" style="text-align:right;">
+                              <span>
+                                  <t t-set="total_vat" t-value="doc.amount_total - doc.amount_untaxed"/>
+                                  <span t-out="total_vat" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                              </span>
+                          </td>
+                      </tr>
+                      <tr class="o_total">
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_amount_total_label" class="sub-td-esky"><strong>Grand Total</strong></td>
+                          <td name="td_amount_total" class="sub-td-esky" style="text-align:right;">
+                              <span t-field="doc.amount_total"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td colspan="99" style="border: 1px solid white;">
+                              <span style="color:white;">space</span>
+                          </td>
+                      </tr>
+                      <tr class="o_total">
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_amount_total" class="text-center sub-td-esky" colspan="2">
+                              <span t-field="doc.user_id.email"/>
+                          </td>
+                      </tr>
+                      <tr class="o_total">
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_amount_total" class="text-center sub-td-esky" colspan="2">
+                              <span t-field="doc.user_id.mobile"/>
+                          </td>
+                      </tr>
+                     </table>
+                  </div> -->
+                <!-- <t t-if="doc.add_white_lines" t-foreach="range(doc.add_white_lines)" t-as="rl">
+                    <br/>
+                </t> -->
+                <!-- <t t-if="hasattr(doc, 'add_white_lines') and doc.add_white_lines" t-foreach="range(doc.add_white_lines)" t-as="rl">
+                  <br/>
+                </t> -->
+<!-- 
+                <div class="row" style="border:1px solid black;background-color: #c55a11;height:3.5rem;">
+                    <div class="col-md-12" style="padding:1rem;">
+                        <span style="color:white;font-size:23px;"><strong><i>Terms and Conditions:</i></strong></span>
+                    </div>
+                </div>
+                <div class="row" style="border:1px solid black;border-top:none;border-bottom:none;">
+                    <div class="col-md-6" style="padding:1rem;">
+                        <strong t-esc="doc.note" style="font-size:21px;"/>
+                    </div> 
+                </div>
+                <div class="row" style="border:1px solid black;">
+                    <div class="col-md-12" style="padding:1rem;">
+                        <span><strong><i>DISCLAIMER:</i></strong></span><br/>
+                        <t t-set="gt" t-value="request.env['general.terms'].sudo().search([('default_gt', '=', True)])"/>
+                        <span t-esc="gt.disclaimer"/>
+                    </div> 
+                </div>
+            </t>  -->
+
+                            <!-- For Esky Company -->
+                <t t-else="">
+                  <!-- … (everything up to the “Optional Items” header stays exactly as before) … -->
+
+                  <!-- ================================================================================
+                       “Esky Company” HEADER & TITLE SECTIONS (unchanged)
+                       ================================================================================= -->
+                  <div class="row">
+                    <div class="col-md-12 text-center" style="position:relative;top:35rem;">
+                      <h1 style="color:#ed7d31;font-size:3.5rem;">
+                        <strong>
+                          <i>
+                            Financial Proposal<br/>Presented To
+                          </i>
+                        </strong>
+                      </h1>
+                    </div>
+                  </div>
+                  <br/>
+                  <div class="row">
+                    <div class="col-md-12 text-center" style="position:relative;top:35rem;">
+                      <h1 style="color:#ed7d31;font-size:3.5rem;">
+                        <strong>
+                          <i>
+                            <span t-esc="doc.partner_id.name"/>
+                          </i>
+                          <br/>
+                          <img t-if="doc.partner_id.image_1920"
+                               t-att-src="image_data_uri(doc.partner_id.image_1920)"
+                               alt="Customer Logo"
+                               style="max-height: 150px;"/>
+                        </strong>
+                      </h1>
+                    </div>
+                  </div>
+                  <div style="page-break-after: always;"/>
+
+                  <div class="row">
+                    <div class="col-md-12" style="position:relative;top:2rem;">
+                      <h1 style="color:#ed7d31;font-size:2rem;" class="text-center">
+                        <strong>
+                          eSKy IT - The Firm
+                        </strong>
+                      </h1>
+                      <t t-set="gt" t-value="request.env['general.terms'].sudo().search([('default_gt','=',True)])"/>
+                      <i>
+                        <strong t-esc="gt.general_terms"
+                                style="color:#002060 !important;font-size:1.5rem;"/>
+                      </i>
+                    </div>
+                  </div>
+                  <div style="page-break-after: always;"/>
+
+                  <div class="row" style="border:1px solid black;height:2rem;background-color:#c55a11;width:25rem;position:relative;left:60rem;">
+                    <div class="col-md-12 text-center">
+                      <span style="color:white;font-size:20px;">
+                        <strong><i>Quotation Reference</i></strong>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row" style="border:1px solid black;height:2rem;position:relative;width:25rem;border-top:none;left:60rem;">
+                    <div class="col-md-3 text-center" style="border-right:1px solid black;width:12rem;">
+                      <span style="font-size:20px;"><strong>Quote No:</strong></span>
+                    </div>
+                    <div class="col-md-6 text-center" style="background-color:#002060;width:13rem;">
+                      <span t-field="doc.name" style="color:white;"/>
+                    </div>
+                  </div>
+                  <div class="row" style="border:1px solid black;height:2rem;position:relative;width:25rem;border-top:none;left:60rem;">
+                    <div class="col-md-3 text-center" style="border-right:1px solid black;width:12rem;">
+                      <span style="font-size:20px;"><strong>Quote Date</strong></span>
+                    </div>
+                    <div class="col-md-6 text-center" style="width:13rem;">
+                      <span t-esc="doc.x_studio_report_date" t-options='{"widget":"date"}'/>
+                    </div>
+                  </div>
+
+                  <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;left:24rem;">
+                    <div class="col-md-4 text-right"
+                         style="border-right:1px solid black;width:15rem;background-color:#002060;border-bottom:1px solid black;">
+                      <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Quote To:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center"
+                         style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                      <span t-field="doc.partner_id" style="color:white;"/>
+                    </div>
+                  </div>
+                  <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">
+                    <div class="col-md-4 text-right"
+                         style="border-right:1px solid black;width:15rem;background-color:#002060;">
+                      <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Project Ref:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center"
+                         style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                      <span t-field="doc.project_ref" style="color:white;"/>
+                    </div>
+                  </div>
+                  <div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">
+                    <div class="col-md-4 text-right"
+                         style="border-right:1px solid black;width:15rem;background-color:#002060;border-top:1px solid black;border-bottom:1px solid black;">
+                      <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Contact Person:</strong></span>
+                    </div>
+                    <div class="col-md-8 text-center"
+                         style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">
+                      <span t-field="doc.contact_person" style="color:white;"/>
+                    </div>
+                  </div>
+                  <!--<div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">-->
+                  <!--  <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;border-top:1px solid black;border-bottom:1px solid black;">-->
+                  <!--    <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Mobile:</strong></span>-->
+                  <!--  </div>-->
+                  <!--  <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">-->
+                      <!--<span t-field="doc.partner_id.mobile" style="color:white;"/>-->
+                  <!--    <t t-foreach="doc.partner_id.child_ids" t-as="mob">-->
+                  <!--      <span t-field="mob.mobile" style="color:white;"/>-->
+                  <!--    </t>-->
+                  <!--  </div>-->
+                  <!--</div>-->
+                  <!--<div class="row" style="border:1px solid black;height:2rem;position:relative;width:34rem;border-top:none;left:24rem;">-->
+                  <!--  <div class="col-md-4 text-right" style="border-right:1px solid black;width:15rem;background-color:#002060;border-top:1px solid black;border-bottom:1px solid black;">-->
+                  <!--    <span style="font-size:20px;color:white;margin-left:1rem;"><strong>Address:</strong></span>-->
+                  <!--  </div>-->
+                  <!--  <div class="col-md-8 text-center" style="background-color:#c55a11;width:19rem;border:1px solid black;border-left:none;border-top:none;">-->
+                  <!--    <span t-esc="doc.ship_to_address" style="color:white;"/>-->
+                  <!--  </div>-->
+                  <!--</div>-->
+
+                  <div class="row">
+                    <div class="col-md-12" style="position:relative;top:2rem;">
+                      <h1 style="color:black;font-size:2rem;text-decoration: underline;" class="text-center">
+                        <span t-field="doc.x_studio_options"/>
+                      </h1>
+                    </div>
+                  </div>
+                  <!-- ================================================================================
+                       END HEADER SECTIONS FOR “Esky Company”
+                       ================================================================================= -->
+
+                  <!-- ================================================================================
+                       PREPARE FLAGS FOR START/END/DISCOUNT AND INITIALIZE “current_section” COUNTERS
+                       ================================================================================= -->
+                  <t t-set="lines_to_report"   t-value="doc._get_order_lines_to_report()"/>
+                  <t t-set="display_discount"  t-value="any(l.discount for l in lines_to_report)"/>
+                  <t t-set="has_start_date"    t-value="any(l.start_date for l in doc.order_line)"/>
+                  <t t-set="has_end_date"      t-value="any(l.end_date   for l in doc.order_line)"/>
+                  <t t-set="has_discount"      t-value="any(l.discount   for l in doc.order_line)"/>
+                  <!-- “current_section” will be set once we hit a line with display_type='line_section' -->
+                  <t t-set="current_section"   t-value="False"/>
+                  <t t-set="current_subtotal"  t-value="0"/>
+                  <t t-set="current_vat"       t-value="0"/>
+                  <t t-set="current_grand_total" t-value="0"/>
+                  <t t-set="sno"               t-value="1"/>
+
+                  <!-- ================================================================================
+                       MAIN “Optional Items” LINE‐ITEMS TABLE (with class="table-esky")
+                       ================================================================================= -->
+                  <table class="table table-sm o_main_table table-esky mt-5 mb-0">
+                    <thead style="display: table-row-group">
+                      <th name="th_no"          class="text-center th-esky">S.No.</th>
+                      <th t-if="doc.show_unit_price" name="th_part_no"  class="text-center th-esky">Part Number</th>
+                      <th t-if="doc.show_unit_price" name="th_description" class="text-center th-esky">DESCRIPTION</th>
+                      <th t-if="not doc.show_unit_price" name="th_part_no" class="text-center th-esky" colspan="2">Part Number</th>
+                      <th t-if="not doc.show_unit_price" name="th_description" class="text-center th-esky" colspan="2">DESCRIPTION</th>
+                      <th name="th_quantity"    class="text-center th-esky">Qty</th>
+                      <!-- Only show when used -->
+                      <th class="text-center th-esky" t-if="has_start_date">Start Date</th>
+                      <th class="text-center th-esky" t-if="has_end_date">End Date</th>
+                      <th t-if="doc.show_unit_price" name="th_priceunit" class="text-center th-esky">Unit Price</th>
+                      <th name="th_discount"     class="th-do-it" t-if="has_discount">DISCOUNT</th>
+                      <th t-if="doc.show_unit_price" name="th_subtotal" class="text-center th-esky">
+                        <span groups="account.group_show_line_subtotals_tax_excluded">Total Price</span>
+                        <span groups="account.group_show_line_subtotals_tax_included">Total Price</span>
+                      </th>
+                    </thead>
+                    <tbody class="sale_tbody">
+                      <t t-foreach="doc.order_line" t-as="line">
+                        <!-- accumulate VAT/subtotal as we go -->
+                        <t t-set="current_subtotal"  t-value="current_subtotal + line.price_subtotal"/>
+                        <t t-set="current_vat"       t-value="current_vat + line.price_tax"/>
+                        <t t-set="current_grand_total" t-value="current_vat + current_subtotal"/>
+
+                        <tr t-att-class="                           'bg-200 fw-bold o_line_section' if line.display_type == 'line_section'                           else 'fst-italic o_line_note' if line.display_type == 'line_note'                           else '' ">
+                          <t t-if="not line.display_type">
+                            <!-- regular data row -->
+                            <td class="td-esky" name="td_no">
+                              <span t-esc="sno"/><t t-set="sno" t-value="sno + 1"/>
+                            </td>
+                            <td t-if="doc.show_unit_price" class="td-esky" name="td_part_number">
+                              <span t-field="line.part_number"/>
+                            </td>
+                            <td t-if="doc.show_unit_price" class="td-esky" name="td_name">
+                              <span t-field="line.name"/>
+                            </td>
+                            <td t-if="not doc.show_unit_price" class="td-esky" name="td_part_number" colspan="2">
+                              <span t-field="line.part_number"/>
+                            </td>
+                            <td t-if="not doc.show_unit_price" class="td-esky" name="td_name" colspan="2">
+                              <span t-field="line.name"/>
+                            </td>
+                            <td name="td_quantity" class="text-center td-esky">
+                              <span t-field="line.product_uom_qty" t-options='{"widget":"integer"}'/>
+                            </td>
+                            <td class="td-esky text-center" t-if="has_start_date">
+                              <span t-field="line.start_date" t-options='{"widget":"date"}'/>
+                            </td>
+                            <td class="td-esky text-center" t-if="has_end_date">
+                              <span t-field="line.end_date" t-options='{"widget":"date"}'/>
+                            </td>
+                            <td t-if="doc.show_unit_price" name="td_priceunit" class="text-center td-esky">
+                              <span t-field="line.price_unit" t-options='{"widget":"monetary"}'/>
+                            </td>
+                            <td name="td_discount" class="td-do-it" t-if="has_discount">
+                              <span t-field="line.discount"/>%
+                            </td>
+                            <td t-if="not line.is_downpayment and doc.show_unit_price" name="td_subtotal" class="text-center o_price_total td-esky">
+                              <span t-field="line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                              <span t-field="line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+                            </td>
+                          </t>
+                          <t t-if="current_section and (line_last or doc.order_line[line_index+1].display_type == 'line_section') and not line.is_downpayment">
+                                <tr>
+                                  <td colspan="8" style="border:1px solid white;">
+                                    <table class="table table-sm o_main_table table-esky mt-5 mb-0" style="margin-left:auto; width:100%;border 1px solid white;">
+                                    <tr class="is-subtotal text-center" style="width:100%;">
+                                        <td style="border: 0px solid white;width:5%;"/>
+                                        <td style="border: 0px solid white;width:10%;"/>
+                                        <td style="border: 0px solid white;width:15%;"/>
+                                        <td style="border: 0px solid white;"/>
+                                        <td name="td_section_subtotal" class="sub-td-esky text-center">
+                                            <strong class="mr16">Total</strong>
+                                        </td>
+                                        <td class="sub-td-esky text-right" style="width:10%">
+                                            <span t-out="current_subtotal" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr name="vat" class="text-center">
+                                        <td style="border: 0px solid white;"/>
+                                        <td style="border: 0px solid white;"/>
+                                        <td style="border: 0px solid white;"/>
+                                        <td style="border: 0px solid white;"/>
+                                        <td name="td_section_subtotal" class="sub-td-esky text-center">
+                                            <strong class="mr16">VAT</strong>
+                                        </td>
+                                        <td class="sub-td-esky text-right" style="width:10%">
+                                            <span t-out="current_vat" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    <tr name="grand_total" class="text-center">
+                                        <td style="border: 0px solid white;"/>
+                                        <td style="border: 0px solid white;"/>
+                                        <td style="border: 0px solid white;"/>
+                                        <td style="border: 0px solid white;"/>
+                                        <td name="td_section_subtotal" class="sub-td-esky text-center">
+                                            <strong class="mr16">Grand Total</strong>
+                                        </td>
+                                        <td class="sub-td-esky text-right" style="width:10%">
+                                            <span t-out="current_grand_total" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                                        </td>
+                                    </tr>
+                                    </table>
+                                  </td>
+                                </tr>
+                            </t>
+                          <t t-elif="line.display_type == 'line_section'">
+                            <!-- found a “section” – mark this as the current_section and reset accumulators -->
+                            <td name="td_section_line" colspan="99" class="section-th-esky text-center">
+                              <span t-field="line.name"/>
+                            </td>
+                            <t t-set="current_section" t-value="line"/>
+                            <t t-set="current_subtotal" t-value="0"/>
+                            <t t-set="current_vat" t-value="0"/>
+                            <t t-set="current_grand_total" t-value="0"/>
+                          </t>
+                          <t t-elif="line.display_type == 'line_note'">
+                            <!-- found a “note” row -->
+                            <td name="td_note_line" colspan="99" class="td-esky text-center">
+                              <span t-field="line.name"/>
+                            </td>
+                          </t>
+                        </tr>
+                      </t>
+
+
+
+  <t t-if="doc.order_line">
+    <table class="table table-sm o_main_table table-esky mt-5 mb-0" style="margin-left:auto; width:100%;">
+      <tbody>
+        <tr>
+          <td style="border:1px solid white; width:5%;"/>
+          <td style="border:1px solid white; width:10%;"/>
+          <td style="border:1px solid white; width:5%;"/>
+          <td style="border:1px solid white;"/>
+          <td name="td_main_amount_untaxed_label" class="text-center sub-td-esky">
+            <strong>Total</strong>
+          </td>
+          <td class="sub-td-esky text-right" style="text-align:right;width:10%">
+            <span t-field="doc.amount_untaxed"/>
+          </td>
+        </tr>
+        <tr>
+          <td style="border:1px solid white;"/>
+          <td style="border:1px solid white;"/>
+          <td style="border:1px solid white;"/>
+          <td style="border:1px solid white;"/>
+          <td name="td_main_vat_label" class="text-center sub-td-esky">
+            <strong>VAT</strong>
+          </td>
+          <td class="sub-td-esky text-right" style="text-align:right;width:10%">
+            <span t-esc="doc.amount_total - doc.amount_untaxed" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.pricelist_id.currency_id}"/>
+          </td>
+        </tr>
+        <tr>
+          <td style="border:1px solid white;"/>
+          <td style="border:1px solid white;"/>
+          <td style="border:1px solid white;"/>
+          <td style="border:1px solid white;"/>
+          <td name="td_main_amount_total_label" class="text-center sub-td-esky">
+            <strong>Grand Total</strong>
+          </td>
+          <td class="sub-td-esky text-right" style="text-align:right;width:10%">
+            <span t-field="doc.amount_total"/>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="6" style="border:1px solid white;">
+            <span style="color:white;">space</span>
+          </td>
+        </tr>
+        <tr class="o_total">
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_amount_total" class="text-center sub-td-esky" colspan="2">
+                              <span t-field="doc.user_id.email"/>
+                          </td>
+                      </tr>
+                      <tr class="o_total">
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_amount_total" class="text-center sub-td-esky" colspan="2">
+                              <span t-field="doc.user_id.mobile"/>
+                          </td>
+                      </tr>
+
+      </tbody>
+    </table>
+  </t>
+                    </tbody>
+                  </table>
+
+
+                  <!-- END “Optional Items” LINE‐ITEMS TABLE -->
+
+                  <!-- ================================================================================
+                       STANDALONE TABLE FOR “Optional Items” TOTAL / VAT / GRAND TOTAL
+                       (only render if current_section was set during the loop above)
+                       ================================================================================= -->
+                  <!--<t t-if="current_section">-->
+                  <!--  <table class="table table-sm o_main_table table-esky mt-5 mb-0" style="margin-left:auto; width:22.5%;">-->
+                  <!--    <tbody>-->
+                  <!--      <tr>-->
+                  <!--        <td style="border:1px solid white; width:5%;"/>-->
+                  <!--        <td style="border:1px solid white; width:10%;"/>-->
+                  <!--        <td style="border:1px solid white; width:5%;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td name="td_amount_untaxed_label" class="text-right sub-td-esky">-->
+                  <!--          <strong>Total</strong>-->
+                  <!--        </td>-->
+                  <!--        <td class="sub-td-esky text-right" style="text-align:right;">-->
+                  <!--          <span t-out="current_subtotal" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.pricelist_id.currency_id}"/>-->
+                  <!--        </td>-->
+                  <!--      </tr>-->
+                  <!--      <tr name="vat">-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td name="td_vat_label" class="text-right sub-td-esky">-->
+                  <!--          <strong>VAT</strong>-->
+                  <!--        </td>-->
+                  <!--        <td class="sub-td-esky text-right" style="text-align:right;">-->
+                  <!--          <span t-out="current_vat" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.pricelist_id.currency_id}"/>-->
+                  <!--        </td>-->
+                  <!--      </tr>-->
+                  <!--      <tr name="grand_total">-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td name="td_amount_total_label" class="sub-td-esky text-right">-->
+                  <!--          <strong>Grand Total</strong>-->
+                  <!--        </td>-->
+                  <!--        <td class="sub-td-esky text-right" style="text-align:right;">-->
+                  <!--          <span t-out="current_grand_total" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.pricelist_id.currency_id}"/>-->
+                  <!--        </td>-->
+                  <!--      </tr>-->
+                  <!--      <tr>-->
+                  <!--        <td colspan="6" style="border:1px solid white;">-->
+                  <!--          <span style="color:white;">space</span>-->
+                  <!--        </td>-->
+                  <!--      </tr>-->
+
+
+                  <!--    </tbody>-->
+                  <!--  </table>-->
+                  <!--</t>-->
+                  <!-- END standalone “Optional Items” totals table -->
+
+
+                  <!--<table class="table table-sm o_main_table table-esky mt-5 mb-0" style="margin-left:auto; width:22.5%;">-->
+                  <!--    <tbody>-->
+                  <!--      <tr>-->
+                  <!--        <td style="border:1px solid white; width:5%;"/>-->
+                  <!--        <td style="border:1px solid white; width:10%;"/>-->
+                  <!--        <td style="border:1px solid white; width:5%;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td name="td_amount_untaxed_label" class="text-right sub-td-esky">-->
+                  <!--          <strong>Total</strong>-->
+                  <!--        </td>-->
+                  <!--        <td class="sub-td-esky text-right" style="text-align:right;">-->
+                  <!--          <span t-out="doc.amount_untaxed" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.pricelist_id.currency_id}"/>-->
+                  <!--        </td>-->
+                  <!--      </tr>-->
+                  <!--      <tr name="vat">-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td name="td_vat_label" class="text-right sub-td-esky">-->
+                  <!--          <strong>VAT</strong>-->
+                  <!--        </td>-->
+                  <!--        <td class="sub-td-esky text-right" style="text-align:right;">-->
+                  <!--          <span>-->
+                  <!--                <t t-set="total_vat" t-value="doc.amount_total - doc.amount_untaxed"/>-->
+                  <!--                <span t-out="total_vat" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.pricelist_id.currency_id}"/>-->
+                  <!--            </span>-->
+                  <!--        </td>-->
+                  <!--      </tr>-->
+                  <!--      <tr name="grand_total">-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td style="border:1px solid white;"/>-->
+                  <!--        <td name="td_amount_total_label" class="sub-td-esky text-right">-->
+                  <!--          <strong>Grand Total</strong>-->
+                  <!--        </td>-->
+                  <!--        <td class="sub-td-esky text-right" style="text-align:right;">-->
+                  <!--          <span t-out="doc.amount_total" t-options="{&quot;widget&quot;:&quot;monetary&quot;,&quot;display_currency&quot;:doc.pricelist_id.currency_id}"/>-->
+
+                  <!--        </td>-->
+                  <!--      </tr>-->
+                  <!--      <tr>-->
+                  <!--        <td colspan="6" style="border:1px solid white;">-->
+                  <!--          <span style="color:white;">space</span>-->
+                  <!--        </td>-->
+                  <!--      </tr>-->
+
+
+                  <!--    </tbody>-->
+                  <!--  </table>-->
+
+                  <!-- <div style="page-break-inside: avoid;">
+                      <table class="table table-sm o_main_table table-esky mt-5 mb-0" style="margin-left:auto; width:22.5%;">
+                      <tr>
+                          <td style="border:  1px solid white;width:5%;"/>
+                          <td style="border:  1px solid white;width:10%;"/>
+                          <td style="border:  1px solid white;width:5%;"/>
+                          <td style="border:  1px solid white;"/>
+                          <td name="td_amount_untaxed_label" class="sub-td-esky">Total</td>
+                          <td name="td_amount_untaxed" class="sub-td-esky" style="text-align:right;width:10%">
+                              <span t-field="doc.amount_untaxed"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_vat_label" class="sub-td-esky">VAT</td>
+                          <td name="td_vat" class="sub-td-esky" style="text-align:right;">
+                              <span>
+                                  <t t-set="total_vat" t-value="doc.amount_total - doc.amount_untaxed"/>
+                                  <span t-out="total_vat" t-options="{&quot;widget&quot;: &quot;monetary&quot;, &quot;display_currency&quot;: doc.pricelist_id.currency_id}"/>
+                              </span>
+                          </td>
+                      </tr>
+                      <tr class="o_total">
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_amount_total_label" class="sub-td-esky"><strong>Grand Total</strong></td>
+                          <td name="td_amount_total" class="sub-td-esky" style="text-align:right;">
+                              <span t-field="doc.amount_total"/>
+                          </td>
+                      </tr>
+                      <tr>
+                          <td colspan="99" style="border: 1px solid white;">
+                              <span style="color:white;">space</span>
+                          </td>
+                      </tr>
+                      <tr class="o_total">
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_amount_total" class="text-center sub-td-esky" colspan="2">
+                              <span t-field="doc.user_id.email"/>
+                          </td>
+                      </tr>
+                      <tr class="o_total">
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td style="border: 1px solid white;"/>
+                          <td name="td_amount_total" class="text-center sub-td-esky" colspan="2">
+                              <span t-field="doc.user_id.mobile"/>
+                          </td>
+                      </tr>
+                     </table>
+                  </div>  -->
+
+                  <div class="row" style="                         text-align: right;                         margin-top: 2rem;    /* a little space above */                         margin-bottom: 1rem; /* a little space below */                         ">
+                    <!--<div class="col-md-12">-->
+                    <!--    <span style="font-size:32px; color:#003264;">-->
+                    <!--    <t t-esc="doc.user_id.email"/>-->
+                    <!--    <br/>-->
+                    <!--    <t t-esc="doc.user_id.mobile"/>-->
+                    <!--    </span>-->
+                    <!--</div>-->
+                    </div>
+
+                  <!-- ================================================================================
+                       TERMS & CONDITIONS / DISCLAIMER (unchanged)
+                       ================================================================================= -->
+                  <div class="row" style="border:1px solid black;background-color:#c55a11;height:3.5rem;">
+                    <div class="col-md-12" style="padding:1rem;">
+                      <span style="color:white;font-size:23px;">
+                        <strong><i>Terms and Conditions:</i></strong>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="row" style="border:1px solid black;border-top:none;border-bottom:none;">
+                    <div class="col-md-6" style="padding:1rem;">
+                      <strong t-esc="doc.note" style="font-size:21px;"/>
+                    </div>
+                  </div>
+                  <div class="row" style="border:1px solid black;">
+                    <div class="col-md-12" style="padding:1rem;">
+                      <span><strong><i>DISCLAIMER:</i></strong></span><br/>
+                      <t t-set="gt" t-value="request.env['general.terms'].sudo().search([('default_gt','=',True)])"/>
+                      <span t-esc="gt.disclaimer"/>
+                    </div>
+                  </div>
+                </t>
+                <!-- ───────────────────────────────────────────────────────── END Esky Company branch ───────────────────────────────────────────────────────── -->
+
+
+            </div>
+        </t>
+    </template>
+  
+    <template id="report_project_sales">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="do_sales_report.report_project_sales_document" t-lang="doc.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

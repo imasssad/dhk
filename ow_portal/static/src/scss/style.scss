@@ -1,0 +1,68 @@
+/* Hack for custom themes */
+.o_portal_docs.list-group.ow_portal {
+    width: 100%;
+    display: inline-block;
+}
+
+
+.ow_portal {
+	width: 100%;
+	display: inline-block;
+	
+	.badge-pill {
+		font-size: 32px;
+	}
+	
+    .badge-secondary {
+        background-color: transparent;
+    }
+	
+	.list-group-item {
+	        float: left;
+		    margin: 10px;
+		    padding: 14px 18px;
+		    min-height: 130px;
+            width: 30%;
+            border-radius: 0px;
+		    font-size: 20px;
+		    
+            @media (max-width: 767px) {
+                width: 100%;
+            }
+	}
+	
+	[href="/my/mission"] {
+		background-color: #3B71CA;
+		color: #fff !important;
+	}
+
+	[href="/my/loan"]{
+		background-color: #DC4C64;
+		color: #fff !important;
+	}
+	
+    	[href="/my/attendance"]{
+		background-color: #54B4D3;
+		color: #fff !important;
+	}
+
+	[href="/my/leaves"] {
+		background-color: #E4A11B;
+		 color: #fff !important;
+	}
+
+	[href="/my/projects"] {
+		background-color: theme-color('epsilon');
+		color: #fff !important;
+	}
+
+	[href="/my/tasks"] {
+		background-color: theme-color('gamma');
+        color: #fff !important;
+	}
+    
+	[href="/my/timesheets"]{
+		background-color: theme-color('epsilon');
+		color: #fff !important;
+	}
+}

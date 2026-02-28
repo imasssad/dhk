@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!--    code comment in manifest-->
+
+    <record id="dics_calendar_event_view_tree" model="ir.ui.view">
+        <field name="name">calendar.event.view.tree.inherit.hr.attendance</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_tree"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='user_id']" position="before">
+                <field name="customer_name"/>
+            </xpath>
+        </field>
+    </record>
+
+    <record id="dics_calendar_event_view_form" model="ir.ui.view">
+        <field name="name">calendar.event.view.form.inherit.hr.attendance</field>
+        <field name="model">calendar.event</field>
+        <field name="inherit_id" ref="calendar.view_calendar_event_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//field[@name='allday']" position="before">
+                <field name="customer_name"/>
+            </xpath>
+        </field>
+    </record>
+</odoo>

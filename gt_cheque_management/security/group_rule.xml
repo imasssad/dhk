@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+       <record id="cheque_rule" model="ir.rule">
+            <field name="name">Cheque rule for multi-company</field>
+            <field ref="model_cheque_manage" name="model_id"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,185 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="portal_my_home_menu_meeting_custom" name="Portal layout : Meetings menu entries"
+              inherit_id="portal.portal_breadcrumbs" priority="20">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name == 'custom_meeting_page_probc' or custom_meeting_request"
+                t-attf-class="breadcrumb-item #{'active ' if not custom_meeting_request else ''}">
+                <a t-if="custom_meeting_request" t-attf-href="/my/custom_meeting_request?{{ keep_query() }}">Meeting</a>
+                <t t-else="">Meeting</t>
+            </li>
+            <li t-if="custom_meeting_request" class="breadcrumb-item active">
+                <span t-field="custom_meeting_request.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_meeting_custom" name="Portal My Meetings: Meeting  entries"
+              inherit_id="portal.portal_my_home" priority="28">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Meetings</t>
+                <t t-set="url" t-value="'/my/custom_meeting_request'"/>
+                <t t-set="placeholder_count" t-value="'custom_meeting_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_meeting_custom" name="My Meetings">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Meeting</t>
+            </t>
+            <t t-if="not meetings">
+                <p>There are currently no Meetings for your account.</p>
+            </t>
+            <t t-if="meetings" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Subject</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Duration</th>
+                        <th>Location</th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <t t-foreach="meetings" t-as="custom_meeting_request">
+                    <tr>
+                        <td>
+                            <a t-attf-href="/my/custom_meeting_request/#{custom_meeting_request.id}?{{ keep_query() }}">
+                                <span t-field="custom_meeting_request.name"/>
+                            </a>
+                        </td>
+                        <td>
+                            <span t-field="custom_meeting_request.start"/>
+                        </td>
+                        <td>
+                            <span t-field="custom_meeting_request.stop"/>
+                        </td>
+                        <td>
+                            <span t-esc="custom_meeting_request.duration" t-options='{"widget": "float_time"}'/>
+                            hours
+                        </td>
+                        <td>
+                            <span t-field="custom_meeting_request.location"/>
+                        </td>
+                        <td>
+                            <!-- <div class="text-right"> -->
+                            <div class="text-end">
+                                <a data-bs-toggle="modal"
+                                   class="update_calendar_details"
+                                   t-attf-data-bs-target="#modal-custom_meeting_request-comment-#{custom_meeting_request.id}"
+                                   href="">Send Message
+                                </a>
+                                <t t-call="calendar_meeting_portal.custom_modal_update_calendar_comment"/>
+                                <t t-call="calendar_meeting_portal.custom_calendar_update_message"/>
+                            </div>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="custom_portal_my_meeting" name="My Meeting">
+        <t t-call="portal.portal_layout">
+            <!-- <t t-set="o_portal_fullwidth_alert">
+                <t t-call="portal.portal_back_in_edit_mode">
+                    <t t-set="backend_url" t-value="'/web#return_label=Website&amp;model=calendar.event&amp;id=%s&amp;view_type=form' % (custom_meeting_request.id)"/>
+                </t>
+            </t> -->
+            <t t-call="portal.portal_record_layout">
+                <t t-set="card_body">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <div>
+                                <strong style='text-left'>
+                                    <span t-field="custom_meeting_request.name"/>
+                                </strong>
+                                <br></br>
+                                <span t-esc="', '.join(map(lambda x: (x.name), custom_meeting_request.partner_ids))"/>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 portal_attendance_meeting">
+                            <!-- <div class="text-right"> -->
+                            <div class="text-end">
+                                <button data-bs-toggle="modal"
+                                        class="update_calendar_details btn-primary"
+                                        t-attf-data-bs-target="#modal-custom_meeting_request-comment-#{custom_meeting_request.id}"
+                                        href="">Send Message
+                                </button>
+                                <t t-call="calendar_meeting_portal.custom_modal_update_calendar_comment"/>
+                                <t t-call="calendar_meeting_portal.custom_calendar_update_message"/>
+                            </div>
+                        </div>
+                    </div>
+                    <br></br>
+                    <div>
+                        <p>
+                            <strong>Meeting Details</strong>
+                        </p>
+                        <div class="row">
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <label class="col-4">
+                                        <strong>Start Date:</strong>
+                                    </label>
+                                    <span t-field="custom_meeting_request.start"/>
+                                </div>
+                                <div class="row">
+                                    <label class="col-4">
+                                        <strong>End Date:</strong>
+                                    </label>
+                                    <span t-field="custom_meeting_request.stop"/>
+                                </div>
+                                <div class="row">
+                                    <label class="col-4">
+                                        <strong>Duration:</strong>
+                                    </label>
+                                    <span t-esc="custom_meeting_request.duration" t-options='{"widget": "float_time"}'/>
+                                    &#160;
+                                    <p>hours</p>
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="row">
+                                    <label class="col-4">
+                                        <strong>All Day:</strong>
+                                    </label>
+                                    <!-- <span t-field="custom_meeting_request.allday"/> -->
+                                    <t t-if="custom_meeting_request.allday">YES</t>
+                                    <t t-if="not custom_meeting_request.allday">NO</t>
+                                </div>
+                                <div class="row">
+                                    <label class="col-4">
+                                        <strong>Location:</strong>
+                                    </label>
+                                    <span t-field="custom_meeting_request.location"/>
+                                </div>
+                                <div class="row">
+                                    <label class="col-4">
+                                        <strong>Responsible:</strong>
+                                    </label>
+                                    <span t-field="custom_meeting_request.user_id.name"/>
+                                </div>
+                            </div>
+                            <div class="col-lg-12">
+                                <div>
+                                    <label>
+                                        <strong>Description:</strong>
+                                    </label>
+                                    <span t-field="custom_meeting_request.description"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

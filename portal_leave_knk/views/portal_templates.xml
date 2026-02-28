@@ -1,0 +1,353 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_leaves" name="Show Leaves" customize_show="True" inherit_id="portal.portal_my_home" priority="100">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <!-- <t t-call="portal.portal_docs_entry"> -->
+            <t t-if="request.env.user.employee_id">
+                <a class="list-group-item list-group-item-action d-flex align-items-center justify-content-between" href="/my/leaves" title="Leaves">
+                    Leaves
+                    <t t-set="placeholder_count" t-value="'leave_count'"/>
+                    <span class="badge text-bg-secondary rounded-pill" t-att-data-placeholder_count="placeholder_count">
+                        <i class="fa fa-spin fa-circle-o-notch"></i>
+                    </span>
+                </a>
+            </t>
+        </xpath>
+    </template>
+    <template id="portal_my_home_menu_leave" inherit_id="portal.portal_breadcrumbs" priority="30">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name in ['leave', 'create_leave']" t-attf-class="breadcrumb-item #{'active' if not leave else ''}">
+                <a t-if="page_name == 'create_leave'" t-attf-href="/my/leaves?{{ keep_query() }}">Leaves</a>
+                <t t-else="">Leaves</t>
+            </li>
+        </xpath>
+    </template>
+    <template id="portal_searchbar_inh" inherit_id="portal.portal_searchbar">
+        <xpath expr="//nav" position="inside">
+            <a class="btn btn-secondary my-2 mx-1" t-if="page_name == 'leave'"  href="/create/leave">Leave Request</a>
+        </xpath>
+    </template>
+    <template id="portal_my_leave_list">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True" />
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Leaves</t>
+            </t>
+            <t t-if="not grouped_leaves">
+                <p>There are currently no Leaves in your account.</p>
+            </t>
+            <div class="mx-1 mb-2 d-flex justify-content-center bg-white">
+                <t t-foreach="allocations" t-as="allocation_key">
+                    <div class="flex-fill border text-center">
+                        <div><b><t t-out="allocation_key" /></b></div>
+                        <div><t t-out="allocations[allocation_key][0]" /></div>
+                        <div><t t-out="allocations[allocation_key][1]" /> Available</div>
+                    </div>
+                </t> 
+            </div>
+            <t t-if="grouped_leaves">
+                <t t-call="portal.portal_table">
+                    <t t-foreach="grouped_leaves" t-as="leaves">
+                        <thead>
+                            <tr t-attf-class="{{'thead-light' if not groupby == 'none' else ''}}">
+                                <th>
+                                    <span class='d-none d-md-inline'>Employee Name</span>
+                                </th>
+                                <th class="text-right">Leave From</th>
+                                <th class="text-right">Leave To</th>
+                                <th class="text-right">Leave Type</th>
+                                <th class="text-right">Leave Status</th>
+                                <th class="text-right">Reason</th>
+                                <th/>
+                            </tr>
+                        </thead>
+                        <t t-foreach="leaves" t-as="leave">
+                            <tr id="leave_row">
+                                <td>
+                                    <t t-esc="leave.employee_id.name" />
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="leave.date_from" t-options="{'widget': 'date'}" />
+                                </td>
+                                <td class="text-right">
+                                    <span t-field="leave.date_to" t-options="{'widget': 'date'}" />
+                                </td>
+                                <td class="text-right"><span t-field="leave.holiday_status_id.name" /></td>
+                                <td class="text-right">
+                                    <span t-if="leave.state == 'draft'" t-attf-class="bg-info rounded-pill py-1 px-3" t-field="leave.state" />
+                                    <span t-if="leave.state == 'confirm'" t-attf-class="bg-warning rounded-pill py-1 px-3" t-field="leave.state" />
+                                    <span t-if="leave.state == 'refuse'" t-attf-class="bg-danger rounded-pill py-1 px-3" t-field="leave.state" />
+                                    <span t-if="leave.state == 'validate1'" t-attf-class="bg-primary rounded-pill py-1 px-3" t-field="leave.state" />
+                                    <span t-if="leave.state == 'validate'" t-attf-class="bg-success rounded-pill py-1 px-3" t-field="leave.state" />
+                                </td>
+                                <td class="text-right"><span t-field="leave.name" /></td>
+                                <td>
+                                    <i  t-if="leave.state in ['draft', 'confirm']" class="fa fa-trash text-danger o_portal_remove_leave" type="button" t-att-id="leave.id"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+    <template id="portal_apply_leave">
+        <t t-call="portal.portal_layout">
+            <form action="/save/leave" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()" />
+                <input type="hidden" name="employee" t-att-value="employee.id" />
+                <script type="text/javascript">
+                    function getOption() {
+                        selectElement = document.querySelector('#leave_type');
+                        selectedOption = selectElement.options[selectElement.selectedIndex];
+                        supportDocument = selectedOption.getAttribute('data-support-document');
+                        requestUnit = selectedOption.getAttribute('data-request-unit');
+                        documentInput = document.getElementById('leave_type');
+                        fromDateInput = document.getElementById('from_date');
+                        toDateInput = document.getElementById('to_date');
+                        hourlyInput = document.getElementById('hourly_date');
+                        fromTimeInput = document.getElementById('from_time');
+                        toTimeInput = document.getElementById('to_time');
+                        if (supportDocument) {
+                            documentInput.required = true;
+                            boxes = document.getElementsByClassName('show_upload')
+                            for (const box of boxes) {
+                              box.style.display = 'flex';
+                            }
+                        } else {
+                            documentInput.required = false;
+                            $(".show_upload").hide();
+                        }
+                        if (requestUnit === 'hour') {
+                            fromDateInput.required = false;
+                            toDateInput.required = false;
+                            fromTimeInput.required = true;
+                            toTimeInput.required = true;
+                            hourlyInput.required = true;
+                            boxes = document.getElementsByClassName('show_time')
+                            date_boxes = document.getElementsByClassName('show_date')
+                            for (const box of boxes) {
+                              box.style.display = 'flex';
+                            }
+                            for (const box of date_boxes) {
+                              box.style.display = 'none';
+                            }
+                        } else {
+                            fromDateInput.required = true;
+                            toDateInput.required = true;
+                            fromTimeInput.required = false;
+                            toTimeInput.required = false;
+                            hourlyInput.required = false;
+                            $(".show_time").hide();
+                            date_boxes = document.getElementsByClassName('show_date')
+                            for (const box of date_boxes) {
+                              box.style.display = 'flex';
+                            }
+                        }
+                    }
+
+                </script>
+                <style type="text/css">
+                    .show_upload {
+                        display: none;
+                    }
+                    .show_time {
+                        display: none;
+                    }
+                </style>
+                <t t-set="breadcrumbs_searchbar" t-value="True" />
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Leaves</t>
+                </t>
+                <div class="row mt-3 my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="emp_name"><b>Your Name:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="emp_name" class="form-control" t-att-value="employee.name" required='True' readonly='True' />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="leave_type"><b>Leave Type:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select id="leave_type" name="leave_type" class="form-control" required='True' onchange="getOption()">
+                            <option></option>
+                            <t t-foreach="leave_types" t-as="type">
+                                <option t-att-value="type.id" t-att-data-support-document="type.support_document" t-att-data-request-unit="type.request_unit">
+                                    <span t-esc="type.name" />
+                                </option>
+                            </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2 show_date">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="start_date"><b>Leave From:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input id="from_date" type="date" name="start_date" class="form-control" t-options='{"widget": "date"}' />
+                    </div>
+                </div>
+                <div class="row my-2 show_date">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="end_date"><b>Leave To:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input id="to_date" type="date" name="end_date" class="form-control" t-options='{"widget": "date"}' />
+                    </div>
+                </div>
+                <div class="row my-2 show_time">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="leave_date"><b>Date:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input id="hourly_date" type="date" name="leave_date" class="form-control" t-options='{"widget": "date"}' />
+                    </div>
+                </div>
+                <div class="row my-2 show_time">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="from_time"><b>From Time:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select id="from_time" name="from_time" class="form-control">
+                            <option value="0">12:00 am</option>
+                            <option value="0.5">12:30 am</option>
+                            <option value="1">01:00 am</option>
+                            <option value="1.5">01:30 am</option>
+                            <option value="2">02:00 am</option>
+                            <option value="2.5">02:30 am</option>
+                            <option value="3">03:00 am</option>
+                            <option value="3.5">03:30 am</option>
+                            <option value="4">04:00 am</option>
+                            <option value="4.5">04:30 am</option>
+                            <option value="5">05:00 am</option>
+                            <option value="5.5">05:30 am</option>
+                            <option value="6">06:00 am</option>
+                            <option value="6.5">06:30 am</option>
+                            <option value="7">07:00 am</option>
+                            <option value="7.5">07:30 am</option>
+                            <option value="8">08:00 am</option>
+                            <option value="8.5">08:30 am</option>
+                            <option value="9">09:00 am</option>
+                            <option value="9.5">09:30 am</option>
+                            <option value="10">10:00 am</option>
+                            <option value="10.5">10:30 am</option>
+                            <option value="11">11:00 am</option>
+                            <option value="11.5">11:30 am</option>
+                            <option value="12">12:00 pm</option>
+                            <option value="12.5">12:30 pm</option>
+                            <option value="13">01:00 pm</option>
+                            <option value="13.5">01:30 pm</option>
+                            <option value="14">02:00 pm</option>
+                            <option value="14.5">02:30 pm</option>
+                            <option value="15">03:00 pm</option>
+                            <option value="15.5">03:30 pm</option>
+                            <option value="16">04:00 pm</option>
+                            <option value="16.5">04:30 pm</option>
+                            <option value="17">05:00 pm</option>
+                            <option value="17.5">05:30 pm</option>
+                            <option value="18">06:00 pm</option>
+                            <option value="18.5">06:30 pm</option>
+                            <option value="19">07:00 pm</option>
+                            <option value="19.5">07:30 pm</option>
+                            <option value="20">08:00 pm</option>
+                            <option value="20.5">08:30 pm</option>
+                            <option value="21">09:00 pm</option>
+                            <option value="21.5">09:30 pm</option>
+                            <option value="22">10:00 pm</option>
+                            <option value="22.5">10:30 pm</option>
+                            <option value="23">11:00 pm</option>
+                            <option value="23.5">11:30 pm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2 show_time">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="to_time"><b>To Time:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select id="to_time" name="to_time" class="form-control">
+                            <option value="0">12:00 am</option>
+                            <option value="0.5">12:30 am</option>
+                            <option value="1">01:00 am</option>
+                            <option value="1.5">01:30 am</option>
+                            <option value="2">02:00 am</option>
+                            <option value="2.5">02:30 am</option>
+                            <option value="3">03:00 am</option>
+                            <option value="3.5">03:30 am</option>
+                            <option value="4">04:00 am</option>
+                            <option value="4.5">04:30 am</option>
+                            <option value="5">05:00 am</option>
+                            <option value="5.5">05:30 am</option>
+                            <option value="6">06:00 am</option>
+                            <option value="6.5">06:30 am</option>
+                            <option value="7">07:00 am</option>
+                            <option value="7.5">07:30 am</option>
+                            <option value="8">08:00 am</option>
+                            <option value="8.5">08:30 am</option>
+                            <option value="9">09:00 am</option>
+                            <option value="9.5">09:30 am</option>
+                            <option value="10">10:00 am</option>
+                            <option value="10.5">10:30 am</option>
+                            <option value="11">11:00 am</option>
+                            <option value="11.5">11:30 am</option>
+                            <option value="12">12:00 pm</option>
+                            <option value="12.5">12:30 pm</option>
+                            <option value="13">01:00 pm</option>
+                            <option value="13.5">01:30 pm</option>
+                            <option value="14">02:00 pm</option>
+                            <option value="14.5">02:30 pm</option>
+                            <option value="15">03:00 pm</option>
+                            <option value="15.5">03:30 pm</option>
+                            <option value="16">04:00 pm</option>
+                            <option value="16.5">04:30 pm</option>
+                            <option value="17">05:00 pm</option>
+                            <option value="17.5">05:30 pm</option>
+                            <option value="18">06:00 pm</option>
+                            <option value="18.5">06:30 pm</option>
+                            <option value="19">07:00 pm</option>
+                            <option value="19.5">07:30 pm</option>
+                            <option value="20">08:00 pm</option>
+                            <option value="20.5">08:30 pm</option>
+                            <option value="21">09:00 pm</option>
+                            <option value="21.5">09:30 pm</option>
+                            <option value="22">10:00 pm</option>
+                            <option value="22.5">10:30 pm</option>
+                            <option value="23">11:00 pm</option>
+                            <option value="23.5">11:30 pm</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2 show_upload">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="document"><b>Upload Document:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="file" name="document" class="form-control"/>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="end_date"><b>Reason:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <textarea name="reason" class="form-control" required="true" rows="3" cols="50" />
+                        </div>
+                </div>
+                <div class="row my-2" t-if="error">
+                    <div class="col-xl-6 offset-xl-3 bg-danger text-center">
+                        <div class="py-2"><b ><t t-out="error" /></b></div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button class="btn btn-primary mx-2" type="submit">Submit</button>
+                        <a class="btn btn-danger mx-2" href="/my/leaves" >Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+</odoo>

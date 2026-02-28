@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mail_template_customer_creation" model="mail.template">
+        <field name="name">Sales: Customer Created</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="subject">New customer created</field>
+        <field name="email_from"></field>
+        <field name="partner_to"></field>
+        <field name="description">Sent automatically to sales director when new customer is created</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <t t-set="sales_director" t-value="request.env['res.users'].sudo().search([('role', '=', 'sales_director')])"/>
+                    Dear <t t-out="sales_director.name"></t>,
+                    <br/><br/>
+                    Please be advised that new customer
+                    <strong t-out="object.name"></strong>
+                    is created. Therefore, Please assign the salesperson to this customer.
+                    <br/>
+                </p>
+            </div>
+        </field>
+        <field name="lang">{{ object.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="mail_template_assign_presale" model="mail.template">
+        <field name="name">Sales: Assign Presale</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="subject">Salesperson is Added</field>
+        <field name="email_from"></field>
+        <field name="partner_to"></field>
+        <field name="description">Sent automatically to technical head when salesperson is added to customer.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <t t-set="technical_head" t-value="request.env['res.users'].sudo().search([('role', '=', 'technical_head')])"/>
+                    Dear <t t-out="technical_head.name"></t>,
+                    <br/><br/>
+                    Please be advised that salesperson has been added for new customer
+                    <strong t-out="object.name"></strong>. Therefore, Please assign the presales to this customer.
+                    <br/>
+                </p>
+            </div>
+        </field>
+        <field name="lang">{{ object.lang }}</field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+</odoo>

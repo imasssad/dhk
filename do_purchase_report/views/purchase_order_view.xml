@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+	<record id="purchase_order_view_form" model="ir.ui.view">
+	    <field name="name">purchase.order.form</field>
+	    <field name="model">purchase.order</field>	
+	    <field name="inherit_id" ref="purchase.purchase_order_form" />
+	    <field name="arch" type="xml">
+		<xpath expr="//field[@name='partner_id']" position="attributes">
+                <attribute name="string">Distributor</attribute>
+            </xpath>
+	    	<xpath expr="//field[@name='company_id']" position="after">
+	    		<field name="current_company_name" invisible="1"/>
+      		</xpath>
+      		<xpath expr="//field[@name='partner_ref']" position="after">
+	    		<field name="contact_person"/>
+	    		<field name="sale_order_number" readonly="1"/>
+	    		<field name="customer_id" readonly="1"/>
+				<field name="vendor_from_sale" readonly="1"/> 
+      		</xpath>
+
+			<xpath expr="//field[@name='order_line']/tree//field[@name='price_unit']" position="before">
+				<field name="serial_number"/>
+				 <!-- Add date fields -->
+				<field name="start_date" optional="show"/>
+				<field name="end_date" optional="show"/>
+			</xpath>
+
+			 <!-- Add date fields to form view -->
+            <xpath expr="//field[@name='order_line']/form//field[@name='price_unit']" position="before">
+                <field name="serial_number"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </xpath>
+
+      		<page name="purchase_delivery_invoice" position="inside">
+  				<group>
+  					<group name="bill_to" string="Ship / Bill To">
+<!--  						<field name="ship_bill_to_contact"/>-->
+<!--  						<field name="ship_bill_to_email"/>-->
+<!--  						<field name="ship_bill_to_address"/>-->
+<!--  						<field name="ship_bill_to_phone"/>-->
+						<field name="ship_to"/>
+						<field name="bill_to"/>
+  					</group>
+  					<group name="distributor_to" string="Distributor">
+  						<field name="distributor_to_contact"/>
+  						<field name="distributor_to_email"/>
+  						<field name="distributor_to_address"/>
+  						<field name="distributor_to_phone"/>
+  					</group>
+  					<group name="other_details" string="Other Details">
+  						<field name="requistioner"/>
+  						<field name="delivery"/>
+  						<field name="payment"/>
+  					</group>
+  					<group name="end_user_details" string="End User Details">
+						<field name="end_user_detail"/>
+<!--  						<field name="end_user_to_name"/>-->
+<!--  						<field name="end_user_to_contact"/>-->
+<!--  						<field name="end_user_to_email"/>-->
+<!--  						<field name="end_user_to_phone"/>-->
+  					</group>
+  					<group name="bank_details" string="Bank Details">
+  						<field name="add_account_name"/>
+  						<field name="add_account_no"/>
+  						<field name="add_currency"/>
+  						<field name="add_bank_name"/>
+  						<field name="add_iban_swift"/>
+  					</group>
+  				</group>
+      		</page>
+	    </field>
+	</record>
+
+	<record id="stock_picking_view_form_inherit_do" model="ir.ui.view">
+	    <field name="name">stock.picking.form.inherit</field>
+	    <field name="model">stock.picking</field>
+	    <field name="inherit_id" ref="stock.view_picking_form" />
+	    <field name="arch" type="xml">
+	    	<xpath expr="//field[@name='move_ids_without_package']/tree//field[@name='product_uom']" position="after">
+	    		<field name="serial_number"/>
+      		</xpath>
+	    </field>
+	</record>
+</odoo>

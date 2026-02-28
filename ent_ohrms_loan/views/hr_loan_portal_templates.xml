@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="portal_my_home_loan_custom" name="Portal My Loans: loans  entries" inherit_id="portal.portal_my_home" priority="29">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+            <t t-call="portal.portal_docs_entry">
+                <t t-set="title">Loans</t>
+                <t t-set="url" t-value="'/my/loan'"/>
+                <t t-set="placeholder_count" t-value="'custom_loan_count'"/>
+            </t>
+        </xpath>
+    </template>
+
+    <template id="portal_my_home_menu_loan_custom" name="Portal layout : loans menu entries" inherit_id="portal.portal_breadcrumbs" priority="21">
+        <xpath expr="//ol[hasclass('o_portal_submenu')]" position="inside">
+            <li t-if="page_name in ['custom_loan_page_probc', 'create_loan'] or custom_loan_request"
+                t-attf-class="breadcrumb-item #{'active ' if not custom_loan_request else ''}">
+                <a t-if="page_name in ['custom_loan_request','create_loan'] or custom_loan_request" t-attf-href="/my/loan?{{ keep_query() }}">Loan</a>
+                <t t-else="">Loan</t>
+            </li>
+            <li t-if="custom_loan_request" class="breadcrumb-item active">
+                <span t-field="custom_loan_request.name"/>
+            </li>
+        </xpath>
+    </template>
+
+    <template id="portal_searchbar_loan" inherit_id="portal.portal_searchbar">
+        <xpath expr="//nav" position="inside">
+            <a class="btn btn-secondary my-2 mx-1" t-if="page_name == 'custom_loan_page_probc' or custom_loan_request"  href="/create/loan">Request for Loan</a>
+        </xpath>
+    </template>
+
+    <template id="portal_my_loan_custom" name="My loans">
+        <t t-call="portal.portal_layout">
+            <t t-set="breadcrumbs_searchbar" t-value="True"/>
+            <t t-call="portal.portal_searchbar">
+                <t t-set="title">Loan</t>
+            </t>
+            <t t-if="not loans">
+                <p>There are currently no loans for your account.</p>
+            </t>
+            <t t-if="loans" t-call="portal.portal_table">
+                <thead>
+                    <tr class="active">
+                        <th>Date</th>
+                        <th>Employee</th>
+                        <th>Loan Amount</th>
+                        <th>No of Installments</th>
+                        <th>Payment Start Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <t t-foreach="loans" t-as="custom_loan_request">
+                    <tr>
+                        <td>
+                            <span t-field="custom_loan_request.date"/>
+                        </td>
+                        <td>
+                            <span t-field="custom_loan_request.employee_id.name"/>
+                        </td>
+                        <td>
+                            <span t-field="custom_loan_request.loan_amount"/>
+                        </td>
+                        <td>
+                            <span t-field="custom_loan_request.installment"/>
+                        </td>
+                        <td>
+                            <span t-field="custom_loan_request.payment_date"/>
+                        </td>
+                        <td>
+                            <span t-if="custom_loan_request.state == 'draft'" t-attf-class="bg-primary rounded-pill py-1 px-3" t-field="custom_loan_request.state" />
+                            <span t-if="custom_loan_request.state == 'waiting_approval_1'" t-attf-class="bg-warning rounded-pill py-1 px-3" t-field="custom_loan_request.state" />
+                            <span t-if="custom_loan_request.state == 'running'" t-attf-class="bg-info rounded-pill py-1 px-3" t-field="custom_loan_request.state" />
+                            <span t-if="custom_loan_request.state == 'refuse'" t-attf-class="bg-danger rounded-pill py-1 px-3" t-field="custom_loan_request.state" />
+                            <span t-if="custom_loan_request.state == 'cancel'" t-attf-class="bg-secondary rounded-pill py-1 px-3" t-field="custom_loan_request.state" />
+                            <span t-if="custom_loan_request.state == 'complete'" t-attf-class="bg-success rounded-pill py-1 px-3" t-field="custom_loan_request.state" />
+                        </td>
+                        <td>
+                            <a t-if="custom_loan_request.state in ['draft']" role="button" t-attf-href="/update/loan/#{custom_loan_request.id}?{{ keep_query() }}" class="btn btn-sm btn-link"><i class="btn btn-primary fa fa-pencil"></i></a>
+                            <a t-if="custom_loan_request.state in ['draft']" role="button" t-attf-href="/cancel/loan/#{custom_loan_request.id}  }" class="btn btn-sm btn-link"><i class="btn btn-primary fa fa-close"></i></a>
+                        </td>
+                    </tr>
+                </t>
+            </t>
+        </t>
+    </template>
+
+    <template id="portal_apply_loan" name="Loan">
+        <t t-call="portal.portal_layout">
+            <form action="/save/loan" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="employee" t-att-value="employee.id" />
+                <t t-set="breadcrumbs_searchbar" t-value="True"/>
+                <t t-call="portal.portal_searchbar">
+                    <t t-set="title">Loans</t>
+                </t>
+                <div class="row mt-3 my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="emp_name"><b>Employee Name:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="emp_name" class="form-control" t-att-value="employee.name" required='True' readonly='True' />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="start_date"><b>Date:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="date" name="start_date" class="form-control" t-att-value="date" readonly="1" required="true" t-options='{"widget": "date"}' />
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="loan_amount"><b>Loan Amount:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="number" name="loan_amount" class="form-control" required="true" value="0.0"/>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="installment"><b>No of Installments:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select name="installment" class="form-control" required="true">
+                          <t t-foreach="range(1, 13)" t-as="number">
+                            <option t-att-value="number" t-esc="number"/>
+                          </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="payment_date"><b>Payment Start Date:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="date" name="payment_date" class="form-control" t-att-value="payment_date" required="true" t-options='{"widget": "date"}' />
+                    </div>
+                </div>
+                <div class="row my-2" t-if="error">
+                    <div class="col-xl-6 offset-xl-3 bg-danger text-center">
+                        <div class="py-2"><b ><t t-out="error" /></b></div>
+                    </div>
+                </div>
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button class="btn btn-primary mx-2" type="submit">Submit</button>
+                        <a class="btn btn-danger mx-2" href="/my/loan">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+
+    <!-- Update Loan -->
+    <template id="custom_portal_edit_loan" name="Edit loan">
+        <t t-call="portal.portal_layout">
+            <form action="/edit/loan" method="post">
+                <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                <input type="hidden" name="employee" t-att-value="custom_loan_request.employee_id.id" />
+                <input type="hidden" name="loan" t-att-value="custom_loan_request.id"/>
+                <div class="row my-2">
+                    <div class="form-group mt-3 col-xl-3">
+                        <label class="col-form-label" for="start_date"><b>Date:</b></label>
+                    </div>
+                    <div class="form-group mt-3 col-xl-6">
+                        <input type="date" name="start_date" class="form-control" t-options='{"widget": "date"}' t-att-value="custom_loan_request.date" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="emp_name"><b>Employee Name:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="text" name="emp_name" class="form-control" t-att-value="custom_loan_request.employee_id.name" readonly='True'/>
+                    </div>
+                </div>
+
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="loan_amount"><b>Loan Amount:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="number" name="loan_amount" class="form-control" required="true" t-att-value="custom_loan_request.loan_amount"/>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="installment"><b>No of Installments:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <select name="installment" class="form-control" required="true">
+                            <option t-att-value="custom_loan_request.installment" t-att-selected="True" t-esc="custom_loan_request.installment"/>
+                          <t t-foreach="range(1, 13)" t-as="number">
+                            <option t-att-value="number" t-esc="number"/>
+                          </t>
+                        </select>
+                    </div>
+                </div>
+                <div class="row my-2">
+                    <div class="form-group col-xl-3">
+                        <label class="col-form-label" for="payment_date"><b>Payment Start Date:</b></label>
+                    </div>
+                    <div class="form-group col-xl-6">
+                        <input type="date" name="payment_date" class="form-control" t-att-value="custom_loan_request.payment_date" required="true" t-options='{"widget": "date"}' />
+                    </div>
+                </div>
+
+                <div class="row mt-2">
+                    <div class="col text-center">
+                        <button class="btn btn-primary mx-2" type="submit">Update</button>
+                        <a class="btn btn-danger mx-2" href="/my/loan">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </t>
+    </template>
+</odoo>

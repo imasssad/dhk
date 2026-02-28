@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="mail_template_approval_to_send" model="mail.template">
+        <field name="name">Sales: Approval To Send</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Submit for Approval To Send Quotation</field>
+        <field name="email_from"></field>
+        <field name="partner_to"></field>
+        <field name="description">Salesperson will ask for approval to send the quotation.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <h2>
+                        <b>Submit for Approval: <t t-out="object.name"/></b>
+                    </h2>
+                    <br/>
+                    <br/>
+                    <p>
+                        Dear Approver,
+                        <br />
+                        <br />
+                        This is inform you that quotation is submitted for approval to send.
+                        <br />
+                        <br />
+                        <b>Sales Person: </b><t t-out="object.user_id.name"/>
+                        <br />
+                        <b>Total Amount: </b><t t-out="format_amount(object.amount_total, object.currency_id)"/>
+                        <br />
+                        <br />
+                        You can use the following link and approve<br /><br />
+                        <t t-set="order_link" t-value="'/mail/view?model=sale.order&amp;res_id='+str(object.id)"/>
+                        <div style="display: inline-block; margin: 15px; text-align: center">
+                            <a t-att-href="order_link" target="_blank"
+                                style="padding: 5px 10px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px"
+                            >Order Ref: #<t t-out="object.name"/></a>
+                        </div><br />
+                        Thanks,
+                    </p>
+                </p>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="mail_template_approval_to_confirm" model="mail.template">
+        <field name="name">Sales: Approval To Confirm</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Approval To Confirm Quotation</field>
+        <field name="email_from"></field>
+        <field name="partner_to"></field>
+        <field name="description">Salesperson will ask for approval to confirm the quotation.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <h2>
+                        <b>Submit for Approval: <t t-out="object.name"/></b>
+                    </h2>
+                    <br/>
+                    <br/>
+                    <p>
+                        Dear Approver,
+                        <br />
+                        <br />
+                        This is inform you that Vendor Quotation and Customer PO is uploaded on <t t-out="object.name"/> and submitted for approval to confirm.
+                        <br />
+                        <br />
+                        <b>Sales Person: </b><t t-out="object.user_id.name"/>
+                        <br />
+                        <b>Total Amount: </b><t t-out="format_amount(object.amount_total, object.currency_id)"/>
+                        <br />
+                        <br />
+                        You can use the following link and approve<br /><br />
+                        <t t-set="order_link" t-value="'/mail/view?model=sale.order&amp;res_id='+str(object.id)"/>
+                        <div style="display: inline-block; margin: 15px; text-align: center">
+                            <a t-att-href="order_link" target="_blank"
+                                style="padding: 5px 10px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px"
+                            >Order Ref: #<t t-out="object.name"/></a>
+                        </div><br />
+                        Thanks,
+                    </p>
+                </p>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="mail_template_quotation_approval" model="mail.template">
+        <field name="name">Sales: Quotation Approved</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Quotation Approved</field>
+        <field name="email_from"></field>
+        <field name="partner_to"></field>
+        <field name="description">Notification to saleperson for the quotation approval.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <h2>
+                        <b>Quotation approved for: <t t-out="object.name"/></b>
+                    </h2>
+                    <br/>
+                    <br/>
+                    <p>
+                        Dear <t t-out="object.user_id.name"/>,
+                        <br />
+                        <br />
+                        This is inform you that quotation is approved by.
+                        <br />
+                        <br />
+                        <b><t t-esc="object.write_uid.get_selection_label('role')"/>: </b><t t-out="object.write_uid.name"/>
+                        <br />
+                        <b>Total Amount: </b><t t-out="format_amount(object.amount_total, object.currency_id)"/>
+                        <br />
+                        <br />
+                        You can use the following link and confirm<br /><br />
+                        <t t-set="order_link" t-value="'/mail/view?model=sale.order&amp;res_id='+str(object.id)"/>
+                        <div style="display: inline-block; margin: 15px; text-align: center">
+                            <a t-att-href="order_link" target="_blank"
+                                style="padding: 5px 10px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px"
+                            >Order Ref: #<t t-out="object.name"/></a>
+                        </div><br />
+                        Thanks,
+                    </p>
+                </p>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <record id="mail_template_quotation_refused" model="mail.template">
+        <field name="name">Sales: Quotation Refused</field>
+        <field name="model_id" ref="sale.model_sale_order"/>
+        <field name="subject">Quotation Refused</field>
+        <field name="email_from"></field>
+        <field name="partner_to"></field>
+        <field name="description">Notification to saleperson for the quotation refused.</field>
+        <field name="body_html" type="html">
+            <div style="margin: 0px; padding: 0px;">
+                <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                    <h2>
+                        <b>Quotation reused for: <t t-out="object.name"/></b>
+                    </h2>
+                    <br/>
+                    <br/>
+                    <p>
+                         Dear <t t-out="object.user_id.name"/>,
+                        <br />
+                        <br />
+                        This is inform you that quotation is refused by.
+                        <br />
+                        <br />
+                        <b><t t-esc="object.write_uid.get_selection_label('role')"/>: </b><t t-out="object.write_uid.name"/>
+                        <br />
+                        <b>Total Amount: </b><t t-out="format_amount(object.amount_total, object.currency_id)"/>
+                        <br />
+                        <br />
+                        You can use the following link and check<br /><br />
+                        <t t-set="order_link" t-value="'/mail/view?model=sale.order&amp;res_id='+str(object.id)"/>
+                        <div style="display: inline-block; margin: 15px; text-align: center">
+                            <a t-att-href="order_link" target="_blank"
+                                style="padding: 5px 10px; color: #FFFFFF; text-decoration: none; background-color: #875A7B; border: 1px solid #875A7B; border-radius: 3px"
+                            >Order Ref: #<t t-out="object.name"/></a>
+                        </div><br />
+                        Thanks,
+                    </p>
+                </p>
+            </div>
+        </field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+
+</odoo>

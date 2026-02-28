@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_cheque_manage,cheque.manage,model_cheque_manage,base.group_user,1,1,1,1
+access_cheque_outgoing_wizard,cheque.outgoing.wizard,model_cheque_outgoing_wizard,base.group_user,1,1,1,1
+access_cheque_date_wizard,cheque.date.wizard,model_cheque_date_wizard,base.group_user,1,1,1,1
+access_return_date_wizard,return_date_wizard,model_return_date_wizard,base.group_user,1,1,1,1

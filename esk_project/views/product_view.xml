@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="invoice_policy_inherit_sale_project_for_consumable" model="ir.ui.view">
+            <field name="name">product.template.inherit.sale.project.consumable</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="sale_project.product_template_form_view_invoice_policy_inherit_sale_project"/>
+            <field name="arch" type="xml">
+                <field name="service_tracking" position="attributes">
+                    <attribute name="attrs">{'invisible': [('type', '=', 'product')]}</attribute>
+                </field>
+            </field>
+    </record>
+</odoo>

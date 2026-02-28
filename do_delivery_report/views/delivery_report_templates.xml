@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="external_layout_standard_mw_delivery_report">
+    <div t-attf-class="header o_company_#{company.id}_layout" t-att-style="report_header_style">
+        <div class="row">
+            <div class="col-3 mb4"> 
+                <img t-if="company.logo" t-att-src="image_data_uri(company.logo)" style="max-height: 90px;" alt="Logo"/>
+            </div>
+        </div>
+    </div>
+    <div class="article o_report_layout_standard" t-att-data-oe-model="o and o._name" t-att-data-oe-id="o and o.id"
+         t-att-data-oe-lang="o and o.env.context.get('lang')">
+      <t t-call="web.address_layout"/>
+      <t t-raw="0"/>
+    </div>  
+    <div class="footer o_standard_footer">
+        <div class="text-center" style="border-top: 1px solid black;">
+            <div t-if="report_type == 'pdf'" class="text-muted">
+                Page: <span class="page"/> / <span class="topage"/>
+            </div>
+        </div>
+    </div>  
+  </template>
+
+  <template id="external_layout_mw_delivery_report">
+    <t t-if="not o" t-set="o" t-value="doc"/>
+    <t t-if="not company">
+      <!-- Multicompany -->
+      <t t-if="company_id">
+        <t t-set="company" t-value="company_id"/>
+      </t>
+      <t t-elif="o and 'company_id' in o">
+        <t t-set="company" t-value="o.company_id.sudo()"/>
+      </t>
+      <t t-else="else">
+        <t t-set="company" t-value="res_company"/>
+      </t>
+    </t>
+    <t t-call="do_delivery_report.external_layout_standard_mw_delivery_report">
+      <t t-raw="0"/>
+    </t>
+  </template>
+
+    <template id="report_project_delivery_slip_document">
+        <t t-call="do_delivery_report.external_layout_mw_delivery_report">
+            <style>
+                body{
+                    font-size:18px!important;
+                    counter-reset: Serial;
+                }
+                .style-table-invoice {  
+                    border: 1px black solid;
+                    border-top:none;
+                    width: 100%;
+                    border-bottom:none;
+                }
+                .span-size-style {
+                    font-size:15px !important;
+                }
+            </style>
+            <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)" />
+            <t t-set="partner" t-value="o.partner_id or (o.move_ids and o.move_ids[0].partner_id) or False"/>
+            <div class="page" style="">  
+                <!-- <div class="container" style="border: 2px solid blue;height:auto;"> -->
+
+                    <div class="row" style="border: 1px solid;">
+                        <div class="col-md-12 text-center" style="padding:4rem;">
+                            <span style="color:#17365d;font-size:2rem;"> 
+                                <strong><u> <i>Delivery Note Dated - -</i></u></strong>
+                            </span>   
+                        </div>
+                    </div>
+
+                    <div class="row" style="border: 1px solid;height:1.5rem;">
+                    </div>
+
+                    <div class="row" style="border: 1px solid;border-top:none;">
+                        <div class="col-2 text-center">
+                            <span><strong>Customer</strong></span>
+                        </div>
+                        <div class="col-4 text-center" style="border-left:1px solid black;">
+                            <span class="span-size-style" t-esc="o.partner_id.name"/>
+                        </div>
+                        <div class="col-2" style="border-left:1px solid black;">
+                        </div>
+                    </div>
+
+                    <div class="row" style="border: 1px solid;border-top:none;">
+                        <div class="col-2 text-center">
+                            <span><strong>Vendor Name</strong></span>
+                        </div>
+                        <div class="col-4 text-center" style="border-left:1px solid black;">
+                            <span class="span-size-style" t-esc="o.partner_id.name"/>
+                        </div>
+                        <div class="col-2 text-center" style="border-left:1px solid black;">
+                            <span><strong>Partner Name</strong></span>
+                        </div>
+                        <div class="col-4 text-center" style="border-left:1px solid black;">
+                            <span class="span-size-style" t-esc="o.partner_id.name"/>
+                        </div>
+                    </div>
+
+                    <div class="row" style="border: 1px solid;border-top:none;">
+                        <div class="col-2 text-center">
+                            <span><strong>Contact Person</strong></span>
+                        </div>
+                        <div class="col-4 text-center" style="border-left:1px solid black;">
+                            <span class="span-size-style" t-esc="o.partner_id.name"/>
+                        </div>
+                        <div class="col-2 text-center" style="border-left:1px solid black;">
+                            <span><strong>Tel #</strong></span>
+                        </div>
+                        <div class="col-4 text-center" style="border-left:1px solid black;">
+                            <span class="span-size-style" t-esc="o.partner_id.phone"/>
+                        </div>
+                    </div>
+
+                    <t t-set="sno" t-value="1" />
+                    <table class="table table-sm o_main_table style-table-invoice">
+                        <thead style="display: table-row-group">
+                            <tr>
+                                <th name="th_no" class="text-center" rowspan="3">S.No.</th>
+                                <th name="th_description" class="text-center" rowspan="3">Description</th>
+                                <th name="th_quantity" class="text-center" rowspan="3">QTY's</th>
+                            </tr>
+                            <tr>
+                                <th name="th_status" class="text-center" colspan="2">Status</th>
+                                <th name="th_item" class="text-center" rowspan="2">Item#</th>
+                            </tr>
+                            <tr>
+                                <th name="th_no_of_pack" class="text-center" >Number of Package</th>
+                                <th name="th_warehouse" class="text-center">Warehousing</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-set="lines" t-value="o.move_ids.filtered(lambda x: x.product_uom_qty)"/>
+                            <tr t-foreach="lines" t-as="move">
+                                <td><span t-esc="sno"/><t t-set="sno" t-value="sno+1"/></td>
+                                <td>
+                                    <span t-field="move.product_id"/>
+                                    <p t-if="move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
+                                        <span t-field="move.description_picking"/>
+                                    </p>
+                                </td>
+                                <td>
+                                    <span t-field="move.product_uom_qty"/>
+                                    <span t-field="move.product_uom"/>
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <span t-field="move.product_id"/>
+                                    <p t-if="move.description_picking != move.product_id.name and move.description_picking != move.product_id.display_name">
+                                        <span t-field="move.description_picking"/>
+                                    </p>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="row" style="border:2px solid black;height:3rem;width:22rem;">
+                        <div class="col-md-12 text-center" style="">
+                            <span style="font-size:12px;"> 
+                                <strong>Checked &amp; Received By</strong>
+                            </span>   
+                        </div>
+                    </div>
+
+                    <div class="row" style="border:2px solid black;height:8rem;width:22rem;margin-top:1rem;">
+                        <div class="col-md-12 text-start" style="">
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Name ...............</strong>
+                            </span><br/>   
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Sign ...............</strong>
+                            </span><br/>
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Date ...............</strong>
+                            </span>   
+                        </div>
+                    </div>
+
+                    <div class="row" style="border:2px solid black;height:2rem;width:14rem;position:relative;left:23rem;bottom:10.5rem;">
+                        <div class="col-md-12 text-center" style="">
+                            <span style="font-size:12px;"> 
+                                <strong>W/H Head</strong>
+                            </span>   
+                        </div>
+                    </div>
+
+                    <div class="row" style="border:2px solid black;height:8rem;width:14rem;position:relative;left:23rem;bottom:10rem;">
+                        <div class="col-md-12 text-start" style="">
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Name ...............</strong>
+                            </span><br/>   
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Sign ...............</strong>
+                            </span><br/>
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Date ...............</strong>
+                            </span>   
+                        </div>
+                    </div>
+
+                    <div class="row" style="border:2px solid black;height:2rem;width:14rem;position:relative;left:38rem;bottom:22rem;">
+                        <div class="col-md-12 text-center" style="">
+                            <span style="font-size:12px;"> 
+                                <strong>Delivered By</strong>
+                            </span>   
+                        </div>
+                    </div>
+
+                    <div class="row" style="border:2px solid black;height:9.5rem;width:14rem;position:relative;left:38rem;bottom:21.5rem;">
+                        <div class="col-md-12 text-start" style="">
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Name ...............</strong>
+                            </span><br/>   
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Sign ...............</strong>
+                            </span><br/>
+                            <span style="font-size:12px;margin-left:0.5rem;"> 
+                                <strong>Date ...............</strong>
+                            </span>   
+                        </div>
+                    </div>
+
+                <!-- </div> -->
+            </div>
+        </t>
+    </template>
+  
+    <template id="report_project_delivery_slip">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-if="o.current_company_name.priority_company == 1">    
+                    <t t-call="do_delivery_report.report_project_delivery_slip_document" t-lang="o.partner_id.lang"/>
+                </t>
+                <t t-else="">
+                    <t t-call="stock.report_delivery_document" t-lang="o.partner_id.lang"/>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>
+    

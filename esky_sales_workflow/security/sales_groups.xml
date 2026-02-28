@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record model="ir.module.category" id="module_category_esky_sales">
+            <field name="name">Esky</field>
+            <field name="sequence">15</field>
+        </record>
+        <record id="group_sales_director" model="res.groups">
+            <field name="name">Sales Director</field>
+            <field name="category_id" ref="esky_sales_workflow.module_category_esky_sales"/>
+        </record>
+        <record id="group_technical_head" model="res.groups">
+            <field name="name">Technical Head</field>
+            <field name="category_id" ref="esky_sales_workflow.module_category_esky_sales"/>
+        </record>
+        <record id="group_sales_operation" model="res.groups">
+            <field name="name">Sales Operation</field>
+            <field name="category_id" ref="esky_sales_workflow.module_category_esky_sales"/>
+        </record>
+        <record id="group_accounting_manager" model="res.groups">
+            <field name="name">Accounting Manager</field>
+            <field name="category_id" ref="esky_sales_workflow.module_category_esky_sales"/>
+        </record>
+        <record id="group_procurement_manager" model="res.groups">
+            <field name="name">Procurement Manager</field>
+            <field name="category_id" ref="esky_sales_workflow.module_category_esky_sales"/>
+        </record>
+
+        <record model="res.groups" id="group_all_customers">
+            <field name="name">All Customers</field>
+            <field name="category_id" ref="base.module_category_usability"/>
+        </record>
+
+        <record model="res.groups" id="group_own_customers">
+            <field name="name">Own Customers</field>
+            <field name="category_id" ref="base.module_category_usability"/>
+        </record>
+
+        <record id="base.default_user" model="res.users">
+            <field name="groups_id" eval="[(4, ref('esky_sales_workflow.group_all_customers'))]"/>
+        </record>
+
+        <record id="own_customers_rule" model="ir.rule">
+            <field name="name">Own Customers</field>
+            <field ref="base.model_res_partner" name="model_id"/>
+            <field name="domain_force">['|', '|','|',('user_id','=',user.id), ('id','in',[2,3,4,5,6,7,user.partner_id.id,user.company_id.partner_id.id]),('second_sale_person.id' ,'=', user.id),('user_ids.role', 'in', ['sales_director','technical_head','sales_operation','accounting_manager','procurement_manager','presales'])]</field>
+            <field name="groups" eval="[(4, ref('esky_sales_workflow.group_own_customers'))]"/>
+        </record>
+
+        <record id="base.res_partner_rule_private_employee" model="ir.rule">
+            <field name="groups" eval="[(6,0, [ref('esky_sales_workflow.group_all_customers')])]"/>
+        </record>
+        
+        <record id="sale.sale_order_personal_rule" model="ir.rule">
+            <field name="name">Personal Orders</field>
+            <field ref="model_sale_order" name="model_id"/>
+            <field name="domain_force">['|','|',('user_id','=',user.id),('user_id','=',False),('account_manager','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+        </record>
+
+        <record id="sale.sale_order_line_personal_rule" model="ir.rule">
+            <field name="name">Personal Order Lines</field>
+            <field ref="model_sale_order_line" name="model_id"/>
+            <field name="domain_force">['|','|',('salesman_id','=',user.id),('salesman_id','=',False),('account_manager','=',user.id)]</field>
+            <field name="groups" eval="[(4, ref('sales_team.group_sale_salesman'))]"/>
+        </record>
+    </data>
+</odoo>

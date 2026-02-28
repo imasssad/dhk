@@ -1,0 +1,453 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <template id="report_project_purchase_document_esky">
+        <t t-call="do_purchase_report.external_layout_mw_purchase_report">
+          <style>
+            body{
+                font-size:18px!important;
+            }
+
+            .style-table {
+              border: 1px black solid;
+              width: 100%;
+            }
+
+            th {
+              border: 1px solid black;
+              background-color: #ff5729;
+              text-align: center;
+              padding: 8px;
+              color:white;
+              font-size:17px;
+            }
+
+            td {
+              border: 1px solid black;
+              text-align: center;
+              padding: 8px;
+              font-size:17px;
+              color:#003264;
+            }
+            .style-table-1 {
+                 margin-left: 41.5rem !important;
+                 width: 26.3%;
+                 position: relative;
+                 bottom: 1rem;
+            }
+
+            .td-style:nth-child(even) {
+                 background-color: #c5e0b3;
+            }
+        </style>
+        <t t-set="o" t-value="o.with_context(lang=o.partner_id.lang)"/>
+            <div class="page" style="">
+                <div class="container">
+                    <!-- <div class="row">
+                        <div class="col-md-12">
+                            <img t-att-src="'/do_purchase_report/static/img/logo.jpg'" style="width:26%;position:relative;left:1%;"/>
+                        </div>
+                    </div> -->
+                    <div class="row">
+                        <div class="col-md-12 text-center">
+                            <t t-if="o.state == 'purchase'">
+                                <h2 style="color:#003264;font-size: 2rem;"> <strong>PURCHASE ORDER</strong></h2>
+                            </t>
+                            <t t-else="">
+                                <h2 style="color:#003264;font-size: 2rem;"> <strong>Request for Quotation</strong></h2>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 2%;">
+                    <div class="col-6">
+                        <h6 style="color:#003264;margin-left: 0.5%;">
+                            <span t-esc="o.company_id.name"/>
+                        </h6>
+                    </div>
+                    <div class="col-6">
+                        <div style="color:#003264;margin-left:18rem;">
+                            <span style="font-weight: 700;">DATE:</span> <span t-esc="o.date_order" t-options='{"widget": "date"}'/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0%;">
+                    <div class="col-6">
+                        <t t-if="o.company_id.street and o.company_id.street2">
+                            <h6 style="color:#003264;margin-left: 0.5%;">
+                                <span t-esc="o.company_id.street"/>, <span t-esc="o.company_id.street2"/>
+                            </h6>
+                        </t>
+                        <t t-elif="o.company_id.street">
+                            <h6 style="color:#003264;margin-left: 0.5%;">
+                                <span t-esc="o.company_id.street"/>
+                            </h6>
+                        </t>
+                        <t t-elif="o.company_id.street2">
+                            <h6 style="color:#003264;margin-left: 0.5%;">
+                                <span t-esc="o.company_id.street2"/>
+                            </h6>
+                        </t>
+                    </div>
+                    <div class="col-6">
+                        <div style="color:#003264;margin-left:18rem">
+                            <span style="font-weight:700;">P.O. #</span>
+                            <span t-esc="o.name"/>
+                        </div>
+                    </div>
+                </div>
+
+                <div class ="row" style="padding-top: 0%;">
+                    <div class="col-6">
+                        <h6 style="color:#003264;margin-left: 0.5%;">
+                            <t t-if="o.company_id.city and o.company_id.state_id and o.company_id.country_id">
+                                <h6 style="color:#003264;margin-left: 0.5%;">
+                                    <span t-esc="o.company_id.city"/>, <span t-esc="o.company_id.state_id.name"/> <span t-esc="o.company_id.zip"/>, <span t-esc="o.company_id.country_id.name"/>
+                                </h6>
+                            </t>
+                            <t t-elif="o.company_id.city and o.company_id.state_id">
+                                <h6 style="color:#003264;margin-left: 0.5%;">
+                                    <span t-esc="o.company_id.city"/>, <span t-esc="o.company_id.state_id.name"/> <span t-esc="o.company_id.zip"/>
+                                </h6>
+                            </t>
+                            <t t-elif="o.company_id.city and o.company_id.country_id">
+                                <h6 style="color:#003264;margin-left: 0.5%;">
+                                    <span t-esc="o.company_id.city"/> <span t-esc="o.company_id.zip"/>, <span t-esc="o.company_id.country_id.name"/>
+                                </h6>
+                            </t>
+                            <t t-elif="o.company_id.state_id and o.company_id.country_id">
+                                <h6 style="color:#003264;margin-left: 0.5%;">
+                                    <span t-esc="o.company_id.state_id"/> <span t-esc="o.company_id.zip"/>, <span t-esc="o.company_id.country_id.name"/>
+                                </h6>
+                            </t>
+                        </h6>
+                    </div>
+                </div>
+
+                <!-- VENDOR & SHIP TO Row -->
+                <div class="row" style="padding-top: 3%;">
+                    <div class="col-5" style="border: 0px #ff5729 solid;background-color: #ff5729;">
+                        <h6 style="font-weight: 700;color:white;margin-left: 1%;margin-top:1%;">
+                            DISTRIBUTOR
+                        </h6>
+                    </div>
+                    
+                    <div class="col-3">
+                    </div>
+                    <div class="col-4" style="border: 0px #ff5729 solid;background-color: #ff5729;">
+                        <h6 style="font-weight: 700;color:white;margin-left: 1%;margin-top:1%;">
+                            SHIP TO
+                        </h6>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top: 1%;">
+                    <!-- Vendor Details -->
+                    <div class="col-5">
+                        <!-- <h6 style="margin-left: 1%;color:#003264;">
+                            <span t-esc="o.partner_id.name"/><br/>
+                            <span t-esc="o.partner_id.email"/><br/>
+                            <span t-esc="o.partner_id.phone"/><br/>
+                            <span t-esc="o.partner_id.street"/>, <span t-esc="o.partner_id.city"/>, 
+                            <span t-esc="o.partner_id.state_id.name"/>, <span t-esc="o.partner_id.country_id.name"/>
+                        </h6> -->
+                         <h6 style="margin-left: 1%;color:#003264;">
+                            <span t-field="o.partner_id"/>
+                        </h6>
+                    </div>
+                    <div class="col-3">
+                    </div>
+
+                    <!-- Ship To Details -->
+                    <div class="col-4">
+                        <h6 style="color:#003264;">
+                            <!-- <span t-field="o.ship_to"/> -->
+                            <t t-if="o.ship_to">
+                                <span t-field="o.ship_to"/>
+                            </t>
+                            <t t-else="">
+                                <span>eSky IT<br/>Agora Mall, New Cairo<br/>Cairo Governorate, Building D,<br/>Cairo, Egypt</span>
+                            </t>
+
+                        </h6>
+                    </div>
+                </div>
+
+                <!-- DISTRIBUTOR & BILL TO Row -->
+                <div class="row" style="padding-top: 3%;">
+                    
+                    <div class="col-5" style="border: 0px #ff5729 solid;background-color: #ff5729;">
+                        <h6 style="font-weight: 700;color:white;margin-left: 1%;margin-top:1%;">
+                            VENDOR
+                        </h6>
+                    </div>
+                    <div class="col-3">
+                    </div>
+                    <div class="col-4" style="border: 0px #ff5729 solid;background-color: #ff5729;">
+                        <h6 style="font-weight: 700;color:white;margin-left: 1%;margin-top:1%;">
+                            BILL TO
+                        </h6>
+                    </div>
+                </div>
+
+                <div class="row" style="padding-top: 1%;">
+                    <!-- Distributor Details -->
+                    <div class="col-5">
+                        
+                        
+                        <h6 style="margin-left: 1%;color:#003264;">
+                            <span t-field="o.vendor_from_sale"/>
+                            <!-- <span t-esc="o.distributor_to_contact"/><br/>
+                            <span t-esc="o.distributor_to_email"/><br/>
+                            <span t-esc="o.distributor_to_phone"/> <br/>
+                            <span t-esc="o.distributor_to_address"/> -->
+                        </h6>
+                    </div>
+
+                    <div class="col-3">
+                    </div>
+
+                    <!-- Bill To Details -->
+                    <div class="col-4">
+                        <h6 style="color:#003264;">
+                            <!-- <span t-field="o.bill_to"/> -->
+                            <t t-if="o.bill_to">
+                                <span t-field="o.bill_to"/>
+                            </t>
+                            <t t-else="">
+                                <span>eSky IT<br/>Agora Mall, New Cairo<br/>Cairo Governorate, Building D,<br/>Cairo, Egypt</span>
+                            </t>
+
+                        </h6>
+                    </div>
+                </div>
+
+                <table style="margin-top: 3%;" class="style-table">
+                    <thead>
+                        <tr>
+                            <th>REQUISTIONER</th>
+                            <th>Delivery</th>
+                            <th>Payment Terms</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <!-- <td><span t-field="o.requistioner"/></td> -->
+                            <td>
+                                <t t-if="o.requistioner">
+                                    <span t-field="o.requistioner"/>
+                                </t>
+                                <t t-else="">
+                                    <span>Purchasing Dept.</span>
+                                </t>
+                            </td>
+
+                            <!-- <td><span t-field="o.delivery"/></td> -->
+                            <td>
+                                <t t-if="o.delivery">
+                                    <span t-field="o.delivery"/>
+                                </t>
+                                <t t-else="">
+                                    <span>in Stock</span>
+                                </t>
+                            </td>
+
+                            <td><span t-field="o.payment"/></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <t t-set="has_dates" t-value="any(line.start_date or line.end_date for line in o.order_line)"/>
+
+                <t t-set="sno" t-value="1" />
+                <table class="table table-sm o_main_table mt-5 style-table">
+                <!-- In case we want to repeat the header, remove "display: table-row-group" -->
+                    <thead style="display: table-row-group">
+                        <tr>
+                            <th name="th_no"><strong>No.</strong></th>
+                            <th name="th_item"><strong>ITEM #</strong></th>
+                            <th name="th_description"><strong>DESCRIPTION</strong></th>
+                            <th name="th_quantity" class="text-center"><strong>QTY</strong></th>
+                            <!-- Conditionally show date columns -->
+                            <th t-if="has_dates" class="text-center"><span>START DATE</span></th>
+                            <th t-if="has_dates" class="text-center"><span>END DATE</span></th>
+                            <th name="th_price_unit" class="text-center"><strong>UNIT PRICE</strong></th>
+                            <th name="th_amount" class="text-center"><strong>TOTAL</strong></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="current_subtotal" t-value="0"/>
+                        <t t-foreach="o.order_line" t-as="line">
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_subtotal" groups="account.group_show_line_subtotals_tax_excluded"/>
+                            <t t-set="current_subtotal" t-value="current_subtotal + line.price_total" groups="account.group_show_line_subtotals_tax_included"/>
+
+                            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'fst-italic o_line_note' if line.display_type == 'line_note' else ''">
+                                <t t-if="not line.display_type">
+                                    <td id="product">
+                                        <span t-esc="sno"/><t t-set="sno" t-value="sno+1"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.product_id.name"/>
+                                    </td>
+                                    <td id="product">
+                                        <span t-field="line.product_id.name"/>
+                                    </td>
+                                    <td>
+                                        <span t-field="line.product_qty"/>
+                                        <span t-field="line.product_uom.name" groups="uom.group_uom"/>
+                                    </td>
+                                    <!-- Conditionally show date cells -->
+                                    <t t-if="has_dates">
+                                        <td class="text-center">
+                                            <span t-if="line.start_date" t-field="line.start_date" t-options='{"widget": "date"}'/>
+                                            <t t-if="not line.start_date">-</t>
+                                        </td>
+                                        <td class="text-center">
+                                            <span t-if="line.end_date" t-field="line.end_date" t-options='{"widget": "date"}'/>
+                                            <t t-if="not line.end_date">-</t>
+                                        </td>
+                                    </t>
+                                    <td>
+                                        <span t-field="line.price_unit"/>
+                                    </td>
+                                    <td style="background-color:#c5e0b3;">
+                                        <span t-field="line.price_subtotal"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                                    </td>
+                                </t>
+                                <t t-if="line.display_type == 'line_section'">
+                                    <td colspan="99" id="section">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                    <t t-set="current_section" t-value="line"/>
+                                    <t t-set="current_subtotal" t-value="0"/>
+                                </t>
+                                <t t-if="line.display_type == 'line_note'">
+                                    <td colspan="99" id="note">
+                                        <span t-field="line.name"/>
+                                    </td>
+                                </t>
+                            </tr>
+                            <t t-if="current_section and (line_last or o.order_line[line_index+1].display_type == 'line_section')">
+                                <tr class="is-subtotal text-center">
+                                    <td colspan="99" id="subtotal" class="text-center">
+                                        <strong class="mr16">Subtotal</strong>
+                                        <span
+                                            t-esc="current_subtotal"
+                                            t-options='{"widget": "monetary", "display_currency": o.currency_id}'
+                                        />
+                                    </td>
+                                </tr>
+                            </t>
+                        </t>
+                    </tbody>
+                </table>
+
+                <div class="clearfix" name="so_total_summary">
+                    <div id="total" class="row" name="total">
+                        <div t-attf-class="#{'col-6' if report_type != 'html' else 'col-sm-7 col-md-6'} ms-auto">
+                            <table class="table table-sm" style="position:relative;bottom:1rem;">
+                                <tr>
+                                    <td name="td_amount_untaxed_label" class="td-do-it">SUBTOTAL</td>
+                                    <td name="td_amount_untaxed" class="td-style td-do-it">
+                                        <span style="background-color:#c5e0b3;" t-field="o.amount_untaxed"/>
+                                    </td>
+                                </tr>
+                                <t t-set="tax_totals" t-value="o.tax_totals"/>
+                                <t t-foreach="tax_totals['subtotals']" t-as="subtotal">
+                                    <t t-set="subtotal_to_show" t-value="subtotal['name']"/>
+                                    <t t-foreach="tax_totals['groups_by_subtotal'][subtotal_to_show]" t-as="amount_by_group">
+                                        <tr>
+                                            <t t-if="tax_totals['display_tax_base']">
+                                                <td class="td-do-it">
+                                                    <span t-esc="amount_by_group['tax_group_name']"/>
+                                                    <span class="text-nowrap"> on
+                                                        <t t-esc="amount_by_group['formatted_tax_group_base_amount']"/>
+                                                    </span>
+                                                </td>
+                                                <td class="td-style td-do-it">
+                                                    <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']"/>
+                                                </td>
+                                            </t>
+                                            <t t-else="">
+                                                <td class="td-do-it"><span class="text-nowrap" t-esc="amount_by_group['tax_group_name']"/></td>
+                                                <td class="td-style td-do-it">
+                                                    <span class="text-nowrap" t-esc="amount_by_group['formatted_tax_group_amount']" />
+                                                </td>
+                                            </t>
+                                        </tr>
+                                    </t>
+                                </t>
+                                
+                                <tr class="o_total">
+                                    <td name="td_amount_total_label" class="td-do-it"><strong style="color:#003264;">TOTAL</strong></td>
+                                    <td name="td_amount_total" class="text-right td-style td-do-it">
+                                        <span style="background-color:#c5e0b3;" t-field="o.amount_total"/>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class ="row" style="margin-top: -8%;padding-top: 0%;position:relative;">
+                    <div class="col-6">
+                        <h6 style="font-weight: 700;color:#003264;margin-left: 0.5%;">
+                            Other Comments / Special Instructions:
+                        </h6>
+                        <span style="color:#003264;font-size:16.5px;" t-field="o.notes"></span>
+                    </div>
+                </div> <br/>
+                
+                <div class ="row" style="padding-top:2%;position:relative;">
+                    <div class="col-6">
+                        <!-- <div>
+                            <span style="font-size:16.5px;font-weight: 700;color:#003264;">
+                                End User Details:
+                            </span>
+                            <span></span> <br/>
+                        </div>
+                        <div>
+                            <span style="font-size:16.5px;font-weight: 700;color:#003264;">
+                                End User Name:
+                            </span>
+                            <span style="color:#003264;font-size:16.5px;" t-field="o.end_user_to_name"></span> <br/>
+                        </div>
+                        <div>
+                            <span style="font-size:16.5px;font-weight: 700;color:#003264;">
+                                Contact Person:
+                            </span>
+                            <span style="color:#003264;font-size:16.5px;" t-field="o.end_user_to_contact"></span><br/>
+                        </div>
+                        <div>
+                            <span style="font-size:16.5px;font-weight: 700;color:#003264;">
+                                Email:
+                            </span>
+                            <span style="color:#003264;font-size:16.5px;" t-field="o.end_user_to_email"></span><br/>
+                        </div>
+                        <div>
+                            <span style="font-size:16.5px;font-weight: 700;color:#003264;">
+                                Phone:
+                            </span>
+                            <span style="color:#003264;font-size:16.5px;" t-field="o.end_user_to_phone"></span><br/>
+                        </div> <br/> -->
+                        <h5 style="font-weight: 700;color:#003264;margin-left: 0.5%;font-size:16.5px;">
+                            <i>Authorized by:</i>
+                        </h5>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+    
+
+    <template id="report_project_purchase_esky">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="do_purchase_report.report_project_purchase_document_esky" t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+</odoo>

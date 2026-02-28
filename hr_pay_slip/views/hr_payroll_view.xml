@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <record id="lax_hr_payroll_btn" model="ir.ui.view">
+            <field name="name">lax.hr.payslip</field>
+            <field name="model">hr.payslip</field>
+            <field name="inherit_id" ref="hr_payroll.view_hr_payslip_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//header" position="inside">
+                    <button string="Pay Slip" name="%(action_report_hr_pay_slip)d" type="action" class="oe_highlight"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

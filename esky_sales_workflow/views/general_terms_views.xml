@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record model="ir.ui.view" id="general_terms_form">
+        <field name="name">general.terms.form</field>
+        <field name="model">general.terms</field>
+        <field name="arch" type="xml">
+            <form>
+                <sheet>
+                    <group>
+                        <field name="name"/>
+                        <field name="default_gt"/>
+                        <field name="general_terms"/>
+                        <field name="disclaimer"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    <record model="ir.ui.view" id="general_terms_tree">
+        <field name="name">general.terms.tree</field>
+        <field name="model">general.terms</field>
+        <field name="arch" type="xml">
+            <tree>
+                <field name="default_gt"/>
+                <field name="name"/>
+                <field name="disclaimer"/>
+                <field name="general_terms"/>
+            </tree>
+        </field>
+    </record>
+    <record model="ir.actions.act_window" id="general_terms_action">
+        <field name="name">General Terms</field>
+        <field name="res_model">general.terms</field>
+        <field name="view_mode">tree,form</field>
+        <field name="help" type="html">
+           <p class="o_view_nocontent_smiling_face">
+              Create a General Terms
+           </p>
+        </field>
+    </record>
+    <menuitem
+        name="General Terms"
+        action="general_terms_action"
+        id="general_terms_action_menu"
+        parent="sale.sale_order_menu"
+        groups="esky_sales_workflow.group_sales_director,base.group_system"/>
+</odoo>

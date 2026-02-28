@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <template id="dics_portal_layout_inherit" inherit_id="portal.portal_layout">
+        <xpath expr="//div[hasclass('o_portal_my_security')]"
+               position="replace"/>
+    </template>
+    
+    <template id="dics_portal_manage_payment_method" inherit_id="portal.portal_layout">
+        <xpath expr="//div[hasclass('manage_payment_method')]"
+               position="replace"/>
+    </template>
+    
+    <template id="dics_portal_o_portal_my_details" inherit_id="portal.portal_layout">
+        <xpath expr="//div[hasclass('o_portal_my_details')]"
+               position="replace"/>
+    </template>
+    
+     <template id="dics_portal_my_home_menu_sale" inherit_id="sale.portal_my_home_sale">
+         <xpath expr="//t[@t-call='portal.portal_docs_entry'][last()]" position="replace"/>
+         <xpath expr="//t[@t-call='portal.portal_docs_entry']" position="replace"/>
+     </template>
+
+
+    <template id="account.portal_my_home_invoice" name="Show Invoices &amp; Bills" inherit_id="portal.portal_my_home" customize_show="True" priority="30">
+        <xpath expr="//div[hasclass('o_portal_docs')]" position="inside">
+<!--            <t t-call="portal.portal_docs_entry">-->
+<!--                <t t-set="title">Invoices &amp; Bills 1212</t>-->
+<!--                <t t-set="url" t-value="'/my/invoices'"/>-->
+<!--                <t t-set="placeholder_count" t-value="'invoice_count'"/>-->
+<!--            </t>-->
+        </xpath>
+    </template>
+</odoo>

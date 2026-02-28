@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="sale_order_view_form_sent_approval" model="ir.ui.view">
+        <field name="name">sale.order.view.form.sent.approval</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+            <button name="action_quotation_send" position="before">
+                <field name="sales_director_send_approve" invisible="1"/>
+                <field name="technical_head_send_approve" invisible="1"/>
+                <field name="accounting_manager_send_approve" invisible="1"/>
+                <field name="sales_director_approve" invisible="1"/>
+                <field name="technical_head_approve" invisible="1"/>
+                <field name="accounting_manager_approve" invisible="1"/>
+                <field name="sales_operation_approve" invisible="1"/>
+                <field name="procurement_manager_approve" invisible="1"/>
+                <field name="is_esky" invisible="1"/>
+                <field name="can_import_pl_sheet" invisible="1"/>
+                <button name="send_approval" string="SEND APPROVAL" class="btn-primary" type="object" attrs="{'invisible': ['|',('state', 'not in', ['draft', 'refused_to_send']), ('can_import_pl_sheet','=',False)]}"/>
+                <button name="approved_to_sent" string="APPROVE" class="btn-primary" groups="esky_sales_workflow.group_sales_director" type="object" attrs="{'invisible': ['|', ('sales_director_send_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_send'])]}"/>
+                <button name="approved_to_sent" string="APPROVE" class="btn-primary" groups="esky_sales_workflow.group_technical_head" type="object" attrs="{'invisible': ['|', ('technical_head_send_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_send'])]}"/>
+                <button name="approved_to_sent" string="APPROVE" class="btn-primary" groups="esky_sales_workflow.group_accounting_manager" type="object" attrs="{'invisible': ['|', ('accounting_manager_send_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_send'])]}"/>
+                <button name="refused_to_sent_wizard" string="REJECT" class="btn-primary" groups="esky_sales_workflow.group_sales_director" type="object" attrs="{'invisible': ['|', ('sales_director_send_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_send'])]}"/>
+                <button name="refused_to_sent_wizard" string="REJECT" class="btn-primary" groups="esky_sales_workflow.group_technical_head" type="object" attrs="{'invisible': ['|', ('technical_head_send_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_send'])]}"/>
+                <button name="refused_to_sent_wizard" string="REJECT" class="btn-primary" groups="esky_sales_workflow.group_accounting_manager" type="object" attrs="{'invisible': ['|', ('accounting_manager_send_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_send'])]}"/>
+<!--                <button name="approved_to_confirm" string="APPROVE" class="btn-primary" groups="esky_sales_workflow.group_sales_director" type="object" attrs="{'invisible': ['|', ('sales_director_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="approved_to_confirm" string="APPROVE" class="btn-primary" groups="esky_sales_workflow.group_technical_head" type="object" attrs="{'invisible': ['|', ('technical_head_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="approved_to_confirm" string="APPROVE" class="btn-primary" groups="esky_sales_workflow.group_accounting_manager" type="object" attrs="{'invisible': ['|', ('accounting_manager_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="approved_to_confirm" string="APPROVE" class="btn-primary" groups="esky_sales_workflow.group_sales_operation" type="object" attrs="{'invisible': ['|', ('sales_operation_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="approved_to_confirm" string="APPROVE" class="btn-primary" groups="esky_sales_workflow.group_procurement_manager" type="object" attrs="{'invisible': ['|', ('procurement_manager_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="refused_to_sent_wizard" string="REJECT" class="btn-primary" groups="esky_sales_workflow.group_sales_director" type="object" attrs="{'invisible': ['|', ('sales_director_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="refused_to_sent_wizard" string="REJECT" class="btn-primary" groups="esky_sales_workflow.group_technical_head" type="object" attrs="{'invisible': ['|', ('technical_head_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="refused_to_sent_wizard" string="REJECT" class="btn-primary" groups="esky_sales_workflow.group_accounting_manager" type="object" attrs="{'invisible': ['|', ('accounting_manager_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="refused_to_sent_wizard" string="REJECT" class="btn-primary" groups="esky_sales_workflow.group_sales_operation" type="object" attrs="{'invisible': ['|', ('sales_operation_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+<!--                <button name="refused_to_sent_wizard" string="REJECT" class="btn-primary" groups="esky_sales_workflow.group_procurement_manager" type="object" attrs="{'invisible': ['|', ('procurement_manager_approve', '=', True), ('state', 'not in', ['waiting_for_approval_to_confirm'])]}"/>-->
+                <button name="button_confirm" id="button_confirm" string="Confirm" class="btn-primary" type="object" attrs="{'invisible': ['|', ('state', 'not in', ['sent', 'refused_to_confirm']), ('can_import_pl_sheet', '=', False)]}"/>
+            </button>
+            <button name="action_quotation_send" position="attributes">
+                <attribute name="states"></attribute>
+                <attribute name="attrs">{'invisible': ['|', ('state', '!=', 'draft'), ('can_import_pl_sheet','=',True)]}</attribute>
+            </button>
+            <xpath expr="//button[@name='action_quotation_send'][2]" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', '|', ('state', '!=', 'draft'), ('invoice_count','&gt;=',1), ('can_import_pl_sheet','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send'][3]" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', '|', ('state', '=', 'draft'), ('invoice_count','&gt;=',1), ('can_import_pl_sheet','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send'][4]" position="attributes">
+                <attribute name="states"></attribute>
+                <attribute name="attrs">{'invisible': ['|', ('state', 'not in', ['sent','sale']), ('can_import_pl_sheet','=',True)]}</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_quotation_send'][4]" position="after">
+                <button name="action_quotation_send" string="Send by Email" type="object" class="btn-primary" data-hotkey="g" attrs="{'invisible': ['|',('state', '!=', 'approved_to_sent'), ('can_import_pl_sheet','=',False)]}"/>
+            </xpath>
+            <button name="action_confirm" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('can_import_pl_sheet', '=', True), ('state', 'not in', ['sent'])]}</attribute>
+            </button>
+            <xpath expr="//button[@name='action_confirm'][2]" position="attributes">
+                <attribute name="attrs">{'invisible': ['|', ('can_import_pl_sheet', '=', True), ('state', 'not in', ['draft'])]}</attribute>
+            </xpath>
+            <page name="customer_signature" position="after">
+                <page string="Send Approval Workflow" name="approval_workflow" attrs="{'invisible': [('can_import_pl_sheet', '=', False)]}">
+                    <field name="approval_ids" readonly="1">
+                        <tree editable="bottom">
+                            <field name="status_date"/>
+                            <field name="status_by"/>
+                            <field name="user_role"/>
+                            <field name="status"/>
+                            <field name="reason"/>
+                        </tree>
+                    </field>
+                </page>
+                <page string="Required Documents" name="required_documents" attrs="{'invisible': ['|', ('can_import_pl_sheet', '=', False), ('state', 'not in', ['sent','refused_to_confirm','sale','done','waiting_for_approval_to_confirm'])]}">
+                    <field name="required_attachment_ids">
+                        <tree editable="bottom" create="0" delete="0">
+                            <field name="create_date" readonly="1" string="Uploaded on"/>
+                            <field name="create_uid" readonly="1" string="Uploaded by"/>
+                            <field name="name" invisible="1"/>
+                            <field name="datas" string="File" filename="name" widget="binary" readonly="1"/>
+                        </tree>
+                    </field>
+                </page>
+<!--                <page string="Confirm Approval Workflow" name="confirm_approval_workflow" attrs="{'invisible': ['|', ('can_import_pl_sheet', '=', False), ('state', 'not in', ['waiting_for_approval_to_confirm','refused_to_confirm'])]}">-->
+<!--                    <field name="confirm_approval_ids" readonly="1">-->
+<!--                        <tree editable="bottom">-->
+<!--                            <field name="status_date"/>-->
+<!--                            <field name="status_by"/>-->
+<!--                            <field name="user_role"/>-->
+<!--                            <field name="status"/>-->
+<!--                            <field name="reason"/>-->
+<!--                        </tree>-->
+<!--                    </field>-->
+<!--                </page>-->
+            </page>
+
+            <xpath expr="//field[@name='order_line']/tree/field[@name='price_unit']" position="before">
+                <field name="brand"/>
+                <field name="start_date"/>
+                <field name="end_date"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <record id="esky_sale_waiting_approval_to_send_action" model="ir.actions.act_window">
+        <field name="name">Waiting Approval To Send</field>
+        <field name="res_model">sale.order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+        <field name="view_id" ref="sale.view_quotation_tree_with_onboarding" />
+        <field name="domain">[('state','=','waiting_for_approval_to_send')]</field>
+        <field name="context">{'create': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face"></p>
+        </field>
+    </record>
+
+    <record id="esky_sale_waiting_approval_to_confirm_action" model="ir.actions.act_window">
+        <field name="name">Waiting Approval To Confirm</field>
+        <field name="res_model">sale.order</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="view_mode">tree,kanban,form,calendar,pivot,graph,activity</field>
+        <field name="view_id" ref="sale.view_quotation_tree_with_onboarding" />
+        <field name="domain">[('state','=','waiting_for_approval_to_confirm')]</field>
+        <field name="context">{'create': False}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face"></p>
+        </field>
+    </record>
+
+    <menuitem
+        name="Waiting Approval To Send"
+        action="esky_sale_waiting_approval_to_send_action"
+        id="esky_sale_waiting_approval_to_send_action_menu"
+        parent="sale.sale_order_menu"
+        groups="esky_sales_workflow.group_sales_director,esky_sales_workflow.group_technical_head,esky_sales_workflow.group_accounting_manager" sequence="25"/>
+<!--    <menuitem-->
+<!--        name="Waiting Approval To Confirm"-->
+<!--        action="esky_sale_waiting_approval_to_confirm_action"-->
+<!--        id="esky_sale_waiting_approval_to_confirm_action_menu"-->
+<!--        parent="sale.sale_order_menu"-->
+<!--        groups="esky_sales_workflow.group_sales_director,esky_sales_workflow.group_technical_head,esky_sales_workflow.group_accounting_manager,esky_sales_workflow.group_sales_operation,esky_sales_workflow.group_procurement_manager"-->
+<!--        sequence="26" />-->
+</odoo>

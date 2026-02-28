@@ -1,0 +1,16 @@
+<odoo>
+    <record id="sale_inherit_taxes" model="ir.ui.view">
+        <field name="name">sale_inherit_taxes</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//field[@name='payment_term_id']" position="after">
+                <field name="line_taxes" widget="many2many_tags"/>
+                <field name="line_vendor"/>
+                <!-- <field name="line_discount"/> -->
+            </xpath>
+
+        </field>
+    </record>
+</odoo>
